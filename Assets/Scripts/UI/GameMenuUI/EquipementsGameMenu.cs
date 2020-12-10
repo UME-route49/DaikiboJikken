@@ -72,7 +72,7 @@ public class EquipementsGameMenu : MonoBehaviour {
 			newToggle.transform.localScale= Vector3.one;
 			newToggle.transform.position= Vector3.one;
 			if(GameMenu.SelectedCharacter.Type != item.AllowedCharacterType 
-			   || item.IsEquiped)
+			   || item.isEquiped)
 				newToggle.GetComponent<Toggle>().interactable = false ;
 		}
 	}
@@ -136,65 +136,64 @@ public class EquipementsGameMenu : MonoBehaviour {
 			case EnumEquipmentType.Head : 
 				if (GameMenu.SelectedCharacter.Head != default(ItemsData))
                     {
-                        Main.EquipmentList.Where(w => w.Name == GameMenu.SelectedCharacter.Head.Name).FirstOrDefault().IsEquiped = false;
+                        Main.EquipmentList.Where(w => w.Name == GameMenu.SelectedCharacter.Head.Name).FirstOrDefault().isEquiped = false;
                     }
 
                     GameMenu.SelectedCharacter.Head = itemDatas;
-				itemDatas.IsEquiped = true;
+				itemDatas.isEquiped = true;
 				break;
 			case EnumEquipmentType.Body : 
 				if (GameMenu.SelectedCharacter.Body != default(ItemsData))
                     {
-                        GameMenu.SelectedCharacter.Body.IsEquiped = false;
+                        GameMenu.SelectedCharacter.Body.isEquiped = false;
                     }
 
                     GameMenu.SelectedCharacter.Body = itemDatas;
-				itemDatas.IsEquiped = true;
+				itemDatas.isEquiped = true;
 				break;
 			case EnumEquipmentType.LeftHand :
 				if(GameMenu.SelectedCharacter.RightHand != default(ItemsData)
 				   && GameMenu.SelectedCharacter.RightHand.EquipementType == EnumEquipmentType.TwoHands) 
 				{
-					Main.EquipmentList.Where(w =>w.Name == GameMenu.SelectedCharacter.RightHand.Name).FirstOrDefault().IsEquiped = false;
+					Main.EquipmentList.Where(w =>w.Name == GameMenu.SelectedCharacter.RightHand.Name).FirstOrDefault().isEquiped = false;
 					GameMenu.SelectedCharacter.RightHand = default(ItemsData);
 				}
 
 				if (GameMenu.SelectedCharacter.LeftHand != default(ItemsData))
                     {
-                        Main.EquipmentList.Where(w => w.Name == GameMenu.SelectedCharacter.LeftHand.Name).FirstOrDefault().IsEquiped = false;
+                        Main.EquipmentList.Where(w => w.Name == GameMenu.SelectedCharacter.LeftHand.Name).FirstOrDefault().isEquiped = false;
                     }
 
                     GameMenu.SelectedCharacter.LeftHand = itemDatas;
-				itemDatas.IsEquiped = true;
+				itemDatas.isEquiped = true;
 
 				break;
 			case EnumEquipmentType.RightHand : 
 				if (GameMenu.SelectedCharacter.RightHand != default(ItemsData))
                     {
-                        Main.EquipmentList.Where(w => w.Name == GameMenu.SelectedCharacter.RightHand.Name).FirstOrDefault().IsEquiped = false;
+                        Main.EquipmentList.Where(w => w.Name == GameMenu.SelectedCharacter.RightHand.Name).FirstOrDefault().isEquiped = false;
                     }
 
                     GameMenu.SelectedCharacter.RightHand = itemDatas;
-				itemDatas.IsEquiped = true;
+				itemDatas.isEquiped = true;
 				break;
 			case EnumEquipmentType.TwoHands : 
 				if(GameMenu.SelectedCharacter.RightHand != default(ItemsData) ) 
 				{
-					Main.EquipmentList.Where(w =>w.Name == GameMenu.SelectedCharacter.RightHand.Name).FirstOrDefault().IsEquiped = false;
+					Main.EquipmentList.Where(w =>w.Name == GameMenu.SelectedCharacter.RightHand.Name).FirstOrDefault().isEquiped = false;
 						
 				}
 				if(GameMenu.SelectedCharacter.LeftHand != default(ItemsData) ) 
 				{
-					Main.EquipmentList.Where(w =>w.Name == GameMenu.SelectedCharacter.LeftHand.Name).FirstOrDefault().IsEquiped = false;
+					Main.EquipmentList.Where(w =>w.Name == GameMenu.SelectedCharacter.LeftHand.Name).FirstOrDefault().isEquiped = false;
 					GameMenu.SelectedCharacter.LeftHand = default(ItemsData);
 				
 				}
 				GameMenu.SelectedCharacter.RightHand = itemDatas;
-				itemDatas.IsEquiped = true;
+				itemDatas.isEquiped = true;
 
 				break;
                 default:
-                    // do the default action
                     break;
             }
 
@@ -220,7 +219,7 @@ public class EquipementsGameMenu : MonoBehaviour {
         if (toggle.isOn) {
 			ItemsUI toggleItem = selectedToggle.GetComponent <ItemsUI> ();
 			
-			Main.EquipmentList.Remove(Main.EquipmentList.Where(w =>w.Name == toggleItem.Name.text && w.IsEquiped ==false).FirstOrDefault());
+			Main.EquipmentList.Remove(Main.EquipmentList.Where(w =>w.Name == toggleItem.Name.text && w.isEquiped ==false).FirstOrDefault());
 			ClearItemList();
 			PopulateList ();
 		}
@@ -237,7 +236,7 @@ public class EquipementsGameMenu : MonoBehaviour {
         SoundManager.UISound();
         if (toggle.isOn) {
 
-			Main.EquipmentList.RemoveAll(r=>r.IsEquiped ==false);
+			Main.EquipmentList.RemoveAll(r=>r.isEquiped ==false);
 			ClearItemList();
 			PopulateList ();
 		}

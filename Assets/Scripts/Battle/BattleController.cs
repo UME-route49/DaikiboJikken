@@ -1,17 +1,4 @@
-﻿// ***********************************************************************
-// Assembly         : Assembly-CSharp
-// Author           : Pondomaniac
-// Created          : 07-06-2016
-//
-// Last Modified By : Pondomaniac
-// Last Modified On : 07-20-2016
-// ***********************************************************************
-// <copyright file="BattleController.cs" company="">
-
-// </copyright>
-// <summary></summary>
-// ***********************************************************************
-using UnityEngine;
+﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,12 +7,6 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using System;
 
-
-
-
-/// <summary>
-/// Class BattleController.
-/// </summary>
 public class BattleController : MonoBehaviour
 {
     /// <summary>キャラの状態を取得</summary>
@@ -84,17 +65,28 @@ public class BattleController : MonoBehaviour
     /// <summary>選択されたプレイヤーのデータ</summary>
     private CharactersData selectedPlayerDatas;
     /// <summary>UIのオブジェクト</summary>
-    private GameObject uiGameObject ;
+    private GameObject uiGameObject;
 
-    /// <summary>Awakes this instance.main</summary>
-    void Awake()
+	/// <summary>バトルUIのオブジェクト</summary>
+	public GameObject uiBttle;
+	/// コマンド選択許可変数
+	private bool canSelect = false;
+	/// コマンドUIの取得
+	private BattlePanels battlePanels;
+	/// 操作回数
+	private int counter = 0;
+
+	///カメラのオブジェクト
+	public GameObject mainCamera;
+
+	/// <summary>Awakes this instance.main</summary>
+	void Awake()
 	{
         CharacterState = EnumCharacterState.Idle;
 		CharacterSide = EnumSide.Down;
 		instantiatedSelector = GameObject.Instantiate(Selector);
 		instantiatedTargetSelector = GameObject.Instantiate(TargetSelector);
-		var t =Resources.Load <GameObject> (Settings.PrefabsPath + Settings.UIBattle);
-		var o = Instantiate (t);
+		var o = Instantiate(uiBttle);
 		var canvas = o.GetComponentsInChildren<Canvas>();
 		foreach (Canvas canva in canvas) {
 			canva.worldCamera= Camera.main;
@@ -106,44 +98,37 @@ public class BattleController : MonoBehaviour
 		NextBattleSequence();
 		uiGameObject  = GameObject.FindGameObjectsWithTag(Settings.UI).FirstOrDefault();
 		HideDecision();
-	
-
-
 	}
 
+    private void Start()
+    {
+		battlePanels = uiBttle.GetComponent<BattlePanels>();
+    }
 
-
-
-    /// <summary>
-    /// This is the main loop and where the system detect the presed keys and send them to the controller.
-    /// </summary>
+    /// <summary>This is the main loop and where the system detect the presed keys and send them to the controller.</summary>
     void Update()
-	{ 
+	{
+		if (canSelect) CommandSelect();
 
 		if (HOTween.GetAllPlayingTweens().Any()) return;
 		else if (currentState == EnumBattleState.SelectingTarget) {
-			//Detecting if the player clicked on the left mouse button and also if there is no animation playing
-			if (Input.GetButtonDown ("Fire1")) {
-				//The 3 following lines is to get the clicked GameObject and getting the RaycastHit2D that will help us know the clicked object
-				RaycastHit2D hit = Physics2D.Raycast (Camera.main.ScreenToWorldPoint (Input.mousePosition), Vector2.zero);
-				if (hit.transform != null) {
-
-					//TODO: Add tweening condition
-					bool foundEnemy = false;
-					foreach (var x in generatedEnemyList) {
-						if (x.GetInstanceID () == hit.transform.gameObject.GetInstanceID ()) {
-							foundEnemy = true;
-							selectedEnemy = hit.transform.gameObject;
-							PositionTargetSelector (selectedEnemy);
-							break;
-						}
-					}
-					if (!foundEnemy) return;
-				}
+			if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W))
+			{
+				counter--;
+			}
+			else if (Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.S))
+			{
+				counter++;
+			}
+			else if (Input.GetKeyDown(KeyCode.KeypadEnter)) {
+				int n = counter % generatedEnemyList.Count;
+				selectedEnemy = generatedEnemyList[n];
+				PositionTargetSelector(selectedEnemy);
 			}
 		}
 		else if (currentState == EnumBattleState.EnemyTurn)
-		{Log (GameTexts.EnemyTurn);
+		{
+			Log (GameTexts.EnemyTurn);
 			var z = turnByTurnSequenceList.Where(w=> w.First == EnumPlayerOrEnemy.Player);
 			var playerTargetedByEnemy = z.ElementAt(UnityEngine.Random.Range(0, z.Count() - 1));
 			var playerTargetedByEnemyDatas =  GetCharacterDatas (playerTargetedByEnemy.Second.name);
@@ -153,36 +138,39 @@ public class BattleController : MonoBehaviour
 			NextBattleSequence ();                                                             
 		}
 		else if (currentState == EnumBattleState.PlayerTurn)
-		{Log (GameTexts.PlayerTurn);
+		{
+			Log (GameTexts.PlayerTurn);
 			HideTargetSelector();
 			ShowMenu();
-				currentState = EnumBattleState.None;             
+			canSelect = true;
+			currentState = EnumBattleState.None;
 		}
 		else if (currentState == EnumBattleState.PlayerWon)
-		{Log (GameTexts.PlayerWon);
+		{
+			Log (GameTexts.PlayerWon);
 			HideTargetSelector();
 			HideMenu ();
-				int totalXP = 0;
-				foreach (var x in generatedEnemyList) {
-					totalXP += x.GetComponent<EnemyCharacterDatas> ().XP;
-				}
+			int totalXP = 0;
+			foreach (var x in generatedEnemyList) {
+				totalXP += x.GetComponent<EnemyCharacterDatas> ().XP;
+			}
 
-				foreach (var x in turnByTurnSequenceList)
-			{
-					var characterdatas = GetCharacterDatas (x.Second.name);
-					characterdatas.XP += totalXP;
-					var calculatedXP = Math.Floor ( Math.Sqrt(625+100* characterdatas.XP)-25)/ 50;
-					characterdatas.Level =(int) calculatedXP;
+			foreach (var x in turnByTurnSequenceList){
+				var characterdatas = GetCharacterDatas (x.Second.name);
+				characterdatas.XP += totalXP;
+				var calculatedXP = Math.Floor ( Math.Sqrt(625+100* characterdatas.XP)-25)/ 50;
+				characterdatas.Level =(int) calculatedXP;
 			}
 			var textTodisplay = GameTexts.EndOfTheBattle + "\n\n" + GameTexts.PlayerXP + totalXP;
-				ShowDropMenu(textTodisplay);
-				currentState = EnumBattleState.EndBattle;
-				var go = GameObject.FindGameObjectsWithTag(Settings.Music).FirstOrDefault();
-				if (go) go.GetComponent<AudioSource>().Stop(); 
-				SoundManager.WinningMusic();         
+			ShowDropMenu(textTodisplay);
+			currentState = EnumBattleState.EndBattle;
+			var go = GameObject.FindGameObjectsWithTag(Settings.Music).FirstOrDefault();
+			if (go) go.GetComponent<AudioSource>().Stop(); 
+			SoundManager.WinningMusic();         
 		}
 		else if (currentState == EnumBattleState.EnemyWon)
-		{   Log (GameTexts.EnemyWon);
+		{   
+			Log (GameTexts.EnemyWon);
 			HideTargetSelector();
 			HideMenu ();
 
@@ -190,11 +178,28 @@ public class BattleController : MonoBehaviour
 			ShowDropMenu(textTodisplay);
 
 			currentState = EnumBattleState.None;
-				var go = GameObject.FindGameObjectsWithTag(Settings.Music).FirstOrDefault();
-				if (go) go.GetComponent<AudioSource>().Stop();
-				SoundManager.GameOverMusic();
+			var go = GameObject.FindGameObjectsWithTag(Settings.Music).FirstOrDefault();
+			if (go) go.GetComponent<AudioSource>().Stop();
+			SoundManager.GameOverMusic();
         }
 	}
+
+	public void CommandSelect()
+    {
+		if(Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W))
+        {
+			counter--;
+        }
+		else if(Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.S))
+        {
+			counter++;
+        }
+		else if (Input.GetKeyDown(KeyCode.KeypadEnter))
+        {
+			int n = counter % 4;
+
+        }
+    }
 
     /// <summary>キャラクターの名前を取得</summary>
     /// <param name="s">The s.</param>
@@ -238,18 +243,14 @@ public class BattleController : MonoBehaviour
 	{
 		int y = EnnemyYPosition;
 		int calculatedPosition = y;
-		for (int i = 0; i <= NumberOfEnemyToGenerate-1; i++)
+		for (int i = 0; i <= NumberOfEnemyToGenerate - 1; i++)
 		{
 			y--;
 			calculatedPosition = calculatedPosition - SpaceBetweenCharacters;
-		    GameObject go = GameObject.Instantiate (PossibleEnnemies [UnityEngine.Random.Range ((int)0, (int)PossibleEnnemies.Count )],
-				         new Vector3 (EnnemyXPosition, calculatedPosition, 1), Quaternion.identity) as GameObject;
-			
-			 
+			GameObject go = GameObject.Instantiate(PossibleEnnemies[0],
+						 new Vector3(EnnemyXPosition, 1, calculatedPosition), Quaternion.identity) as GameObject;
 			generatedEnemyList.Add(go);
-
 		}
-
 	}
 
     /// <summary>プレイヤーのポジション</summary>
@@ -265,18 +266,15 @@ public class BattleController : MonoBehaviour
 				calculatedPosition = calculatedPosition - SpaceBetweenCharacters;
 
 				GameObject go =  GameObject.Instantiate(Resources.Load(Settings.PrefabsPath + character.Name)
-										, new Vector3(PlayersXPosition, calculatedPosition, 1), Quaternion.identity) as GameObject;
+										, new Vector3(PlayersXPosition, 1, calculatedPosition), Quaternion.identity) as GameObject;
+				go.transform.LookAt(generatedEnemyList[0].transform);
 				var datas = GetCharacterDatas(go.name);
 
 				instantiatedCharacterList.Add(go);
 
-				go.BroadcastMessage ("SetHPValue",datas.MaxHP<=0?0 :  datas.HP*100/datas.MaxHP);
+				go.BroadcastMessage ("SetHPValue",datas.MaxHP <= 0 ? 0 : datas.HP*100/datas.MaxHP);
 				go.BroadcastMessage ("SetMPValue",datas.MaxMP <= 0 ? 0 : datas.MP*100/datas.MaxMP);
-
 			}
-
-
-
 		}
 		catch (System.Exception ex)
 		{
@@ -294,27 +292,27 @@ public class BattleController : MonoBehaviour
 		var indexInRange = true;
 		while (indexInRange)
 		{
-			if (instantiatedCharacterList.Count - 1 < y && generatedEnemyList.Count - 1 < z) { indexInRange = false;
+			if (instantiatedCharacterList.Count - 1 < y && generatedEnemyList.Count - 1 < z) { 
+				indexInRange = false;
                 break;
             }
 
-            if (x % 2 == 0 && instantiatedCharacterList.Count - 1 >= y) { turnByTurnSequenceList.Add(new Tuple<EnumPlayerOrEnemy, GameObject>(EnumPlayerOrEnemy.Player, instantiatedCharacterList[y]));
+            if (x % 2 == 0 && instantiatedCharacterList.Count - 1 >= y) { 
+				turnByTurnSequenceList.Add(new Tuple<EnumPlayerOrEnemy, GameObject>(EnumPlayerOrEnemy.Player, instantiatedCharacterList[y]));
                 y++;
             }
-            else if (x % 2 != 0 && generatedEnemyList.Count - 1 >= z) { turnByTurnSequenceList.Add(new Tuple<EnumPlayerOrEnemy, GameObject>(EnumPlayerOrEnemy.Enemy, generatedEnemyList[z]));
+            else if (x % 2 != 0 && generatedEnemyList.Count - 1 >= z) { 
+				turnByTurnSequenceList.Add(new Tuple<EnumPlayerOrEnemy, GameObject>(EnumPlayerOrEnemy.Enemy, generatedEnemyList[z]));
                 z++;
             }
-
             x++;
 		}
-
-
 	}
 
     /// <summary>バトルの次の順序</summary>
     public void NextBattleSequence()
 	{
-		var x =turnByTurnSequenceList.Where (w => w.First == EnumPlayerOrEnemy.Enemy).Count ();
+		var x = turnByTurnSequenceList.Where (w => w.First == EnumPlayerOrEnemy.Enemy).Count ();
 		var y = turnByTurnSequenceList.Where (w => w.First == EnumPlayerOrEnemy.Player).Count ();
 		if(x<=0) {
 			currentState=EnumBattleState.PlayerWon;
@@ -325,7 +323,6 @@ public class BattleController : MonoBehaviour
             return;
         }
 
-
         if (sequenceEnumerator.MoveNext ()) {
 			PositionSelector (sequenceEnumerator.Current.Second);
 			if (sequenceEnumerator.Current.First == EnumPlayerOrEnemy.Player) {
@@ -335,34 +332,27 @@ public class BattleController : MonoBehaviour
 				selectedPlayer = sequenceEnumerator.Current.Second;
 				selectedPlayerDatas =GetCharacterDatas(selectedPlayer.name);
 				BattlePanels.SelectedCharacter = selectedPlayerDatas;
-			
-			} else if (sequenceEnumerator.Current.First == EnumPlayerOrEnemy.Enemy) {
+				mainCamera.transform.position = selectedPlayer.transform.position + new Vector3(0, 2, 0) 
+					- selectedPlayer.transform.forward * 2;
+			} 
+			else if (sequenceEnumerator.Current.First == EnumPlayerOrEnemy.Enemy) {
 				currentState = EnumBattleState.EnemyTurn;
-
 			}
 
 		} else {
-
 			sequenceEnumerator = turnByTurnSequenceList.GetEnumerator();
 			NextBattleSequence();
-
 		}
 	}
 
-
-
-    /// <summary>
-    /// Positions the selector.
-    /// </summary>
+    /// <summary>Positions the selector.</summary>
     /// <param name="go">The go.</param>
     public void PositionSelector(GameObject go)
 	{
 		instantiatedSelector.transform.position = go.transform.position + new Vector3(-4, 0, 0);
 	}
 
-    /// <summary>
-    /// Weapons the action.
-    /// </summary>
+    /// <summary>Weapons the action.</summary>
     public void WeaponAction()
 	{
 		currentState = EnumBattleState.SelectingTarget;
@@ -370,13 +360,9 @@ public class BattleController : MonoBehaviour
 		SelectTheFirstEnemy();
 		HideMenu();
 		ShowDecision();
-
 	}
 
-
-    /// <summary>
     /// Magics the action.
-    /// </summary>
     public void MagicAction()
 	{
 		currentState = EnumBattleState.SelectingTarget;
@@ -384,25 +370,18 @@ public class BattleController : MonoBehaviour
 		SelectTheFirstEnemy();
 		HideMenu();
 		ShowDecision();
-
 	}
 
-
-    /// <summary>
     /// Items the action.
-    /// </summary>
     public void ItemAction()
 	{
 		currentState = EnumBattleState.SelectingTarget;
 		battlAction = EnumBattleAction.Item;
 		SelectTheFirstEnemy();
-		PassAction ();
-
+		PassAction();
 	}
 
-    /// <summary>
     /// Passes the action.
-    /// </summary>
     public void PassAction()
 	{
 		battlAction = EnumBattleAction.Pass;
@@ -410,23 +389,16 @@ public class BattleController : MonoBehaviour
 		selectedPlayer.BroadcastMessage ("SetMPValue",selectedPlayerDatas.MaxMP <= 0 ? 0 : selectedPlayerDatas.MP*100/selectedPlayerDatas.MaxMP);
 		NextBattleSequence ();
 		HideMenu();
-
-
 	}
 
-    /// <summary>
     /// Selects the first enemy.
-    /// </summary>
     public void SelectTheFirstEnemy()
 	{
 		selectedEnemy = generatedEnemyList.Where(w=>w.activeSelf).FirstOrDefault();
-		if (selectedEnemy != null)
-			PositionTargetSelector(selectedEnemy);
-
+		if (selectedEnemy != null) PositionTargetSelector(selectedEnemy);
 	}
-    /// <summary>
+
     /// Positions the target selector.
-    /// </summary>
     /// <param name="target">The target.</param>
     public void PositionTargetSelector(GameObject target)
 	{
@@ -434,70 +406,49 @@ public class BattleController : MonoBehaviour
 		instantiatedTargetSelector.transform.position = target.transform.position + new Vector3(-4, 0, 0);
 	}
 
-    /// <summary>
     /// Hides the target selector.
-    /// </summary>
     public void HideTargetSelector()
 	{
 		instantiatedTargetSelector.SetActive(false);
 	}
 
-    /// <summary>
     /// Hides the menu.
-    /// </summary>
     public void HideMenu()
 	{
 		if(battlAction!= EnumBattleAction.Pass && currentState != EnumBattleState.EnemyWon && currentState != EnumBattleState.PlayerWon)
 			DeselectMenusToggles ();
 
-		if (uiGameObject ) 
-			uiGameObject.BroadcastMessage("HideActionMenu");	
-
+		if (uiGameObject ) uiGameObject.BroadcastMessage("HideActionMenu");	
 	}
 
-    /// <summary>
     /// Deselects the menus toggles.
-    /// </summary>
     public void DeselectMenusToggles()
 	{
-		if ( uiGameObject) 
-			uiGameObject.BroadcastMessage("DeselectMenusToggles");	
+		if ( uiGameObject) uiGameObject.BroadcastMessage("DeselectMenusToggles");	
 	}
 
 
-    /// <summary>
     /// Shows the menu.
-    /// </summary>
     public void ShowMenu()
 	{	if (uiGameObject) {
 			uiGameObject.BroadcastMessage("ShowActionMenu");	
 			uiGameObject.BroadcastMessage ("Start");
 		}
-	
-
 	}
 
-    /// <summary>
     /// Hides the decision.
-    /// </summary>
     public void HideDecision()
 	{
-		if ( uiGameObject ) 
-			uiGameObject.BroadcastMessage ("HideDecision");
+		if ( uiGameObject ) uiGameObject.BroadcastMessage ("HideDecision");
 	}
 
-    /// <summary>
     /// Shows the decision.
-    /// </summary>
     public void ShowDecision()
 	{
-		if (uiGameObject ) 
-			uiGameObject.BroadcastMessage ("ShowDecision");
+		if (uiGameObject ) uiGameObject.BroadcastMessage ("ShowDecision");
 	}
 
-    /// <summary>
     /// Declines the decision.
-    /// </summary>
     public void DeclineDecision()
 	{
         SoundManager.UISound();
@@ -507,9 +458,7 @@ public class BattleController : MonoBehaviour
 		HideDecision();
 	}
 
-    /// <summary>
     /// Accepts the decision.
-    /// </summary>
     public void AcceptDecision()
 	{
         SoundManager.UISound();
@@ -519,45 +468,37 @@ public class BattleController : MonoBehaviour
 		PlayerAction();
 	}
 
-    /// <summary>
     /// Ends the battle.
-    /// </summary>
     public void EndBattle()
 	{
 		Main.ControlsBlocked = false;
-       SceneManager.LoadScene (Settings.MainMenuScene);
+        SceneManager.LoadScene (Settings.MainMenuScene);
 	}
 
-    /// <summary>
     /// Players the action.
-    /// </summary>
     public void PlayerAction()
 	{
-	
-
-
 		var enemyCharacterdatas = selectedEnemy.GetComponent<EnemyCharacterDatas> ();
 		int calculatedDamage = 0;
 		if (enemyCharacterdatas != null && selectedPlayerDatas != null) {
 			switch (battlAction) {
 			case EnumBattleAction.Weapon:
-                    Sequence actions = new Sequence(new SequenceParms());
-                    TweenParms parms = new TweenParms().Prop("position", selectedEnemy.transform.position - new Vector3(SpaceBetweenCharacterAndEnemy, 0, 0)).Ease(EaseType.EaseOutQuart);
-                    TweenParms parmsResetPlayerPosition = new TweenParms().Prop("position", selectedPlayer.transform.position).Ease(EaseType.EaseOutQuart);
-                    actions.Append(HOTween.To(selectedPlayer.transform, 0.5f, parms));
-                    actions.Append(HOTween.To(selectedPlayer.transform, 0.5f, parmsResetPlayerPosition));
-                    actions.Play();
-                    calculatedDamage = BattlePanels.SelectedWeapon.Attack + selectedPlayerDatas.GetAttack () - enemyCharacterdatas.Defense; 
+                Sequence actions = new Sequence(new SequenceParms());
+                TweenParms parms = new TweenParms().Prop("position", selectedEnemy.transform.position - new Vector3(SpaceBetweenCharacterAndEnemy, 0, 0)).Ease(EaseType.EaseOutQuart);
+                TweenParms parmsResetPlayerPosition = new TweenParms().Prop("position", selectedPlayer.transform.position).Ease(EaseType.EaseOutQuart);
+                actions.Append(HOTween.To(selectedPlayer.transform, 0.5f, parms));
+                actions.Append(HOTween.To(selectedPlayer.transform, 0.5f, parmsResetPlayerPosition));
+                actions.Play();
+                calculatedDamage = BattlePanels.SelectedWeapon.Attack + selectedPlayerDatas.GetAttack () - enemyCharacterdatas.Defense; 
 				calculatedDamage = Mathf.Clamp (calculatedDamage, 0, calculatedDamage);
 				enemyCharacterdatas.HP =Mathf.Clamp ( enemyCharacterdatas.HP - calculatedDamage, 0 , enemyCharacterdatas.HP - calculatedDamage);
 				ShowPopup ("-"+calculatedDamage.ToString (), selectedEnemy.transform.position);
 				selectedEnemy.BroadcastMessage ("SetHPValue",enemyCharacterdatas.MaxHP<=0?0 :  enemyCharacterdatas.HP*100/enemyCharacterdatas.MaxHP);
 				Destroy( Instantiate (WeaponParticleEffect, selectedEnemy.transform.localPosition, Quaternion.identity),1.5f);
-                    SoundManager.WeaponSound();
-					selectedPlayer.SendMessage("Animate",EnumBattleState.Attack.ToString());
-					selectedEnemy.SendMessage("Animate",EnumBattleState.Hit.ToString());
-					
-					 break;
+                SoundManager.WeaponSound();
+				selectedPlayer.SendMessage("Animate",EnumBattleState.Attack.ToString());
+				selectedEnemy.SendMessage("Animate",EnumBattleState.Hit.ToString());
+				break;
 			case EnumBattleAction.Magic:
 				calculatedDamage = BattlePanels.SelectedSpell.Attack + selectedPlayerDatas.GetMagic () - enemyCharacterdatas.MagicDefense; 
 				calculatedDamage = Mathf.Clamp (calculatedDamage, 0, calculatedDamage);
@@ -568,16 +509,16 @@ public class BattleController : MonoBehaviour
 				selectedEnemy.BroadcastMessage ("SetHPValue",enemyCharacterdatas.MaxHP<=0?0 :  enemyCharacterdatas.HP*100/enemyCharacterdatas.MaxHP);
 				selectedPlayer.BroadcastMessage ("SetMPValue",selectedPlayerDatas.MaxMP <= 0 ? 0 : selectedPlayerDatas.MP*100/selectedPlayerDatas.MaxMP);
 
-                    var ennemyEffect = Resources.Load<GameObject>(Settings.PrefabsPath + BattlePanels.SelectedSpell.ParticleEffect);
-                    Destroy(Instantiate(ennemyEffect, selectedEnemy.transform.localPosition, Quaternion.identity), 0.5f);
+                var ennemyEffect = Resources.Load<GameObject>(Settings.PrefabsPath + BattlePanels.SelectedSpell.ParticleEffect);
+                Destroy(Instantiate(ennemyEffect, selectedEnemy.transform.localPosition, Quaternion.identity), 0.5f);
 
-                    var playerEffect = Resources.Load<GameObject>(Settings.PrefabsPath + Settings.MagicAuraEffect);
-                    Destroy( Instantiate (playerEffect, selectedPlayer.transform.localPosition, Quaternion.identity),0.4f);
-                    SoundManager.StaticPlayOneShot(BattlePanels.SelectedSpell.SoundEffect, Vector3.zero);
-					selectedPlayer.SendMessage("Animate",EnumBattleState.Magic.ToString());
-					selectedEnemy.SendMessage("Animate",EnumBattleState.Hit.ToString());
+                var playerEffect = Resources.Load<GameObject>(Settings.PrefabsPath + Settings.MagicAuraEffect);
+                Destroy( Instantiate (playerEffect, selectedPlayer.transform.localPosition, Quaternion.identity),0.4f);
+                SoundManager.StaticPlayOneShot(BattlePanels.SelectedSpell.SoundEffect, Vector3.zero);
+				selectedPlayer.SendMessage("Animate",EnumBattleState.Magic.ToString());
+				selectedEnemy.SendMessage("Animate",EnumBattleState.Hit.ToString());
 					
-                    break;
+                break;
 			case EnumBattleAction.Item:
 				calculatedDamage = BattlePanels.SelectedItem.Attack - enemyCharacterdatas.MagicDefense; 
 				calculatedDamage = Mathf.Clamp (calculatedDamage, 0, calculatedDamage);
@@ -585,28 +526,24 @@ public class BattleController : MonoBehaviour
 				ShowPopup ("-"+calculatedDamage.ToString (), selectedEnemy.transform.position);
 				selectedEnemy.BroadcastMessage ("SetHPValue",enemyCharacterdatas.HP*100/enemyCharacterdatas.MaxHP);
 				Destroy( Instantiate (MagicParticleEffect, selectedEnemy.transform.localPosition, Quaternion.identity),1.7f);
-                    SoundManager.ItemSound();
+                SoundManager.ItemSound();
 				selectedPlayer.SendMessage("Animate",EnumBattleState.Magic.ToString());
 				selectedEnemy.SendMessage("Animate",EnumBattleState.Hit.ToString());
 					
-                    break;
+                break;
 			default:
 				break;
 			}
 		}
 
-		if (enemyCharacterdatas.HP <= 0)
-			KillCharacter (selectedEnemy);
+		if (enemyCharacterdatas.HP <= 0) KillCharacter (selectedEnemy);
 		//selectedPlayer.SendMessage ("ChangeEnumCharacterState", battlection);
 		selectedEnemy = null;
-
 
 		NextBattleSequence();
 	}
 
-    /// <summary>
     /// Enemies the attack.
-    /// </summary>
     /// <param name="playerToAttack">The player to attack.</param>
     /// <param name="playerToAttackDatas">The player to attack datas.</param>
     public void EnemyAttack(GameObject playerToAttack,CharactersData playerToAttackDatas )
@@ -632,11 +569,11 @@ public class BattleController : MonoBehaviour
 				ShowPopup ("-"+calculatedDamage.ToString (), playerToAttack.transform.position);
 				playerToAttack.BroadcastMessage ("SetHPValue",playerToAttackDatas.MaxHP<=0 ?0 : playerToAttackDatas.HP*100/playerToAttackDatas.MaxHP);
 				Destroy( Instantiate (WeaponParticleEffect, playerToAttack.transform.localPosition, Quaternion.identity),1.5f);
-                    SoundManager.WeaponSound();
-                   go.SendMessage("Animate",EnumBattleState.Attack.ToString());
-				   playerToAttack.SendMessage("Animate",EnumBattleState.Hit.ToString());
+                SoundManager.WeaponSound();
+                go.SendMessage("Animate",EnumBattleState.Attack.ToString());
+				playerToAttack.SendMessage("Animate",EnumBattleState.Hit.ToString());
 				
-				    break;
+				break;
 			
 			default:
 				calculatedDamage = enemyCharacterdatas.Attack - playerToAttackDatas.Defense; 
@@ -645,24 +582,21 @@ public class BattleController : MonoBehaviour
 				ShowPopup ("-"+calculatedDamage.ToString (), playerToAttack.transform.position);
 				playerToAttack.BroadcastMessage ("SetHPValue",playerToAttackDatas.MaxHP<=0 ?0 : playerToAttackDatas.HP*100/playerToAttackDatas.MaxHP);
 				Destroy( Instantiate (WeaponParticleEffect, playerToAttack.transform.localPosition, Quaternion.identity),1.5f);
-                    SoundManager.WeaponSound();
-                   go.SendMessage("Animate",EnumBattleState.Attack.ToString());
-				   playerToAttack.SendMessage("Animate",EnumBattleState.Hit.ToString());
+				SoundManager.WeaponSound();
+				go.SendMessage("Animate",EnumBattleState.Attack.ToString());
+				playerToAttack.SendMessage("Animate",EnumBattleState.Hit.ToString());
 				
-                    break;
+				break;
 
 			}
 		}
-		if (playerToAttackDatas.HP <= 0)
-			KillCharacter (playerToAttack);
+		if (playerToAttackDatas.HP <= 0) KillCharacter (playerToAttack);
 		//selectedPlayer.SendMessage ("ChangeEnumCharacterState", battlection);
 		selectedEnemy = null;
 
 	}
 
-    /// <summary>
     /// Kills the character.
-    /// </summary>
     /// <param name="go">The go.</param>
     public void KillCharacter(GameObject go)
 	{
@@ -676,55 +610,35 @@ public class BattleController : MonoBehaviour
 		var id = sequenceEnumerator.Current.Second.GetInstanceID ();
 		sequenceEnumerator = turnByTurnSequenceList.GetEnumerator();
 		sequenceEnumerator.MoveNext();
-		while (sequenceEnumerator.Current.Second.GetInstanceID () != id)
+		while (sequenceEnumerator.Current.Second.GetInstanceID() != id)
 			sequenceEnumerator.MoveNext();
-		
-
-			
-
 	}
 
-    /// <summary>
     /// Logs the specified text.
-    /// </summary>
     /// <param name="text">The text.</param>
     public void Log(string text)
 	{
-		if (uiGameObject) 
-			uiGameObject.BroadcastMessage ("LogText",text);
-		}
+		if (uiGameObject) uiGameObject.BroadcastMessage ("LogText",text);
+	}
 
-    /// <summary>
     /// Shows the popup.
-    /// </summary>
     /// <param name="text">The text.</param>
     /// <param name="position">The position.</param>
     public void ShowPopup(string text, Vector3 position)
 	{
-		if (uiGameObject)
-			uiGameObject.BroadcastMessage ("ShowPopup", new object[]{ text, position });
+		if (uiGameObject)uiGameObject.BroadcastMessage ("ShowPopup", new object[]{ text, position });
 	}
 
-    /// <summary>
     /// Hides the popup.
-    /// </summary>
     public void HidePopup()
-	{if (uiGameObject) 
-		uiGameObject.BroadcastMessage ("HidePopup");
+	{
+		if (uiGameObject) uiGameObject.BroadcastMessage ("HidePopup");
 	}
 
-
-    /// <summary>
     /// Shows the drop menu.
-    /// </summary>
     /// <param name="text">The text.</param>
     public void ShowDropMenu(string text)
 	{
-		if (uiGameObject) {
-			uiGameObject.BroadcastMessage ("ShowDropMenu", text);
-			}
-
+		if (uiGameObject) uiGameObject.BroadcastMessage ("ShowDropMenu", text);
 	}
-
-   
 }

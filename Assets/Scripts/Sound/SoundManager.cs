@@ -83,16 +83,10 @@ public class SoundManager : MonoBehaviour {
 
 
     // Update is called once per frame
-    /// <summary>
-    /// Updates this instance.
-    /// </summary>
-    void Update () {
-	
-	}
+    /// <summary>Updates this instance.</summary>
+    void Update () {}
 
-    /// <summary>
-    /// Plays the one shot.
-    /// </summary>
+    /// <summary>Plays the one shot.</summary>
     /// <param name="soundName">Name of the sound.</param>
     /// <param name="volume">The volume.</param>
     public void PlayOneShot(string soundName,float volume = -1)
@@ -100,12 +94,9 @@ public class SoundManager : MonoBehaviour {
         var instantiatedSound = Resources.Load<AudioClip>( Settings.SoundPath + soundName);
         if (volume >= 0) instance.gameObject.GetComponent<AudioSource>().PlayOneShot(instantiatedSound, volume);
         else instance.gameObject.GetComponent<AudioSource>().PlayOneShot(instantiatedSound);
-      
     }
 
-    /// <summary>
-    /// Plays the background music.
-    /// </summary>
+    /// <summary>Plays the background music.</summary>
     /// <param name="musicTitle">The music title.</param>
     /// <param name="volume">The volume.</param>
     public void PlayBackgroundMusic(string musicTitle, float volume = -1)
@@ -114,18 +105,14 @@ public class SoundManager : MonoBehaviour {
         if (volume >= 0) instance.gameObject.GetComponent<AudioSource>().volume = volume;
         instance.gameObject.GetComponent<AudioSource>().clip = instantiatedSound;
         instance.gameObject.GetComponent<AudioSource>().Play();
-      
     }
 
-    /// <summary>
-    /// Statics the play one shot.
-    /// </summary>
+    /// <summary>Statics the play one shot.</summary>
     /// <param name="soundName">Name of the sound.</param>
     /// <param name="position">The position.</param>
     /// <param name="volume">The volume.</param>
     public static void StaticPlayOneShot(string soundName,Vector3 position, float volume = -1)
     {
-
         var instantiatedSound = Resources.Load<AudioClip>( Settings.SoundPath + soundName);
         var lastTimeScale= Time.timeScale;
         Time.timeScale = 1f;
@@ -134,18 +121,14 @@ public class SoundManager : MonoBehaviour {
         Time.timeScale = lastTimeScale;
     }
 
-    /// <summary>
-    /// Playing UI sound.
-    /// </summary>
+    /// <summary>Playing UI sound.</summary>
     /// <param name="volume">The volume.</param>
     public static void UISound(float volume = -1)
     {
         SoundManager.StaticPlayOneShot(Settings.ChatSound, Vector3.zero, volume);
     }
 
-    /// <summary>
-    /// Playing Chat sound.
-    /// </summary>
+    /// <summary>Playing Chat sound.</summary>
     /// <param name="volume">The volume.</param>
     public static void ChatSound(float volume = -1)
     {
@@ -200,7 +183,3 @@ public class SoundManager : MonoBehaviour {
     }
     
 }
-
-
-
-

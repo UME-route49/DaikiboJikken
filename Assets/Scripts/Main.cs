@@ -118,8 +118,7 @@ public class Main : MonoBehaviour
         EquipmentList.Add(Datas.ItemsData[1]);
         CharacterList[0].LeftHand = Datas.ItemsData[17];
         EquipmentList.Add(Datas.ItemsData[17]);
-        CharacterList[0].SpellsList.AddRange(Datas.SpellsData.
-            Where(w => w.Value.AllowedCharacterType == EnumCharacterType.Warrior).Select(s => s.Value));
+        CharacterList[0].SpellsList.AddRange(Datas.SpellsData.Where(w => w.Value.AllowedCharacterType == EnumCharacterType.Warrior).Select(s => s.Value));
 
         //CharacterList.Add(Datas.CharactersData[2]);
         //CharacterList[1].Head = Datas.ItemsData[15];
@@ -133,7 +132,7 @@ public class Main : MonoBehaviour
 
         foreach (var item in EquipmentList)
         {
-            item.IsEquiped = true;
+            item.isEquiped = true;
         }
 
         ItemList.Add(Datas.ItemsData[29]);

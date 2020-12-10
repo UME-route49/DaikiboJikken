@@ -1,40 +1,9 @@
-
-/*
-Copyright (c) 2015 Funonium (Jade Skaggs)
-	
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
-
-*/
-
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-
 public delegate void Invokable();
 
-/// <summary>
-/// Enables invokation of functions without regard to timeScale
-/// To use this class, Call Invoker.InvokeDelayed(MyFunc, 5);
-/// 
-/// Written by Jade Skaggs - Funonium.com
-/// </summary>
 public class Invoker : MonoBehaviour {
 	private struct InvokableItem
 	{
@@ -48,11 +17,8 @@ public class Invoker : MonoBehaviour {
 			
 			// realtimeSinceStartup is never 0, and Time.time is affected by timescale (though it is 0 on startup).  Use a combination 
 			// http://forum.unity3d.com/threads/205773-realtimeSinceStartup-is-not-0-in-first-Awake()-call
-			if(Time.time == 0) 
-				this.ExecuteAtTime = delaySeconds;
-			else
-				this.ExecuteAtTime = Time.realtimeSinceStartup + delaySeconds;
-			
+			if(Time.time == 0) this.ExecuteAtTime = delaySeconds;
+			else this.ExecuteAtTime = Time.realtimeSinceStartup + delaySeconds;
 		}
 	}
 	
@@ -83,16 +49,10 @@ public class Invoker : MonoBehaviour {
 	{
 		return fRealDeltaTime;	
 	}
-	/// <summary>
 	/// Invokes the function with a time delay.  This is NOT 
 	/// affected by timeScale like the Invoke function in Unity.
-	/// </summary>
-	/// <param name='func'>
-	/// Function to invoke
-	/// </param>
-	/// <param name='delaySeconds'>
-	/// Delay in seconds.
-	/// </param>
+	/// <param name='func'>Function to invoke</param>
+	/// <param name='delaySeconds'>Delay in seconds.</param>
 	public static void InvokeDelayed(Invokable func, float delaySeconds)
 	{
 		Instance.invokeListPendingAddition.Add(new InvokableItem(func, delaySeconds));

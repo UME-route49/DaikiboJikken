@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [Serializable]
-public class ItemsData : MonoBehaviour
+public class ItemsData
 {
     //画像の名前
     public string PicturesName = string.Empty;
@@ -27,5 +27,5 @@ public class ItemsData : MonoBehaviour
     //アイテムの属性（使い方）
     public EnumEquipmentType EquipementType = EnumEquipmentType.None;
     //装備されているかどうか
-    public bool IsEquiped = false;
+    public bool isEquiped = false;
 }
