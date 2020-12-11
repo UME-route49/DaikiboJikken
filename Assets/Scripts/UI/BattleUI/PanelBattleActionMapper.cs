@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System;
+using UnityEngine.UI;
 
 //Without serialisation this item will not be displayed
 /// Struct PanelBattleActionMapper
@@ -10,4 +11,8 @@ public struct PanelBattleActionMapper
     public EnumBattleAction BattleAction;
     /// The panel
     public GameObject Panel;
+
+    public Toggle parentToggle;
+
+    public Transform contents;
 }

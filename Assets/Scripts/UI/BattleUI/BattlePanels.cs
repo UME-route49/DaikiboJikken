@@ -31,12 +31,15 @@ public class BattlePanels : MonoBehaviour {
     public Text PopUp;
     /// The drop menu
     public GameObject DropMenu;
-    /// The decision menu
-    public GameObject DecisionMenu;
     /// The action menu
     public GameObject ActionMenu;
     /// The logic game object
     private GameObject logicGameObject ;
+
+	private int parentCounter = 0;
+	private int childCounter = 1;
+
+	private string isActivePanel = "ParentPanel";
 
     /// Starts this instance.
     void Start()
@@ -50,75 +53,111 @@ public class BattlePanels : MonoBehaviour {
     void Awake ()
 	{
 		logicGameObject = GameObject.FindGameObjectsWithTag(Settings.Logic).FirstOrDefault();
-		ToggleFightAction (SelectedToggle);
+		//ToggleFightAction (SelectedToggle);
 		SelectedCharacter = Main.CharacterList [0];
 	}
 
+    private void Update()
+    {
+		if (isActivePanel == "ParentPanel")
+		{
+			if (Input.GetKeyDown(KeyCode.W))
+			{
+				if (parentCounter <= 0) return;
 
-    /// This procedure use the selected item
-    /// <param name="toggle">The toggle that sent the action</param>
-    /// <param name="toggle">The toggle.</param>
-    public void ToggleFightAction(Toggle toggle)
-	{
-		Contract.Requires<MissingComponentException>(toggle != null);
-		Contract.Requires<UnassignedReferenceException>(SelectedToggle != null);
-        SoundManager.UISound();
-        if (toggle.isOn) {
-            SoundManager.UISound();
-            SelectedToggle = toggle;
-			DisplayPanel (EnumBattleAction.Weapon);
+				parentCounter--;
+				ActionPanels[parentCounter].parentToggle.isOn = true;
+				SoundManager.UISound();
+				SelectedToggle = ActionPanels[parentCounter].parentToggle;
+				DisplayPanel(ActionPanels[parentCounter].BattleAction);
+			}
+			else if (Input.GetKeyDown(KeyCode.S))
+			{
+				if (parentCounter >= ActionPanels.Length - 1) return;
+
+				parentCounter++;
+				ActionPanels[parentCounter].parentToggle.isOn = true;
+				SoundManager.UISound();
+				SelectedToggle = ActionPanels[parentCounter].parentToggle;
+				DisplayPanel(ActionPanels[parentCounter].BattleAction);
+			}
+			else if (Input.GetKeyDown(KeyCode.D))
+			{
+				if (ActionPanels[parentCounter].contents == null) return;
+
+				SoundManager.UISound();
+				isActivePanel = "ChildPanel";
+				ActionPanels[parentCounter].contents.GetChild(1).GetComponent<Toggle>().isOn = true;
+				SelectedToggle = ActionPanels[parentCounter].contents.GetChild(1).GetComponent<Toggle>();
+				DisplayPanel(ActionPanels[parentCounter].BattleAction);
+			}
+			else if (Input.GetKeyDown(KeyCode.Space))
+			{
+				if(ActionPanels[parentCounter].contents != null)
+                {
+					//
+					SoundManager.UISound();
+					isActivePanel = "ChildPanel";
+					ActionPanels[parentCounter].contents.GetChild(1).GetComponent<Toggle>().isOn = true;
+					SelectedToggle = ActionPanels[parentCounter].contents.GetChild(1).GetComponent<Toggle>();
+					DisplayPanel(ActionPanels[parentCounter].BattleAction);
+				}
+				else
+                {
+					//ActionPanels[parentCounter].Panel.SendMessage("Start");
+					logicGameObject.BroadcastMessage("Action", ActionPanels[parentCounter].BattleAction);
+				}
+				//Debug.Log(parentCounter);
+			}
+			else if (Input.GetKeyDown(KeyCode.C))
+			{
+				if (logicGameObject) logicGameObject.BroadcastMessage("PassAction");
+			}
 		}
+		else if(isActivePanel == "ChildPanel")
+        {
+            if (Input.GetKeyDown(KeyCode.W))
+            {
+				if (childCounter <= 1) return;
+
+				childCounter--;
+				ActionPanels[parentCounter].contents.GetChild(childCounter).GetComponent<Toggle>().isOn = true;
+				SoundManager.UISound();
+				SelectedToggle = ActionPanels[parentCounter].contents.GetChild(childCounter).GetComponent<Toggle>();
+				DisplayPanel(ActionPanels[parentCounter].BattleAction);
+			}
+			else if(Input.GetKeyDown(KeyCode.S))
+            {
+				if (childCounter >= ActionPanels[parentCounter].contents.childCount - 1) return;
+
+				childCounter++;
+				ActionPanels[parentCounter].contents.GetChild(childCounter).GetComponent<Toggle>().isOn = true;
+				SoundManager.UISound();
+				SelectedToggle = ActionPanels[parentCounter].contents.GetChild(childCounter).GetComponent<Toggle>();
+				DisplayPanel(ActionPanels[parentCounter].BattleAction);
+			}
+			else if (Input.GetKeyDown(KeyCode.A))
+            {
+				SelectedToggle.isOn = false;
+				SoundManager.UISound();
+				isActivePanel = "ParentPanel";
+				ActionPanels[parentCounter].parentToggle.isOn = true;
+				SelectedToggle = ActionPanels[parentCounter].parentToggle;
+				DisplayPanel(ActionPanels[parentCounter].BattleAction);
+				childCounter = 1;
+			}
+			else if (Input.GetKeyDown(KeyCode.Space))
+            {
+                switch (ActionPanels[parentCounter].BattleAction)
+                {
+					case EnumBattleAction.Magic:
+
+						break;
+                }
+            }
+        }
 	}
 
-    /// This procedure use the selected item
-    /// <param name="toggle">The toggle that sent the action</param>
-    /// <param name="toggle">The toggle.</param>
-    public void ToggleMagicAction(Toggle toggle)
-	{
-		Contract.Requires<MissingComponentException> (toggle != null);
-		Contract.Requires<UnassignedReferenceException> (SelectedToggle != null);
-        SoundManager.UISound();
-        if (toggle.isOn) {
-			SelectedToggle = toggle;
-			DisplayPanel (EnumBattleAction.Magic);
-		}
-	}
-
-    /// This procedure use the selected item
-    /// <param name="toggle">The toggle that sent the action</param>
-    /// <param name="toggle">The toggle.</param>
-    public void ToggleItemAction(Toggle toggle)
-	{
-		Contract.Requires<MissingComponentException> (toggle != null);
-		Contract.Requires<UnassignedReferenceException> (SelectedToggle != null);
-        SoundManager.UISound();
-        if (toggle.isOn) {
-
-			SelectedToggle = toggle;
-			DisplayPanel (EnumBattleAction.Item);
-		}
-	}
-
-    /// This procedure use the selected item
-    /// <param name="toggle">The toggle that sent the action</param>
-    /// <param name="toggle">The toggle.</param>
-    public void TogglePassAction(Toggle toggle)
-	{
-		Contract.Requires<MissingComponentException> (toggle != null);
-		Contract.Requires<UnassignedReferenceException> (SelectedToggle != null);
-        SoundManager.UISound();
-        if (toggle.isOn) {
-
-			SelectedToggle = toggle;
-			DisplayPanel (EnumBattleAction.None);
-
-			if ( logicGameObject ) logicGameObject.BroadcastMessage ("PassAction");
-		}
-	}
-
-    /// This procedure show or hide the different panels
-    /// <param name="action">The action that correspond to the panel to display</param>
-    /// <param name="action">The action.</param>
     void DisplayPanel(EnumBattleAction action)
 	{
 		foreach (PanelBattleActionMapper row in ActionPanels)
@@ -127,12 +166,11 @@ public class BattlePanels : MonoBehaviour {
 
 				if (row.BattleAction == action){
 					row.Panel.SetActive(true);
-					row.Panel.SendMessage("Start"); 
+					//row.Panel.SendMessage("Start"); 
 				}
 				else  row.Panel.SetActive(false);
 			}
 		}
-
 	}
 
     /// Fights this instance.
@@ -156,65 +194,38 @@ public class BattlePanels : MonoBehaviour {
 		SendMessageUpwards("DisplayPanel",EnumBattleAction.Item);
 	}
 
-    /// Logs the text.
-    /// <param name="text">The text.</param>
     void LogText (string text)
 	{
 		Debug.Log ("Loging"+text);
 		logText.text = text;
 	}
 
-    /// Shows the drop menu.
-    /// <param name="text">The text.</param>
     public void ShowDropMenu(string text)
 	{
 		DropMenu.SetActive (true);
 		DropText.text = text;
 		float time = 0.75f;
 
-		Sequence actions = new Sequence(new SequenceParms());
-		TweenParms parms = new TweenParms().Prop("localScale", DropMenu.transform.localScale*2f ).Ease(EaseType.EaseOutElastic);
-
-		actions.Append(HOTween.To(DropMenu.transform, time, parms));
-
-		actions.Play();
+		//Sequence actions = new Sequence(new SequenceParms());
+		//TweenParms parms = new TweenParms().Prop("localScale", DropMenu.transform.localScale*2f ).Ease(EaseType.EaseOutElastic);
+		//actions.Append(HOTween.To(DropMenu.transform, time, parms));
+		//actions.Play();
 	}
-
-    /// Hides the decision.
-    public void HideDecision()
-	{
-		DecisionMenu.SetActive (false);
-	}
-
-    /// Shows the decision.
-    public void ShowDecision()
-	{
-		DecisionMenu.SetActive (true);
-	}
-
 
     /// Hides the action menu.
     public void HideActionMenu()
 	{
 		ActionMenu.SetActive (false);
+		isActivePanel = "None";
 	}
 
     /// Shows the action menu.
     public void ShowActionMenu()
 	{
 		ActionMenu.SetActive (true);
-	}
-
-    /// Declines the decision.
-    public void DeclineDecision()
-	{
-		if (logicGameObject) logicGameObject.BroadcastMessage ("DeclineDecision");
-	}
-
-    /// Accepts the decision.
-    public void AcceptDecision()
-	{
-		if (logicGameObject ) logicGameObject.BroadcastMessage ("AcceptDecision");
+		isActivePanel = "ParentPanel";
+		parentCounter = 0;
+		childCounter = 1;
 	}
 
     /// Shows the popup.

@@ -979,6 +979,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6556970276844460172}
   - component: {fileID: 6602931063485198148}
+  - component: {fileID: 1963769445007980057}
   m_Layer: 0
   m_Name: BOSS
   m_TagString: Untagged
@@ -995,7 +996,7 @@ Transform:
   m_GameObject: {fileID: 6553916670458435248}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 2, y: 2, z: 2}
+  m_LocalScale: {x: 3, y: 3, z: 5}
   m_Children:
   - {fileID: 6548306919752911370}
   - {fileID: 6548493057685303400}
@@ -1013,7 +1014,7 @@ Animator:
   m_GameObject: {fileID: 6553916670458435248}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: 5b33c1f08daab914aa2238ae6f13b0ad, type: 3}
-  m_Controller: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: c225a25137ae8fa4ea0d0ce7b7ea41b4, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -1022,6 +1023,28 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &1963769445007980057
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6553916670458435248}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6e9cb6fc7a4e6344a8fc16605030a3d3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  HP: 200
+  MP: 20
+  Attack: 20
+  Defense: 20
+  Magic: 20
+  MagicDefense: 20
+  Level: 40
+  MaxHP: 200
+  MaxMP: 20
+  XP: 10000
 --- !u!1 &6553919712167617028
 GameObject:
   m_ObjectHideFlags: 0

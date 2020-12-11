@@ -90,29 +90,15 @@ public class SpellsBattle : MonoBehaviour {
 		Contract.Requires<MissingComponentException> (toggle != null);
         SoundManager.UISound();
         if (toggle.isOn) {
-			//equipActionToggle.isOn = true;
-			ColorBlock cb = toggle.colors;
-			cb.normalColor = Color.cyan;
-			cb.highlightedColor = Color.cyan;
-			toggle.colors = cb;
 			selectedToggle = toggle;
 			ItemsUI toggleItem = selectedToggle.GetComponent <ItemsUI> ();
-			var itemDatas=BattlePanels.SelectedCharacter.SpellsList.Where(w =>w.Name == toggleItem.Name.text).FirstOrDefault();
+			var itemDatas = BattlePanels.SelectedCharacter.SpellsList.Where(w =>w.Name == toggleItem.Name.text).FirstOrDefault();
 			BattlePanels.SelectedSpell = itemDatas;
-			//spellDescription.text = itemDatas.Description;
 			if (logicGameObject) {
-				logicGameObject.BroadcastMessage("MagicAction");	
+				//logicGameObject.BroadcastMessage("MagicAction");	
 			}
 		}
 		else if (!toggle.isOn) {
-				//equipActionToggle.isOn = true;
-			ColorBlock cb = toggle.colors;
-			cb.normalColor = Color.white;
-			cb.highlightedColor = Color.yellow;
-			toggle.colors = cb;
-			//PanelActionController.selectedSpell = null;
-			//spellDescription.text =string.Empty;
-
 			}
 	}
 

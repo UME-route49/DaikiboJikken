@@ -66,8 +66,8 @@ public class Datas : MonoBehaviour
 	{
 		//武器
 		var item = new ItemsData();
-		item.Name = "sword";
-		item.Description = "sword";
+		item.Name = "ブロードソード";
+		item.Description = "見習い戦士に国から支給される剣。";
 		item.PicturesName = "sword001";
 		item.EquipementType = EnumEquipmentType.RightHand;
 		item.AllowedCharacterType = EnumCharacterType.Warrior;
@@ -75,75 +75,75 @@ public class Datas : MonoBehaviour
 		item.Price = 10;
 		ItemsData[1] = item;
 
-		item = new ItemsData();
-		item.Name = "Master sword";
-		item.Description = "A sword for experienced warrior";
-		item.PicturesName = "W_Sword004";
-		item.EquipementType = EnumEquipmentType.RightHand;
-		item.AllowedCharacterType = EnumCharacterType.Warrior;
-		item.Attack = 30;
-		item.Price = 20;
-		ItemsData[2] = item;
+		//item = new ItemsData();
+		//item.Name = "マスターソード";
+		//item.Description = "サーの称号を手にした英雄にのみ装備することを許された剣。";
+		//item.PicturesName = "W_Sword004";
+		//item.EquipementType = EnumEquipmentType.RightHand;
+		//item.AllowedCharacterType = EnumCharacterType.Warrior;
+		//item.Attack = 30;
+		//item.Price = 20;
+		//ItemsData[2] = item;
 
-		item = new ItemsData();
-		item.Name = "Vedetta sword";
-		item.Description = "A sword to take revenge";
-		item.PicturesName = "W_Sword008";
-		item.EquipementType = EnumEquipmentType.RightHand;
-		item.AllowedCharacterType = EnumCharacterType.Warrior;
-		item.Attack = 50;
-		item.Price = 30;
-		ItemsData[3] = item;
+		//item = new ItemsData();
+		//item.Name = "Vedetta sword";
+		//item.Description = "A sword to take revenge";
+		//item.PicturesName = "W_Sword008";
+		//item.EquipementType = EnumEquipmentType.RightHand;
+		//item.AllowedCharacterType = EnumCharacterType.Warrior;
+		//item.Attack = 50;
+		//item.Price = 30;
+		//ItemsData[3] = item;
 
-		item = new ItemsData();
-		item.Name = "Cimitare cimitery";
-		item.Description = "To send your enemies to the cimitary";
-		item.PicturesName = "W_Sword013";
-		item.EquipementType = EnumEquipmentType.RightHand;
-		item.AllowedCharacterType = EnumCharacterType.Warrior;
-		item.Attack = 60;
-		item.Price = 40;
-		ItemsData[4] = item;
+		//item = new ItemsData();
+		//item.Name = "Cimitare cimitery";
+		//item.Description = "To send your enemies to the cimitary";
+		//item.PicturesName = "W_Sword013";
+		//item.EquipementType = EnumEquipmentType.RightHand;
+		//item.AllowedCharacterType = EnumCharacterType.Warrior;
+		//item.Attack = 60;
+		//item.Price = 40;
+		//ItemsData[4] = item;
 
-		item = new ItemsData();
-		item.Name = "Lighting sword";
-		item.Description = "Contains lightning power";
-		item.PicturesName = "W_Sword015";
-		item.EquipementType = EnumEquipmentType.RightHand;
-		item.AllowedCharacterType = EnumCharacterType.Warrior;
-		item.Attack = 70;
-		item.Price = 50;
-		ItemsData[5] = item;
+		//item = new ItemsData();
+		//item.Name = "Lighting sword";
+		//item.Description = "Contains lightning power";
+		//item.PicturesName = "W_Sword015";
+		//item.EquipementType = EnumEquipmentType.RightHand;
+		//item.AllowedCharacterType = EnumCharacterType.Warrior;
+		//item.Attack = 70;
+		//item.Price = 50;
+		//ItemsData[5] = item;
 
-		item = new ItemsData();
-		item.Name = "Fire sword";
-		item.Description = "Contains Fire power";
-		item.PicturesName = "W_Sword016";
-		item.EquipementType = EnumEquipmentType.RightHand;
-		item.AllowedCharacterType = EnumCharacterType.Warrior;
-		item.Attack = 80;
-		item.Price = 60;
-		ItemsData[6] = item;
+		//item = new ItemsData();
+		//item.Name = "Fire sword";
+		//item.Description = "Contains Fire power";
+		//item.PicturesName = "W_Sword016";
+		//item.EquipementType = EnumEquipmentType.RightHand;
+		//item.AllowedCharacterType = EnumCharacterType.Warrior;
+		//item.Attack = 80;
+		//item.Price = 60;
+		//ItemsData[6] = item;
 
-		item = new ItemsData();
-		item.Name = "Water sword";
-		item.Description = "Contains Water power";
-		item.PicturesName = "W_Sword017";
-		item.EquipementType = EnumEquipmentType.RightHand;
-		item.AllowedCharacterType = EnumCharacterType.Warrior;
-		item.Attack = 90;
-		item.Price = 70;
-		ItemsData[7] = item;
+		//item = new ItemsData();
+		//item.Name = "Water sword";
+		//item.Description = "Contains Water power";
+		//item.PicturesName = "W_Sword017";
+		//item.EquipementType = EnumEquipmentType.RightHand;
+		//item.AllowedCharacterType = EnumCharacterType.Warrior;
+		//item.Attack = 90;
+		//item.Price = 70;
+		//ItemsData[7] = item;
 
-		item = new ItemsData();
-		item.Name = "Black sword";
-		item.Description = "No one know the real power of this sword";
-		item.PicturesName = "W_Sword021";
-		item.EquipementType = EnumEquipmentType.RightHand;
-		item.AllowedCharacterType = EnumCharacterType.Warrior;
-		item.Attack = 120;
-		item.Price = 150;
-		ItemsData[8] = item;
+		//item = new ItemsData();
+		//item.Name = "Black sword";
+		//item.Description = "No one know the real power of this sword";
+		//item.PicturesName = "W_Sword021";
+		//item.EquipementType = EnumEquipmentType.RightHand;
+		//item.AllowedCharacterType = EnumCharacterType.Warrior;
+		//item.Attack = 120;
+		//item.Price = 150;
+		//ItemsData[8] = item;
 
 		item = new ItemsData();
 		item.Name = "Wand";
@@ -156,27 +156,27 @@ public class Datas : MonoBehaviour
 		item.Price = 10;
 		ItemsData[9] = item;
 
-		item = new ItemsData();
-		item.Name = "Master wand";
-		item.Description = "A Master wand";
-		item.PicturesName = "W_Mace007";
-		item.EquipementType = EnumEquipmentType.TwoHands;
-		item.AllowedCharacterType = EnumCharacterType.Warrior;
-		item.Attack = 30;
-		item.Magic = 30;
-		item.Price = 30;
-		ItemsData[10] = item;
+		//item = new ItemsData();
+		//item.Name = "Master wand";
+		//item.Description = "A Master wand";
+		//item.PicturesName = "W_Mace007";
+		//item.EquipementType = EnumEquipmentType.TwoHands;
+		//item.AllowedCharacterType = EnumCharacterType.Warrior;
+		//item.Attack = 30;
+		//item.Magic = 30;
+		//item.Price = 30;
+		//ItemsData[10] = item;
 
-		item = new ItemsData();
-		item.Name = "Solar wand";
-		item.Description = "A wand that contains the solar power";
-		item.PicturesName = "W_Mace014";
-		item.EquipementType = EnumEquipmentType.TwoHands;
-		item.AllowedCharacterType = EnumCharacterType.Wizard;
-		item.Attack = 60;
-		item.Magic = 70;
-		item.Price = 120;
-		ItemsData[11] = item;
+		//item = new ItemsData();
+		//item.Name = "Solar wand";
+		//item.Description = "A wand that contains the solar power";
+		//item.PicturesName = "W_Mace014";
+		//item.EquipementType = EnumEquipmentType.TwoHands;
+		//item.AllowedCharacterType = EnumCharacterType.Wizard;
+		//item.Attack = 60;
+		//item.Magic = 70;
+		//item.Price = 120;
+		//ItemsData[11] = item;
 
 		//ヘルメット
 		item = new ItemsData();
@@ -353,7 +353,7 @@ public class Datas : MonoBehaviour
 
 		//アイテム
 		item = new ItemsData();
-		item.Name = "Small potion";
+		item.Name = "ポーション";
 		item.Description = "A potion that add 20 Hp points";
 		item.PicturesName = "P_Red04";
 		item.EquipementType = EnumEquipmentType.Usable;
@@ -362,7 +362,7 @@ public class Datas : MonoBehaviour
 		ItemsData[29] = item;
 
 		item = new ItemsData();
-		item.Name = "Potion";
+		item.Name = "メガポーション";
 		item.Description = "A potion that add 40 Hp points";
 		item.PicturesName = "P_Red03";
 		item.EquipementType = EnumEquipmentType.Usable;
@@ -371,7 +371,7 @@ public class Datas : MonoBehaviour
 		ItemsData[30] = item;
 
 		item = new ItemsData();
-		item.Name = "Big potion";
+		item.Name = "ウルトラポーション";
 		item.Description = "A big potion that add 60 Hp points";
 		item.PicturesName = "P_Red03";
 		item.EquipementType = EnumEquipmentType.Usable;
@@ -380,7 +380,7 @@ public class Datas : MonoBehaviour
 		ItemsData[31] = item;
 
 		item = new ItemsData();
-		item.Name = "Small mana potion";
+		item.Name = "エーテル";
 		item.Description = "A potion that add 20 mana points";
 		item.PicturesName = "P_Red04";
 		item.EquipementType = EnumEquipmentType.Usable;
@@ -389,7 +389,7 @@ public class Datas : MonoBehaviour
 		ItemsData[32] = item;
 
 		item = new ItemsData();
-		item.Name = "Mana potion";
+		item.Name = "ハイエーテル";
 		item.Description = "A potion that add 40 mana points";
 		item.PicturesName = "P_Red03";
 		item.EquipementType = EnumEquipmentType.Usable;
@@ -398,7 +398,7 @@ public class Datas : MonoBehaviour
 		ItemsData[33] = item;
 
 		item = new ItemsData();
-		item.Name = "Big mana potion";
+		item.Name = "ウルトラポーション";
 		item.Description = "A big potion that add 60 mana points";
 		item.PicturesName = "P_Red03";
 		item.EquipementType = EnumEquipmentType.Usable;
@@ -412,7 +412,7 @@ public class Datas : MonoBehaviour
 	{
 
 		var spell = new SpellsData();
-		spell.Name = "Fire ball";
+		spell.Name = "";
 		spell.Description = "Send a fireball on your ennemies";
 		spell.AllowedCharacterType = EnumCharacterType.Wizard;
 		spell.ManaAmount = 5;

@@ -30,13 +30,13 @@ public class Settings
     public const string SoundPath = "Sounds/";
     //The path to battle begins music
     /// <summary>The  battle begins music name</summary>
-    public const string BattleBeginsMusic = "Bumblebee loop";
+    public const string BattleBeginsMusic = "BattleTheme";
     //The path to game over music
     /// <summary>The path to game over music</summary>
-    public const string GameOverMusic = "softpiano20";
+    public const string GameOverMusic = "GameOverMusic";
     // The path to winning music
     /// <summary>The path to winning music </summary>
-    public const string WinningMusic = "Bouncy";
+    public const string WinningMusic = "Fanfare";
     //The  chat sound name
     /// <summary>The  chat sound name</summary>
     public const string ChatSound = "metalLatch";
