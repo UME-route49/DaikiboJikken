@@ -30,7 +30,7 @@ public class ItemsBattle : MonoBehaviour {
     /// Populates the list.
     void PopulateList () {
 	
-		Contract.Requires<UnassignedReferenceException> (BattlePanels.SelectedCharacter != null);
+		Contract.Requires<UnassignedReferenceException> (BattlePanels.selectedCharacter != null);
 
 		foreach (var item in Main.ItemList) {
 			GameObject newToggle = Instantiate (ToggleToDuplicate) as GameObject;
@@ -57,8 +57,8 @@ public class ItemsBattle : MonoBehaviour {
         if (toggle.isOn) {
 			toggle.group.NotifyToggleOn(toggle);
 			selectedToggle = toggle;
-			ItemsUI toggleItem = selectedToggle.GetComponent <ItemsUI> ();
-			var itemDatas = Main.ItemList.Where(w =>w.Name == toggleItem.Name.text).FirstOrDefault();
+			//ItemsUI toggleItem = selectedToggle.GetComponent <ItemsUI> ();
+			//var itemDatas = Main.ItemList.Where(w =>w.Name == toggleItem.Name.text).FirstOrDefault();
 			
 			//BattlePanels.SelectedCharacter.HP += itemDatas.HealthPoint;
 			//BattlePanels.SelectedCharacter.MP += itemDatas.Mana;

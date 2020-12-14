@@ -38,28 +38,28 @@ public class Datas : MonoBehaviour
 		character.MaxMP = 10;
 		CharactersData[1] = character;
 
-		//character = new CharactersData();
-		//character.Name = "Thief";
-		//character.Type = EnumCharacterType.Thief;
-		//character.Level = 1;
-		//character.PicturesName = "Thief";
-		//character.HP = 100;
-		//character.MaxHP = 100;
-		//character.MP = 30;
-		//character.MaxMP = 30;
-		//CharactersData[2] = character;
+        character = new CharactersData();
+        character.Name = "Thief";
+        character.Type = EnumCharacterType.Thief;
+        character.Level = 1;
+        character.PicturesName = "Thief";
+        character.HP = 100;
+        character.MaxHP = 100;
+        character.MP = 30;
+        character.MaxMP = 30;
+        CharactersData[2] = character;
 
-		//character = new CharactersData();
-		//character.Name = "Wizard";
-		//character.Type = EnumCharacterType.Wizard;
-		//character.Level = 1;
-		//character.PicturesName = "Wizard";
-		//character.HP = 20;
-		//character.MaxHP = 20;
-		//character.MP = 30;
-		//character.MaxMP = 30;
-		//CharactersData[3] = character;
-	}
+        character = new CharactersData();
+        character.Name = "Witch";
+        character.Type = EnumCharacterType.Witch;
+        character.Level = 1;
+        character.PicturesName = "Witch";
+        character.HP = 20;
+        character.MaxHP = 20;
+        character.MP = 30;
+        character.MaxMP = 30;
+        CharactersData[3] = character;
+    }
 
 	//アイテムデータの設定
 	public static void PopulateItemsDatas()
@@ -214,7 +214,7 @@ public class Datas : MonoBehaviour
 		item.Description = "A noob hat";
 		item.PicturesName = "C_Hat01";
 		item.EquipementType = EnumEquipmentType.Head;
-		item.AllowedCharacterType = EnumCharacterType.Wizard;
+		item.AllowedCharacterType = EnumCharacterType.Witch;
 		item.MagicDefense = 20;
 		item.Price = 10;
 		ItemsData[15] = item;
@@ -224,7 +224,7 @@ public class Datas : MonoBehaviour
 		item.Description = "A star hat";
 		item.PicturesName = "C_Hat02";
 		item.EquipementType = EnumEquipmentType.Head;
-		item.AllowedCharacterType = EnumCharacterType.Wizard;
+		item.AllowedCharacterType = EnumCharacterType.Witch;
 		item.MagicDefense = 40;
 		item.Price = 20;
 		ItemsData[16] = item;
@@ -336,7 +336,7 @@ public class Datas : MonoBehaviour
 		item.Description = "A superior clothes";
 		item.PicturesName = "A_Clothing02";
 		item.EquipementType = EnumEquipmentType.Body;
-		item.AllowedCharacterType = EnumCharacterType.Wizard;
+		item.AllowedCharacterType = EnumCharacterType.Witch;
 		item.MagicDefense = 40;
 		item.Price = 40;
 		ItemsData[27] = item;
@@ -346,7 +346,7 @@ public class Datas : MonoBehaviour
 		item.Description = "An adamentium clothes";
 		item.PicturesName = "A_Armor04";
 		item.EquipementType = EnumEquipmentType.Body;
-		item.AllowedCharacterType = EnumCharacterType.Wizard;
+		item.AllowedCharacterType = EnumCharacterType.Witch;
 		item.MagicDefense = 80;
 		item.Price = 100;
 		ItemsData[28] = item;
@@ -414,7 +414,7 @@ public class Datas : MonoBehaviour
 		var spell = new SpellsData();
 		spell.Name = "";
 		spell.Description = "Send a fireball on your ennemies";
-		spell.AllowedCharacterType = EnumCharacterType.Wizard;
+		spell.AllowedCharacterType = EnumCharacterType.Witch;
 		spell.ManaAmount = 5;
 		spell.Attack = 10;
 		spell.ParticleEffect = "FireBall";
@@ -424,7 +424,7 @@ public class Datas : MonoBehaviour
 		spell = new SpellsData();
 		spell.Name = "Ice ball";
 		spell.Description = "Send an ice ball on your ennemies";
-		spell.AllowedCharacterType = EnumCharacterType.Wizard;
+		spell.AllowedCharacterType = EnumCharacterType.Witch;
 		spell.ManaAmount = 7;
 		spell.Attack = 15;
 		spell.ParticleEffect = "IceCold";
@@ -434,7 +434,7 @@ public class Datas : MonoBehaviour
 		spell = new SpellsData();
 		spell.Name = "Shadow ball";
 		spell.Description = "Send a shadow ball on your ennemies";
-		spell.AllowedCharacterType = EnumCharacterType.Wizard;
+		spell.AllowedCharacterType = EnumCharacterType.Witch;
 		spell.ManaAmount = 15;
 		spell.Attack = 20;
 		spell.ParticleEffect = "IceWave";
@@ -444,7 +444,7 @@ public class Datas : MonoBehaviour
 		spell = new SpellsData();
 		spell.Name = "Earth quak";
 		spell.Description = "Shake the ground";
-		spell.AllowedCharacterType = EnumCharacterType.Wizard;
+		spell.AllowedCharacterType = EnumCharacterType.Witch;
 		spell.ManaAmount = 20;
 		spell.Attack = 30;
 		spell.ParticleEffect = "IceWave";
@@ -454,7 +454,7 @@ public class Datas : MonoBehaviour
 		spell = new SpellsData();
 		spell.Name = "Fire wall";
 		spell.Description = "Invok a firewall";
-		spell.AllowedCharacterType = EnumCharacterType.Wizard;
+		spell.AllowedCharacterType = EnumCharacterType.Witch;
 		spell.ManaAmount = 30;
 		spell.Attack = 35;
 		spell.ParticleEffect = "FireFlamish";
@@ -464,7 +464,7 @@ public class Datas : MonoBehaviour
 		spell = new SpellsData();
 		spell.Name = "Ice mirror";
 		spell.Description = "Freeze your ennemies inside";
-		spell.AllowedCharacterType = EnumCharacterType.Wizard;
+		spell.AllowedCharacterType = EnumCharacterType.Witch;
 		spell.ManaAmount = 40;
 		spell.Attack = 45;
 		spell.ParticleEffect = "IceCold";
@@ -473,7 +473,7 @@ public class Datas : MonoBehaviour
 		spell = new SpellsData();
 		spell.Name = "Death shadow";
 		spell.Description = "Open the gate for dead souls";
-		spell.AllowedCharacterType = EnumCharacterType.Wizard;
+		spell.AllowedCharacterType = EnumCharacterType.Witch;
 		spell.ManaAmount = 60;
 		spell.Attack = 60;
 		spell.ParticleEffect = "IceStars";
@@ -483,7 +483,7 @@ public class Datas : MonoBehaviour
 		spell = new SpellsData();
 		spell.Name = "Thunder storm";
 		spell.Description = "A big thunder storm";
-		spell.AllowedCharacterType = EnumCharacterType.Wizard;
+		spell.AllowedCharacterType = EnumCharacterType.Witch;
 		spell.ManaAmount = 150;
 		spell.Attack = 150;
 		spell.ParticleEffect = "IceStars";

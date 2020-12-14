@@ -25,18 +25,18 @@ public class WeaponBattle : MonoBehaviour {
 
     void Start () {
 		//Weapon.isOn = false;
-		if (BattlePanels.SelectedCharacter  != null) LoadEquipements();
+		if (BattlePanels.selectedCharacter  != null) LoadEquipements();
 		logicGameObject  = GameObject.FindGameObjectsWithTag(Settings.Logic).FirstOrDefault();
 	}
 
     /// This procedure display theequiped items
     public void LoadEquipements()
 	{
-		if (BattlePanels.SelectedCharacter.RightHand != null) {
+		if (BattlePanels.selectedCharacter.RightHand != null) {
 			if (RightHandImage != null)
-				RightHandImage.sprite = Resources.Load <Sprite> (Settings.IconsPaths + BattlePanels.SelectedCharacter.RightHand.PicturesName);
+				RightHandImage.sprite = Resources.Load <Sprite> (Settings.IconsPaths + BattlePanels.selectedCharacter.RightHand.PicturesName);
 			if (RightHandText != null)
-                RightHandText.text = BattlePanels.SelectedCharacter.RightHand.Name;
+                RightHandText.text = BattlePanels.selectedCharacter.RightHand.Name;
         }
         else {
 			if (RightHandImage != null)
@@ -63,8 +63,8 @@ public class WeaponBattle : MonoBehaviour {
 			cb.normalColor = Color.cyan;
 			cb.highlightedColor = Color.cyan;
 			toggle.colors = cb;
-			if (BattlePanels.SelectedCharacter.RightHand != null) {
-				BattlePanels.SelectedWeapon = BattlePanels.SelectedCharacter.RightHand;
+			if (BattlePanels.selectedCharacter.RightHand != null) {
+				BattlePanels.selectedWeapon = BattlePanels.selectedCharacter.RightHand;
 				if (logicGameObject) {
 					logicGameObject.BroadcastMessage("WeaponAction");	
 				}

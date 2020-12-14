@@ -4,5 +4,6 @@ public enum EnumCharacterType
     None,
     Warrior,
     Thief,
-    Wizard
+    Witch
+
 }

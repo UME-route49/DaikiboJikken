@@ -118,17 +118,34 @@ public class Main : MonoBehaviour
         EquipmentList.Add(Datas.ItemsData[1]);
         CharacterList[0].LeftHand = Datas.ItemsData[17];
         EquipmentList.Add(Datas.ItemsData[17]);
-        CharacterList[0].SpellsList.AddRange(Datas.SpellsData.Where(w => w.Value.AllowedCharacterType == EnumCharacterType.Warrior).Select(s => s.Value));
+        CharacterList[0].SpellsList.AddRange(Datas.SpellsData.
+            Where(w => w.Value.AllowedCharacterType == EnumCharacterType.Warrior).Select(s => s.Value));
 
-        //CharacterList.Add(Datas.CharactersData[2]);
-        //CharacterList[1].Head = Datas.ItemsData[15];
-        //EquipmentList.Add(Datas.ItemsData[15]);
-        //CharacterList[1].Body = Datas.ItemsData[26];
-        //EquipmentList.Add(Datas.ItemsData[26]);
-        //CharacterList[1].RightHand = Datas.ItemsData[9];
-        //EquipmentList.Add(Datas.ItemsData[9]);
-        //CharacterList[1].SpellsList.AddRange(Datas.SpellsData.
-        //    Where(w => w.Value.AllowedCharacterType == EnumCharacterType.Wizard).Select(s => s.Value));
+        Debug.Log(CharacterList[0].Name);
+
+        CharacterList.Add(Datas.CharactersData[2]);
+        CharacterList[1].Head = Datas.ItemsData[15];
+        EquipmentList.Add(Datas.ItemsData[15]);
+        CharacterList[1].Body = Datas.ItemsData[26];
+        EquipmentList.Add(Datas.ItemsData[26]);
+        CharacterList[1].RightHand = Datas.ItemsData[9];
+        EquipmentList.Add(Datas.ItemsData[9]);
+        CharacterList[1].SpellsList.AddRange(Datas.SpellsData.
+            Where(w => w.Value.AllowedCharacterType == EnumCharacterType.Thief).Select(s => s.Value));
+
+        Debug.Log(CharacterList[1].Name);
+
+        CharacterList.Add(Datas.CharactersData[3]);
+        CharacterList[2].Head = Datas.ItemsData[15];
+        EquipmentList.Add(Datas.ItemsData[15]);
+        CharacterList[2].Body = Datas.ItemsData[26];
+        EquipmentList.Add(Datas.ItemsData[26]);
+        CharacterList[2].RightHand = Datas.ItemsData[9];
+        EquipmentList.Add(Datas.ItemsData[9]);
+        CharacterList[2].SpellsList.AddRange(Datas.SpellsData.
+            Where(w => w.Value.AllowedCharacterType == EnumCharacterType.Witch).Select(s => s.Value));
+
+        Debug.Log(CharacterList[2].Name);
 
         foreach (var item in EquipmentList)
         {
@@ -141,15 +158,9 @@ public class Main : MonoBehaviour
     }
 
     #region ISerializable implementation
-    /// <summary>
     /// Initializes a new instance of the <see cref="Main"/> class.
-    /// </summary>
     public Main() { }
-    /// <summary>
     /// Initializes a new instance of the <see cref="Main"/> class.
-    /// </summary>
-    /// <param name="info">The information.</param>
-    /// <param name="context">The context.</param>
     public Main(SerializationInfo info, StreamingContext context)
     {
         CharacterList = (List<CharactersData>)info.GetValue("characterList", typeof(List<CharactersData>));
@@ -165,11 +176,7 @@ public class Main : MonoBehaviour
         JustEnteredTheScreen = false;
     }
 #pragma warning disable  // Type or member is obsolete
-    /// <summary>
     /// Gets the object data.
-    /// </summary>
-    /// <param name="info">The information.</param>
-    /// <param name="context">The context.</param>
     [SecurityPermission(SecurityAction.Demand, SerializationFormatter = true)]
 #pragma warning restore  // Type or member is obsolete
     public void GetObjectData(SerializationInfo info, StreamingContext context)
@@ -184,9 +191,7 @@ public class Main : MonoBehaviour
 
     }
 
-    /// <summary>
     /// Saves this instance.
-    /// </summary>
     public static void Save()
     {
 
@@ -202,13 +207,9 @@ public class Main : MonoBehaviour
 
     }
 
-    /// <summary>
     /// Loads this instance.
-    /// </summary>
     public static void Load()
     {
-
-
         //Main data = new Main ();
         Stream stream = File.Open(Settings.SavedFileName, FileMode.Open);
         BinaryFormatter bformatter = new BinaryFormatter();
@@ -221,27 +222,18 @@ public class Main : MonoBehaviour
             SceneManager.LoadScene(Main.CurrentScene);
         else
             SceneManager.LoadScene(Settings.MainMenuScene);
-
     }
 
 
-    /// <summary>
     /// Class VersionDeserializationBinder. This class cannot be inherited.
-    /// </summary>
     public sealed class VersionDeserializationBinder : SerializationBinder
     {
-        /// <summary>
         /// Binds to type.
-        /// </summary>
-        /// <param name="assemblyName">Name of the assembly.</param>
-        /// <param name="typeName">Name of the type.</param>
-        /// <returns>Type.</returns>
         public override Type BindToType(string assemblyName, string typeName)
         {
             if (!string.IsNullOrEmpty(assemblyName) && !string.IsNullOrEmpty(typeName))
             {
                 Type typeToDeserialize = null;
-
 
                 assemblyName = Assembly.GetExecutingAssembly().FullName;
                 // The following line of code returns the type. 
@@ -250,8 +242,6 @@ public class Main : MonoBehaviour
             }
             return null;
         }
-
     }
-
     #endregion
 }

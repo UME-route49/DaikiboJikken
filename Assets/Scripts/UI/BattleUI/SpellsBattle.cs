@@ -1,16 +1,3 @@
-// ***********************************************************************
-// Assembly         : Assembly-CSharp
-// Author           : Pondomaniac
-// Created          : 07-06-2016
-//
-// Last Modified By : Pondomaniac
-// Last Modified On : 07-07-2016
-// ***********************************************************************
-// <copyright file="SpellsBattle.cs" company="">
-
-// </copyright>
-// <summary></summary>
-// ***********************************************************************
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
@@ -18,51 +5,31 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
-/// <summary>
-/// Class SpellsBattle.
-/// </summary>
 public class SpellsBattle : MonoBehaviour {
 
-    /// <summary>
     /// The toggle to duplicate
-    /// </summary>
     public GameObject ToggleToDuplicate;
-    /// <summary>
     /// The content panel
-    /// </summary>
     public Transform ContentPanel;
-    /// <summary>
     /// The spell description
-    /// </summary>
     public Text SpellDescription;
-    /// <summary>
     /// The selected toggle
-    /// </summary>
     private Toggle selectedToggle;
-    /// <summary>
     /// The logic game object
-    /// </summary>
     private GameObject logicGameObject ;
 
 
-    /// <summary>
-    /// Starts this instance.
-    /// </summary>
     void Start () {
 		ClearItemList ();
 		PopulateList ();
 		logicGameObject  = GameObject.FindGameObjectsWithTag(Settings.Logic).FirstOrDefault();
-
 	}
 
-    /// <summary>
-    /// Populates the list.
-    /// </summary>
     void PopulateList () {
 	
-		Contract.Requires<UnassignedReferenceException> (BattlePanels.SelectedCharacter != null);
+		Contract.Requires<UnassignedReferenceException> (BattlePanels.selectedCharacter != null);
 
-		foreach (var spell in BattlePanels.SelectedCharacter.SpellsList) {
+		foreach (var spell in BattlePanels.selectedCharacter.SpellsList) {
 			GameObject newToggle = Instantiate (ToggleToDuplicate) as GameObject;
 			ItemsUI toggle = newToggle.GetComponent <ItemsUI> ();
 			toggle.Name.text = spell.Name;
@@ -72,7 +39,7 @@ public class SpellsBattle : MonoBehaviour {
 			newToggle.transform.SetParent(ContentPanel.transform);
 			newToggle.transform.localScale= Vector3.one;
 			newToggle.transform.position= Vector3.one;
-			if (BattlePanels.SelectedCharacter.MP < spell.ManaAmount)
+			if (BattlePanels.selectedCharacter.MP < spell.ManaAmount)
 				toggle.Toggle.interactable = false;
 			else 
 				toggle.Toggle.interactable = true;
@@ -92,8 +59,8 @@ public class SpellsBattle : MonoBehaviour {
         if (toggle.isOn) {
 			selectedToggle = toggle;
 			ItemsUI toggleItem = selectedToggle.GetComponent <ItemsUI> ();
-			var itemDatas = BattlePanels.SelectedCharacter.SpellsList.Where(w =>w.Name == toggleItem.Name.text).FirstOrDefault();
-			BattlePanels.SelectedSpell = itemDatas;
+			var itemDatas = BattlePanels.selectedCharacter.SpellsList.Where(w =>w.Name == toggleItem.Name.text).FirstOrDefault();
+			BattlePanels.selectedSpell = itemDatas;
 			if (logicGameObject) {
 				//logicGameObject.BroadcastMessage("MagicAction");	
 			}

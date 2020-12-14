@@ -8,17 +8,17 @@ using System;
 public class BattlePanels : MonoBehaviour {
 
     /// The action panels
-    public PanelBattleActionMapper[] ActionPanels;
+    public PanelBattleActionMapper[] actionPanels;
     /// The selected toggle
-    public Toggle SelectedToggle;
+    public Toggle selectedToggle;
     /// The selected character
-    public static CharactersData SelectedCharacter ;
+    public static CharactersData selectedCharacter ;
     /// The selected weapon
-    public static ItemsData SelectedWeapon;
+    public static ItemsData selectedWeapon;
     /// The selected spell
-    public static SpellsData SelectedSpell ;
+    public static SpellsData selectedSpell ;
     /// The selected item
-    public static ItemsData SelectedItem;
+    public static ItemsData selectedItem;
     /// The fade out time
     public float FadeOutTime=2.5f;
     
@@ -44,17 +44,16 @@ public class BattlePanels : MonoBehaviour {
     /// Starts this instance.
     void Start()
 	{
-		SelectedWeapon = null;
-		SelectedSpell = null;
-		SelectedItem = null;
+		selectedWeapon = null;
+		selectedSpell = null;
+		selectedItem = null;
 	}
 
     /// Awakes this instance.
     void Awake ()
 	{
 		logicGameObject = GameObject.FindGameObjectsWithTag(Settings.Logic).FirstOrDefault();
-		//ToggleFightAction (SelectedToggle);
-		SelectedCharacter = Main.CharacterList [0];
+		selectedCharacter = Main.CharacterList [0];
 	}
 
     private void Update()
@@ -66,52 +65,40 @@ public class BattlePanels : MonoBehaviour {
 				if (parentCounter <= 0) return;
 
 				parentCounter--;
-				ActionPanels[parentCounter].parentToggle.isOn = true;
+				actionPanels[parentCounter].parentToggle.isOn = true;
 				SoundManager.UISound();
-				SelectedToggle = ActionPanels[parentCounter].parentToggle;
-				DisplayPanel(ActionPanels[parentCounter].BattleAction);
+				selectedToggle = actionPanels[parentCounter].parentToggle;
+				DisplayPanel(actionPanels[parentCounter].BattleAction);
 			}
 			else if (Input.GetKeyDown(KeyCode.S))
 			{
-				if (parentCounter >= ActionPanels.Length - 1) return;
+				if (parentCounter >= actionPanels.Length - 1) return;
 
 				parentCounter++;
-				ActionPanels[parentCounter].parentToggle.isOn = true;
+				actionPanels[parentCounter].parentToggle.isOn = true;
 				SoundManager.UISound();
-				SelectedToggle = ActionPanels[parentCounter].parentToggle;
-				DisplayPanel(ActionPanels[parentCounter].BattleAction);
+				selectedToggle = actionPanels[parentCounter].parentToggle;
+				DisplayPanel(actionPanels[parentCounter].BattleAction);
 			}
 			else if (Input.GetKeyDown(KeyCode.D))
 			{
-				if (ActionPanels[parentCounter].contents == null) return;
+				if (actionPanels[parentCounter].contents == null) return;
+				if (actionPanels[parentCounter].contents.childCount < 2) return;
 
 				SoundManager.UISound();
 				isActivePanel = "ChildPanel";
-				ActionPanels[parentCounter].contents.GetChild(1).GetComponent<Toggle>().isOn = true;
-				SelectedToggle = ActionPanels[parentCounter].contents.GetChild(1).GetComponent<Toggle>();
-				DisplayPanel(ActionPanels[parentCounter].BattleAction);
+				actionPanels[parentCounter].contents.GetChild(1).GetComponent<Toggle>().isOn = true;
+				selectedToggle = actionPanels[parentCounter].contents.GetChild(1).GetComponent<Toggle>();
+				DisplayPanel(actionPanels[parentCounter].BattleAction);
 			}
 			else if (Input.GetKeyDown(KeyCode.Space))
 			{
-				if(ActionPanels[parentCounter].contents != null)
-                {
-					//
-					SoundManager.UISound();
-					isActivePanel = "ChildPanel";
-					ActionPanels[parentCounter].contents.GetChild(1).GetComponent<Toggle>().isOn = true;
-					SelectedToggle = ActionPanels[parentCounter].contents.GetChild(1).GetComponent<Toggle>();
-					DisplayPanel(ActionPanels[parentCounter].BattleAction);
-				}
-				else
-                {
-					//ActionPanels[parentCounter].Panel.SendMessage("Start");
-					logicGameObject.BroadcastMessage("Action", ActionPanels[parentCounter].BattleAction);
-				}
-				//Debug.Log(parentCounter);
-			}
-			else if (Input.GetKeyDown(KeyCode.C))
-			{
-				if (logicGameObject) logicGameObject.BroadcastMessage("PassAction");
+				if (actionPanels[parentCounter].contents != null) return;
+
+				logicGameObject.BroadcastMessage("Action", actionPanels[parentCounter].BattleAction);
+				parentCounter = 0;
+				actionPanels[parentCounter].parentToggle.isOn = true;
+				selectedToggle = actionPanels[parentCounter].parentToggle;
 			}
 		}
 		else if(isActivePanel == "ChildPanel")
@@ -121,46 +108,58 @@ public class BattlePanels : MonoBehaviour {
 				if (childCounter <= 1) return;
 
 				childCounter--;
-				ActionPanels[parentCounter].contents.GetChild(childCounter).GetComponent<Toggle>().isOn = true;
+				actionPanels[parentCounter].contents.GetChild(childCounter).GetComponent<Toggle>().isOn = true;
 				SoundManager.UISound();
-				SelectedToggle = ActionPanels[parentCounter].contents.GetChild(childCounter).GetComponent<Toggle>();
-				DisplayPanel(ActionPanels[parentCounter].BattleAction);
+				selectedToggle = actionPanels[parentCounter].contents.GetChild(childCounter).GetComponent<Toggle>();
+				DisplayPanel(actionPanels[parentCounter].BattleAction);
 			}
 			else if(Input.GetKeyDown(KeyCode.S))
             {
-				if (childCounter >= ActionPanels[parentCounter].contents.childCount - 1) return;
+				if (childCounter >= actionPanels[parentCounter].contents.childCount - 1) return;
 
 				childCounter++;
-				ActionPanels[parentCounter].contents.GetChild(childCounter).GetComponent<Toggle>().isOn = true;
+				actionPanels[parentCounter].contents.GetChild(childCounter).GetComponent<Toggle>().isOn = true;
 				SoundManager.UISound();
-				SelectedToggle = ActionPanels[parentCounter].contents.GetChild(childCounter).GetComponent<Toggle>();
-				DisplayPanel(ActionPanels[parentCounter].BattleAction);
+				selectedToggle = actionPanels[parentCounter].contents.GetChild(childCounter).GetComponent<Toggle>();
+				DisplayPanel(actionPanels[parentCounter].BattleAction);
 			}
 			else if (Input.GetKeyDown(KeyCode.A))
             {
-				SelectedToggle.isOn = false;
+				selectedToggle.isOn = false;
 				SoundManager.UISound();
 				isActivePanel = "ParentPanel";
-				ActionPanels[parentCounter].parentToggle.isOn = true;
-				SelectedToggle = ActionPanels[parentCounter].parentToggle;
-				DisplayPanel(ActionPanels[parentCounter].BattleAction);
+				actionPanels[parentCounter].parentToggle.isOn = true;
+				selectedToggle = actionPanels[parentCounter].parentToggle;
+				DisplayPanel(actionPanels[parentCounter].BattleAction);
 				childCounter = 1;
 			}
 			else if (Input.GetKeyDown(KeyCode.Space))
             {
-                switch (ActionPanels[parentCounter].BattleAction)
+				ItemsUI toggleItem = selectedToggle.GetComponent<ItemsUI>();
+                switch (actionPanels[parentCounter].BattleAction)
                 {
 					case EnumBattleAction.Magic:
-
+						var spellDatas = BattlePanels.selectedCharacter.SpellsList.Where(w => w.Name == toggleItem.Name.text).FirstOrDefault();
+						BattlePanels.selectedSpell = spellDatas;
+						break;
+					case EnumBattleAction.Item:
+						var itemDatas = Main.ItemList.Where(w => w.Name == toggleItem.Name.text).FirstOrDefault();
+						BattlePanels.selectedCharacter.HP += itemDatas.HealthPoint;
+						BattlePanels.selectedCharacter.MP += itemDatas.Mana;
+						BattlePanels.selectedItem = itemDatas;
+						Main.ItemList.Remove(Main.ItemList.Where(w => w.Name == toggleItem.Name.text).FirstOrDefault());
+						Destroy(selectedToggle.gameObject);
 						break;
                 }
+				selectedToggle.isOn = false;
+				logicGameObject.BroadcastMessage("Action", actionPanels[parentCounter].BattleAction);
             }
         }
 	}
 
     void DisplayPanel(EnumBattleAction action)
 	{
-		foreach (PanelBattleActionMapper row in ActionPanels)
+		foreach (PanelBattleActionMapper row in actionPanels)
 		{
 			if(row.Panel != null) {
 
@@ -206,11 +205,11 @@ public class BattlePanels : MonoBehaviour {
 		DropText.text = text;
 		float time = 0.75f;
 
-		//Sequence actions = new Sequence(new SequenceParms());
-		//TweenParms parms = new TweenParms().Prop("localScale", DropMenu.transform.localScale*2f ).Ease(EaseType.EaseOutElastic);
-		//actions.Append(HOTween.To(DropMenu.transform, time, parms));
-		//actions.Play();
-	}
+        Sequence actions = new Sequence(new SequenceParms());
+        TweenParms parms = new TweenParms().Prop("localScale", DropMenu.transform.localScale * 2f).Ease(EaseType.EaseOutElastic);
+        actions.Append(HOTween.To(DropMenu.transform, time, parms));
+        actions.Play();
+    }
 
     /// Hides the action menu.
     public void HideActionMenu()
@@ -225,6 +224,9 @@ public class BattlePanels : MonoBehaviour {
 		ActionMenu.SetActive (true);
 		isActivePanel = "ParentPanel";
 		parentCounter = 0;
+		actionPanels[parentCounter].parentToggle.isOn = true;
+		selectedToggle = actionPanels[parentCounter].parentToggle;
+		DisplayPanel(actionPanels[parentCounter].BattleAction);
 		childCounter = 1;
 	}
 

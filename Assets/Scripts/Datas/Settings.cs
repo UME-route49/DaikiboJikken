@@ -1,16 +1,3 @@
-// ***********************************************************************
-// Assembly         : Assembly-CSharp
-// Author           : Pondomaniac
-// Created          : 07-06-2016
-//
-// Last Modified By : Pondomaniac
-// Last Modified On : 07-06-2016
-// ***********************************************************************
-// <copyright file="Settings.cs" company="">
-
-// </copyright>
-// <summary></summary>
-// ***********************************************************************
 using System;
 using UnityEngine;
 /// <summary>Class Settings.</summary>
