@@ -1,61 +1,27 @@
-﻿// ***********************************************************************
-// Assembly         : Assembly-CSharp
-// Author           : Pondomaniac
-// Created          : 07-06-2016
-//
-// Last Modified By : Pondomaniac
-// Last Modified On : 07-06-2016
-// ***********************************************************************
-// <copyright file="SmoothCamera2D.cs" company="">
-
-// </copyright>
-// <summary></summary>
-// ***********************************************************************
-using UnityEngine;
+﻿using UnityEngine;
 using System.Collections;
-using Holoville.HOTween;
 using UnityEngine.UI;
+using DG.Tweening;
 
-/// <summary>
-/// Class SmoothCamera2D.
-/// </summary>
 public class SmoothCamera2D : MonoBehaviour
 {
-
-    /// <summary>
     /// The damp time
-    /// </summary>
     public float DampTime = 0.15f;
-    /// <summary>
     /// The velocity
-    /// </summary>
     Vector3 velocity = Vector3.zero;
-    /// <summary>
     /// The target
-    /// </summary>
     public Transform Target;
-    /// <summary>
     /// The minx
-    /// </summary>
     public float MINX = float.NegativeInfinity;
-    /// <summary>
     /// The maxx
-    /// </summary>
     public float MAXX = float.PositiveInfinity;
-    /// <summary>
     /// The miny
-    /// </summary>
     public float MINY = float.NegativeInfinity;
-    /// <summary>
     /// The maxy
-    /// </summary>
     public float MAXY = float.PositiveInfinity;
 
 
     // Update is called once per frame
-    /// <summary>
-    /// Updates this instance.
-    /// </summary>
     void Update ()
 	{
 		if (Target) {
@@ -69,10 +35,6 @@ public class SmoothCamera2D : MonoBehaviour
 			
 			transform.position = Vector3.SmoothDamp (transform.position, destination, ref velocity, DampTime);
 		}
-			
 	}
-
-
-
 }
 	

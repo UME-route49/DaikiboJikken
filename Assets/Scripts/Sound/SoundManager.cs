@@ -110,4 +110,9 @@ public class SoundManager : MonoBehaviour {
     {
         SoundManager.StaticPlayOneShot(Settings.BattleBeginsMusic, Vector3.zero, 1);
     }
+
+    public static void AttackSounde()
+    {
+        SoundManager.StaticPlayOneShot("BossAttack", Vector3.zero, 1);
+    }
 }

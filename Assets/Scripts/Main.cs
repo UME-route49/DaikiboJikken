@@ -194,7 +194,6 @@ public class Main : MonoBehaviour
     /// Saves this instance.
     public static void Save()
     {
-
 #pragma warning disable
         Main data = new Main();
 #pragma warning restore 
@@ -204,7 +203,6 @@ public class Main : MonoBehaviour
         Debug.Log("Writing Information");
         bformatter.Serialize(stream, data);
         stream.Close();
-
     }
 
     /// Loads this instance.

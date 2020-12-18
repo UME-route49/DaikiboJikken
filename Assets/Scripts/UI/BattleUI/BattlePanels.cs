@@ -1,9 +1,9 @@
 using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
-using Holoville.HOTween;
 using System.Linq;
 using System;
+using DG.Tweening;
 
 public class BattlePanels : MonoBehaviour {
 
@@ -205,9 +205,8 @@ public class BattlePanels : MonoBehaviour {
 		DropText.text = text;
 		float time = 0.75f;
 
-        Sequence actions = new Sequence(new SequenceParms());
-        TweenParms parms = new TweenParms().Prop("localScale", DropMenu.transform.localScale * 2f).Ease(EaseType.EaseOutElastic);
-        actions.Append(HOTween.To(DropMenu.transform, time, parms));
+		Sequence actions = DOTween.Sequence();
+		actions.Append(DropMenu.transform.DOScale(DropMenu.transform.localScale * 2f, time)).SetEase(Ease.OutElastic);
         actions.Play();
     }
 
@@ -241,16 +240,11 @@ public class BattlePanels : MonoBehaviour {
 		PopUp.gameObject.transform.position = new Vector3(position.x, position.y, PopUp.gameObject.transform.position.z);
 		float time = 0.75f;
 
-		Sequence actions = new Sequence(new SequenceParms());
-		TweenParms parms = new TweenParms().Prop("color", new Color(1.0f, 1.0f, 1.0f, 1.0f)).Ease(EaseType.EaseOutQuart);
-		parms.Prop("fontSize", PopUp.fontSize * 2).Ease(EaseType.EaseOutBounce);
-
-		TweenParms parmsReset = new TweenParms().Prop("color", new Color(1.0f, 1.0f, 1.0f, 0.0f)).Ease(EaseType.EaseOutQuart);
-		parmsReset.Prop("fontSize", PopUp.fontSize ).Ease(EaseType.EaseOutQuart);
-
-		actions.Append(HOTween.To(PopUp, time, parms));
-		actions.Append(HOTween.To(PopUp, time, parmsReset));
-
+		Sequence actions = DOTween.Sequence();
+		actions.Append(PopUp.DOColor(new Color(1.0f, 1.0f, 1.0f, 1.0f), time)).SetEase(Ease.OutQuart);
+		//actions.Join(PopUp.DOFontsize(PopUp.fontSize * 2, time)).setEase(Ease.OutBounce);
+		actions.Append(PopUp.DOColor(new Color(1.0f, 1.0f, 1.0f, 0.0f), time)).SetEase(Ease.OutQuart);
+		//actions.Join(PopUp.DOFontsize(PopUp.fontSize, time)).setEase(Ease.OutQuart);
 		actions.Play();
 	}
 

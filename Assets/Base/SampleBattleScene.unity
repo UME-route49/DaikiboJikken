@@ -342,6 +342,18 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4872714130585634, guid: cd93828a0cf973e48b07726edcc42a41, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4872714130585634, guid: cd93828a0cf973e48b07726edcc42a41, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4872714130585634, guid: cd93828a0cf973e48b07726edcc42a41, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 2
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: cd93828a0cf973e48b07726edcc42a41, type: 3}
 --- !u!1 &1361519953
@@ -549,6 +561,18 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4872714130585634, guid: cd93828a0cf973e48b07726edcc42a41, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4872714130585634, guid: cd93828a0cf973e48b07726edcc42a41, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4872714130585634, guid: cd93828a0cf973e48b07726edcc42a41, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 2
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: cd93828a0cf973e48b07726edcc42a41, type: 3}
 --- !u!1 &1696824622
@@ -584,9 +608,9 @@ MonoBehaviour:
   PossibleEnnemies:
   - {fileID: 6553916670458435248, guid: 7e9279917ca7c1a46829b13557e4d0c8, type: 3}
   NumberOfEnemyToGenerate: 1
-  SpaceBetweenCharacters: 5
+  SpaceBetweenCharacters: 7
   SpaceBetweenCharacterAndEnemy: 3
-  PlayersXPosition: -5
+  PlayersXPosition: -15
   EnnemyXPosition: 0
   PlayersYPosition: 5
   EnnemyYPosition: 0
