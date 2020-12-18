@@ -1,8 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class SoundManager : MonoBehaviour {
-   
+public class SoundManager : MonoBehaviour
+{
+
     /// This variable indicate if the music should restart from the begining even if it's the same as the previous scene
     public bool IgnorePreviousSceneMusic = false;
     /// The current singleton instance
@@ -13,7 +14,7 @@ public class SoundManager : MonoBehaviour {
     {
         get
         {
-           return _instance;
+            return _instance;
         }
     }
 
@@ -21,11 +22,11 @@ public class SoundManager : MonoBehaviour {
     /// Awake this instance.
     void Awake()
     {
-         if (_instance == null )
+        if (_instance == null)
         {
             _instance = this;
             DontDestroyOnLoad(this);
-         }
+        }
         else
         {
             var audiosource = GetComponent<AudioSource>();
@@ -35,7 +36,7 @@ public class SoundManager : MonoBehaviour {
             {
                 Destroy(instance.gameObject);
                 _instance = this;
-               
+
             }
             if (this != _instance)
                 Destroy(this.gameObject);
@@ -44,12 +45,12 @@ public class SoundManager : MonoBehaviour {
 
 
     // Update is called once per frame
-    void Update () {}
+    void Update() { }
 
     /// <summary>Plays the one shot.</summary>
-    public void PlayOneShot(string soundName,float volume = -1)
+    public void PlayOneShot(string soundName, float volume = -1)
     {
-        var instantiatedSound = Resources.Load<AudioClip>( Settings.SoundPath + soundName);
+        var instantiatedSound = Resources.Load<AudioClip>(Settings.SoundPath + soundName);
         if (volume >= 0) instance.gameObject.GetComponent<AudioSource>().PlayOneShot(instantiatedSound, volume);
         else instance.gameObject.GetComponent<AudioSource>().PlayOneShot(instantiatedSound);
     }
@@ -57,17 +58,17 @@ public class SoundManager : MonoBehaviour {
     /// <summary>Plays the background music.</summary>
     public void PlayBackgroundMusic(string musicTitle, float volume = -1)
     {
-        var instantiatedSound = Resources.Load<AudioClip>( Settings.SoundPath + musicTitle);
+        var instantiatedSound = Resources.Load<AudioClip>(Settings.SoundPath + musicTitle);
         if (volume >= 0) instance.gameObject.GetComponent<AudioSource>().volume = volume;
         instance.gameObject.GetComponent<AudioSource>().clip = instantiatedSound;
         instance.gameObject.GetComponent<AudioSource>().Play();
     }
 
     /// <summary>Statics the play one shot.</summary>
-    public static void StaticPlayOneShot(string soundName,Vector3 position, float volume = -1)
+    public static void StaticPlayOneShot(string soundName, Vector3 position, float volume = -1)
     {
-        var instantiatedSound = Resources.Load<AudioClip>( Settings.SoundPath + soundName);
-        var lastTimeScale= Time.timeScale;
+        var instantiatedSound = Resources.Load<AudioClip>(Settings.SoundPath + soundName);
+        var lastTimeScale = Time.timeScale;
         Time.timeScale = 1f;
         if (volume >= 0) AudioSource.PlayClipAtPoint(instantiatedSound, position, volume);
         else AudioSource.PlayClipAtPoint(instantiatedSound, position);
@@ -84,11 +85,6 @@ public class SoundManager : MonoBehaviour {
     public static void ChatSound(float volume = -1)
     {
         SoundManager.StaticPlayOneShot(Settings.ChatSound, Vector3.zero, volume);
-    }
-
-    public static void WeaponSound(float volume = -1)
-    {
-        SoundManager.StaticPlayOneShot(Settings.WeaponSound, Vector3.zero, volume);
     }
 
     public static void ItemSound(float volume = -1)
@@ -108,11 +104,11 @@ public class SoundManager : MonoBehaviour {
 
     public static void BattleBeginsMusic(float volume = -1)
     {
-        SoundManager.StaticPlayOneShot(Settings.BattleBeginsMusic, Vector3.zero, 1);
+        SoundManager.StaticPlayOneShot(Settings.BattleBeginsMusic, Vector3.zero, volume);
     }
 
-    public static void AttackSounde()
+    public static void TurnSound(float volume = -1)
     {
-        SoundManager.StaticPlayOneShot("BossAttack", Vector3.zero, 1);
+        SoundManager.StaticPlayOneShot(Settings.TurnSound, Vector3.zero, volume);
     }
 }

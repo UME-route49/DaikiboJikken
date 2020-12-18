@@ -57,7 +57,7 @@ public class WeaponBattle : MonoBehaviour {
     public void ToggleSelectAction(Toggle toggle)
 	{
 		Contract.Requires<MissingComponentException> (toggle != null);
-        SoundManager.UISound();
+        //SoundManager.UISound();
         if (toggle.isOn) {
 			ColorBlock cb = toggle.colors;
 			cb.normalColor = Color.cyan;

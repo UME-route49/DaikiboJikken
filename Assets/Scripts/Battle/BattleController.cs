@@ -131,6 +131,7 @@ public class BattleController : MonoBehaviour
 					- selectedPlayer.transform.forward * 4;
 			mainCamera.transform.LookAt(generatedEnemyList[0].transform);
 
+			SoundManager.TurnSound();
 			HideTargetSelector();
 			ShowMenu();
 			currentState = EnumBattleState.None;
@@ -391,10 +392,10 @@ public class BattleController : MonoBehaviour
 					Sequence actions = DOTween.Sequence();
 					animator.SetBool("Run", true);
 					sequence = actions.Append(selectedPlayer.transform.DOLocalMove(selectedEnemy.transform.position
-						- new Vector3(SpaceBetweenCharacterAndEnemy, 0, 0), 1.5f))//.SetEase(Ease.OutQuad)
+						- new Vector3(SpaceBetweenCharacterAndEnemy, 0, 0), 1.0f)).SetEase(Ease.InSine)
 						.AppendCallback(() => animator.SetBool("Run", false))
 						.AppendCallback(() => animator.SetTrigger("Attack"));
-					sequence = actions.AppendInterval(0.5f);
+					sequence = actions.AppendInterval(1.5f);
 					sequence = actions.Append(selectedPlayer.transform
 						.DOLocalMove(selectedPlayer.transform.position, 0.8f))
 						.Join(selectedPlayer.transform.DOJump(selectedPlayer.transform.position, 3, 1, 0.8f));
@@ -483,7 +484,6 @@ public class BattleController : MonoBehaviour
 				ShowPopup ("-"+calculatedDamage.ToString (), playerToAttack.transform.position);
 				//battlePanels.BroadcastMessage ("SetHPValue",playerToAttackDatas.MaxHP<=0 ?0 : playerToAttackDatas.HP*100/playerToAttackDatas.MaxHP);
 				Destroy( Instantiate (WeaponParticleEffect, playerToAttack.transform.localPosition, Quaternion.identity),1.5f);
-				SoundManager.WeaponSound();
 				//go.SendMessage("Animate",EnumBattleState.Attack.ToString());
 				//playerToAttack.SendMessage("Animate",EnumBattleState.Hit.ToString());
 				

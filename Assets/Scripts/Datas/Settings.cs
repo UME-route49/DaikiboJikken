@@ -26,18 +26,14 @@ public class Settings
     public const string WinningMusic = "Fanfare";
     //The  chat sound name
     /// <summary>The  chat sound name</summary>
-    public const string ChatSound = "metalLatch";
-    // The  Weapon sound name
-    /// <summary>The  Weapon sound name </summary>
-    public const string WeaponSound = "swish-10";
+    public const string ChatSound = "ChatSound";
     // The  Item sound name
     ///<summary>The  Item sound name</summary>
     public const string ItemSound = "spell3";
     //The path to battle begins music
-    /// <summary>
     /// The  battle begins music name
-    /// </summary>
-    public const string UIClickSound = "swish-10";
+    public const string UIClickSound = "UiSound";
+    public const string TurnSound = "TurnSOund";
     //The path to magic aura effect
     /// <summary>The magic aura effect</summary>
     public const string MagicAuraEffect = "Magic_Aura";

@@ -610,7 +610,7 @@ MonoBehaviour:
   NumberOfEnemyToGenerate: 1
   SpaceBetweenCharacters: 7
   SpaceBetweenCharacterAndEnemy: 3
-  PlayersXPosition: -15
+  PlayersXPosition: -12
   EnnemyXPosition: 0
   PlayersYPosition: 5
   EnnemyYPosition: 0

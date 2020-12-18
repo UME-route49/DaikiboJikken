@@ -55,7 +55,7 @@ public class SpellsBattle : MonoBehaviour {
     public void ToggleSelectAction(Toggle toggle)
 	{
 		Contract.Requires<MissingComponentException> (toggle != null);
-        SoundManager.UISound();
+        //SoundManager.UISound();
         if (toggle.isOn) {
 			selectedToggle = toggle;
 			ItemsUI toggleItem = selectedToggle.GetComponent <ItemsUI> ();

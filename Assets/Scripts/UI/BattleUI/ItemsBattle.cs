@@ -53,7 +53,7 @@ public class ItemsBattle : MonoBehaviour {
     public void ToggleSelectAction(Toggle toggle)
 	{
 		Contract.Requires<MissingComponentException> (toggle != null);
-        SoundManager.UISound();
+        //SoundManager.UISound();
         if (toggle.isOn) {
 			toggle.group.NotifyToggleOn(toggle);
 			selectedToggle = toggle;

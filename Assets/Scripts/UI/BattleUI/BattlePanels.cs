@@ -207,7 +207,6 @@ public class BattlePanels : MonoBehaviour {
 
 		Sequence actions = DOTween.Sequence();
 		actions.Append(DropMenu.transform.DOScale(DropMenu.transform.localScale * 2f, time)).SetEase(Ease.OutElastic);
-        actions.Play();
     }
 
     /// Hides the action menu.
