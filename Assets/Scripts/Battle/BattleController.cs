@@ -72,8 +72,6 @@ public class BattleController : MonoBehaviour
 	public GameObject uiBttle;
 	/// コマンドUIの取得
 	private BattlePanels battlePanels;
-	/// 操作回数
-	private int counter = 0;
 
 	///カメラのオブジェクト
 	public GameObject mainCamera;
@@ -89,13 +87,13 @@ public class BattleController : MonoBehaviour
 		instantiatedTargetSelector = GameObject.Instantiate(TargetSelector);
 		var o = Instantiate(uiBttle);
 		var canvas = o.GetComponentsInChildren<Canvas>();
-		foreach (Canvas canva in canvas) canva.worldCamera = Camera.main;
+		//foreach (Canvas canva in canvas) canva.worldCamera = Camera.main;
+		uiGameObject  = GameObject.FindGameObjectsWithTag(Settings.UI).FirstOrDefault();
 		GenerateEnnemies();
 		PositionPlayers();
 		GenerateTurnByTurnSequence();
 		sequenceEnumerator = turnByTurnSequenceList.GetEnumerator();
 		NextBattleSequence();
-		uiGameObject  = GameObject.FindGameObjectsWithTag(Settings.UI).FirstOrDefault();
 	}
 
     private void Start()
@@ -186,24 +184,20 @@ public class BattleController : MonoBehaviour
     public void ChangeEnumCharacterState(EnumCharacterState state)
 	{
 		CharacterState = state;
-		SendMessage("Animate", string.Format("{0}{1}", CharacterState, CharacterSide));
 	}
 
     /// <summary>Changes the enum character side.</summary>
     public void ChangeEnumCharacterSide(EnumSide state)
 	{
 		CharacterSide = state;
-		SendMessage("Animate", string.Format("{0}{1}", CharacterState, CharacterSide));
 	}
 
     /// <summary>Flips the specified to the left.</summary>
     void Flip(bool toTheLeft)
 	{
 		Vector3 theScale = transform.localScale;
-		if (toTheLeft)
-			theScale.x = -Mathf.Abs(theScale.x);
-		else
-			theScale.x = Mathf.Abs(theScale.x);
+		if (toTheLeft)theScale.x = -Mathf.Abs(theScale.x);
+		else theScale.x = Mathf.Abs(theScale.x);
 		transform.localScale = theScale;
 	}
 
@@ -241,8 +235,7 @@ public class BattleController : MonoBehaviour
 
 				instantiatedCharacterList.Add(go);
 
-				//battlePanels.BroadcastMessage ("SetHPValue",datas.MaxHP <= 0 ? 0 : datas.HP*100/datas.MaxHP);
-				//battlePanels.BroadcastMessage ("SetMPValue",datas.MaxMP <= 0 ? 0 : datas.MP*100/datas.MaxMP);
+				uiGameObject.SendMessage("HpMpSet", character);
 			}
 		}
 		catch (System.Exception ex)
@@ -332,8 +325,7 @@ public class BattleController : MonoBehaviour
     public void PassAction()
 	{
 		battlAction = EnumBattleAction.Pass;
-		//battlePanels.BroadcastMessage ("SetHPValue",selectedPlayerDatas.MaxHP <= 0 ? 0 : selectedPlayerDatas.HP*100/selectedPlayerDatas.MaxHP);
-		//battlePanels.BroadcastMessage ("SetMPValue",selectedPlayerDatas.MaxMP <= 0 ? 0 : selectedPlayerDatas.MP*100/selectedPlayerDatas.MaxMP);
+		//battlePanels.HpMpBarSet(selectedPlayer.name, selectedPlayerDatas);
 		NextBattleSequence ();
 		HideMenu();
 	}
@@ -408,10 +400,7 @@ public class BattleController : MonoBehaviour
 					enemyCharacterdatas.HP = Mathf.Clamp(enemyCharacterdatas.HP 
 						- calculatedDamage, 0 , enemyCharacterdatas.HP - calculatedDamage);
 					ShowPopup ("-"+calculatedDamage.ToString (), selectedEnemy.transform.position);
-					//selectedEnemy.BroadcastMessage ("SetHPValue",enemyCharacterdatas.MaxHP<=0?0 :  enemyCharacterdatas.HP*100/enemyCharacterdatas.MaxHP);
 					Destroy( Instantiate (WeaponParticleEffect, selectedEnemy.transform.localPosition, Quaternion.identity),1.5f);
-					//selectedPlayer.SendMessage("Animate",EnumBattleState.Attack.ToString());
-					//selectedEnemy.SendMessage("Animate",EnumBattleState.Hit.ToString());
 					break;
 				case EnumBattleAction.Magic:
 					calculatedDamage = BattlePanels.selectedSpell.Attack + selectedPlayerDatas.GetMagic () - enemyCharacterdatas.MagicDefense; 
@@ -420,38 +409,29 @@ public class BattleController : MonoBehaviour
 					selectedPlayerDatas.MP = Mathf.Clamp ( selectedPlayerDatas.MP - BattlePanels.selectedSpell.ManaAmount, 0 ,selectedPlayerDatas.MP - BattlePanels.selectedSpell.ManaAmount);
 					ShowPopup (calculatedDamage.ToString (), selectedEnemy.transform.localPosition);
 					ShowPopup ("-"+calculatedDamage.ToString (), selectedEnemy.transform.position);
-					//selectedEnemy.BroadcastMessage ("SetHPValue",enemyCharacterdatas.MaxHP<=0?0 :  enemyCharacterdatas.HP*100/enemyCharacterdatas.MaxHP);
-					//selectedPlayer.BroadcastMessage ("SetMPValue",selectedPlayerDatas.MaxMP <= 0 ? 0 : selectedPlayerDatas.MP*100/selectedPlayerDatas.MaxMP);
-
+					uiGameObject.SendMessage("HpMpSet", selectedPlayerDatas);
+					
 					var ennemyEffect = Resources.Load<GameObject>(Settings.PrefabsPath + BattlePanels.selectedSpell.ParticleEffect);
 					Destroy(Instantiate(ennemyEffect, selectedEnemy.transform.localPosition, Quaternion.identity), 0.5f);
 
 					var playerEffect = Resources.Load<GameObject>(Settings.PrefabsPath + Settings.MagicAuraEffect);
 					Destroy( Instantiate (playerEffect, selectedPlayer.transform.localPosition, Quaternion.identity),0.4f);
 					SoundManager.StaticPlayOneShot(BattlePanels.selectedSpell.SoundEffect, Vector3.zero);
-					//selectedPlayer.SendMessage("Animate",EnumBattleState.Magic.ToString());
-					//selectedEnemy.SendMessage("Animate",EnumBattleState.Hit.ToString());
 					break;
 				case EnumBattleAction.Item:
 					//calculatedDamage = BattlePanels.SelectedItem.Attack - enemyCharacterdatas.MagicDefense; 
 					calculatedDamage = Mathf.Clamp (calculatedDamage, 0, calculatedDamage);
 					enemyCharacterdatas.HP = Mathf.Clamp ( enemyCharacterdatas.HP - calculatedDamage, 0 , enemyCharacterdatas.HP - calculatedDamage);
 					ShowPopup ("-"+calculatedDamage.ToString (), selectedEnemy.transform.position);
-					//selectedEnemy.BroadcastMessage ("SetHPValue",enemyCharacterdatas.HP*100/enemyCharacterdatas.MaxHP);
 					Destroy( Instantiate (MagicParticleEffect, selectedEnemy.transform.localPosition, Quaternion.identity),1.7f);
 					SoundManager.ItemSound();
-					//selectedPlayer.SendMessage("Animate",EnumBattleState.Magic.ToString());
-					//selectedEnemy.SendMessage("Animate",EnumBattleState.Hit.ToString());
 					break;
 				default:
 					break;
 			}
 		}
-
 		if (enemyCharacterdatas.HP <= 0) KillCharacter (selectedEnemy);
-		//selectedPlayer.SendMessage ("ChangeEnumCharacterState", battlection);
 		selectedEnemy = null;
-
 		NextBattleSequence();
 	}
 
@@ -467,37 +447,31 @@ public class BattleController : MonoBehaviour
 		int calculatedDamage = 0;
 		if (enemyCharacterdatas != null && selectedPlayerDatas != null) {
 			switch (battlAction) {
-			case EnumBattleAction.Weapon:
-				go.GetComponent<Animator>().SetTrigger("Attack");
-				calculatedDamage = enemyCharacterdatas.Attack - playerToAttackDatas.Defense; 
-				calculatedDamage = Mathf.Clamp (calculatedDamage, 0, calculatedDamage);
-				playerToAttackDatas.HP = Mathf.Clamp (playerToAttackDatas.HP - calculatedDamage , 0 ,playerToAttackDatas.HP - calculatedDamage);
-				ShowPopup ("-"+calculatedDamage.ToString (), playerToAttack.transform.position);
-				//battlePanels.BroadcastMessage ("SetHPValue",playerToAttackDatas.MaxHP<=0 ?0 : playerToAttackDatas.HP*100/playerToAttackDatas.MaxHP);
-				Destroy(Instantiate(WeaponParticleEffect, playerToAttack.transform.localPosition, Quaternion.identity),1.5f);
-				//playerToAttack.SendMessage("Animate",EnumBattleState.Hit.ToString());
-				break;
-			default:
-				calculatedDamage = enemyCharacterdatas.Attack - playerToAttackDatas.Defense; 
-				calculatedDamage = Mathf.Clamp (calculatedDamage, 0, calculatedDamage);
-				playerToAttackDatas.HP = Mathf.Clamp (playerToAttackDatas.HP - calculatedDamage , 0 ,playerToAttackDatas.HP - calculatedDamage);
-				ShowPopup ("-"+calculatedDamage.ToString (), playerToAttack.transform.position);
-				//battlePanels.BroadcastMessage ("SetHPValue",playerToAttackDatas.MaxHP<=0 ?0 : playerToAttackDatas.HP*100/playerToAttackDatas.MaxHP);
-				Destroy( Instantiate (WeaponParticleEffect, playerToAttack.transform.localPosition, Quaternion.identity),1.5f);
-				//go.SendMessage("Animate",EnumBattleState.Attack.ToString());
-				//playerToAttack.SendMessage("Animate",EnumBattleState.Hit.ToString());
-				
-				break;
+				case EnumBattleAction.Weapon:
+					go.GetComponent<Animator>().SetTrigger("Attack");
+					Sequence actions = DOTween.Sequence();
+					sequence = actions.Append(go.transform.DOLookAt(playerToAttack.transform.position, 0.2f));
+					sequence = actions.Append(go.transform.DOLocalMove(playerToAttack.transform.position
+						+ playerToAttack.transform.forward * 4, 1).SetEase(Ease.OutCirc))
+						.AppendCallback(() => ShowPopup("-" + calculatedDamage.ToString(), playerToAttack.transform.position))
+						.AppendCallback(() => uiGameObject.SendMessage("HpMpSet", playerToAttackDatas));
+					sequence = actions.AppendInterval(2f);
+					sequence = actions.Append(go.transform.DOLocalMove(go.transform.position, 1).SetEase(Ease.OutCirc));
+					calculatedDamage = enemyCharacterdatas.Attack - playerToAttackDatas.Defense; 
+					calculatedDamage = Mathf.Clamp (calculatedDamage, 0, calculatedDamage);
+					playerToAttackDatas.HP = Mathf.Clamp (playerToAttackDatas.HP - calculatedDamage , 0 ,playerToAttackDatas.HP - calculatedDamage);
+					Destroy(Instantiate(WeaponParticleEffect, playerToAttack.transform.localPosition, Quaternion.identity),1.5f);
+					break;
+				default:
+					calculatedDamage = enemyCharacterdatas.Attack - playerToAttackDatas.Defense; 
+					calculatedDamage = Mathf.Clamp (calculatedDamage, 0, calculatedDamage);
+					playerToAttackDatas.HP = Mathf.Clamp (playerToAttackDatas.HP - calculatedDamage , 0 ,playerToAttackDatas.HP - calculatedDamage);
+					ShowPopup ("-"+calculatedDamage.ToString (), playerToAttack.transform.position);
+					uiGameObject.SendMessage("HpMpSet", playerToAttackDatas);
+					Destroy( Instantiate (WeaponParticleEffect, playerToAttack.transform.localPosition, Quaternion.identity),1.5f);
+					break;
 			}
 		}
-
-		Sequence actions = DOTween.Sequence();
-		sequence = actions.Append(go.transform.DOLookAt(playerToAttack.transform.position, 0.2f));
-		sequence = actions.Append(go.transform.DOLocalMove(playerToAttack.transform.position
-			+ playerToAttack.transform.forward * 4, 1).SetEase(Ease.OutCirc));
-		sequence = actions.AppendInterval(2f);
-		sequence = actions.Append(go.transform.DOLocalMove(go.transform.position, 1).SetEase(Ease.OutCirc));
-
 		if (playerToAttackDatas.HP <= 0) KillCharacter (playerToAttack);
 		selectedEnemy = null;
 	}

@@ -36,6 +36,16 @@ public class BattlePanels : MonoBehaviour {
     /// The logic game object
     private GameObject logicGameObject ;
 
+	[Serializable]
+	public struct HPMPText
+    {
+		public Text name;
+		public Text HP;
+		public Text MP;
+    }
+
+	public HPMPText[] HPMPtexts; 
+
 	private int parentCounter = 0;
 	private int childCounter = 1;
 
@@ -229,7 +239,6 @@ public class BattlePanels : MonoBehaviour {
 	}
 
     /// Shows the popup.
-    /// <param name="parameters">The parameters.</param>
     public void ShowPopup(object[] parameters)
 	{
 		string text = (string)(parameters[0]);
@@ -259,4 +268,27 @@ public class BattlePanels : MonoBehaviour {
 	{
 		if ( logicGameObject ) logicGameObject.BroadcastMessage ("EndBattle");
 	}
+
+	public void HpMpSet(CharactersData character)
+    {
+		Sequence sequence = DOTween.Sequence();
+		switch(character.Name)
+        {
+			case "Warrior":
+				HPMPtexts[0].HP.text = "HP" + character.HP + "/" +  character.MaxHP;
+				HPMPtexts[0].MP.text = "MP" + character.MP + "/" + character.MaxMP;
+				break;
+			case "Thief":
+				HPMPtexts[1].HP.text = "HP" + character.HP + "/" + character.MaxHP;
+				HPMPtexts[1].MP.text = "MP" + character.MP + "/" + character.MaxMP;
+				break;
+			case "Witch":
+				HPMPtexts[2].HP.text = "HP" + character.HP + "/" + character.MaxHP;
+				HPMPtexts[2].MP.text = "MP" + character.MP + "/" + character.MaxMP;
+				break;
+			default:
+				Debug.Log(11111111111111111111);
+				break;
+		}
+    }
 }
