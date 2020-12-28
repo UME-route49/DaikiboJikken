@@ -1,65 +1,23 @@
 using System;
 using UnityEngine;
-/// <summary>Class Settings.</summary>
+
 public class Settings
 {
-    //The path to sprites folder
-    /// <summary>The sprites paths</summary>
-    public const string SpritesPaths = "Sprites/";
-    //The path to icon folder
-    /// <summary>The icons paths</summary>
-    public const string IconsPaths = "Sprites/Icons/";
-    //The path to prefab folder
-    /// <summary>The prefabs paths</summary>
     public const string PrefabsPath = "Prefabs/";
-    //The path to Sounds folder
-    /// <summary>The Sounds paths</summary>
     public const string SoundPath = "Sounds/";
-    //The path to battle begins music
-    /// <summary>The  battle begins music name</summary>
-    public const string BattleBeginsMusic = "BattleTheme";
-    //The path to game over music
-    /// <summary>The path to game over music</summary>
+    public const string BattleMusic = "BattleTheme";
+    public const string FIeldMusic = "FieldTheme";
+    public const string TitleMusic = "Prelude";
     public const string GameOverMusic = "GameOverMusic";
-    // The path to winning music
-    /// <summary>The path to winning music </summary>
     public const string WinningMusic = "Fanfare";
-    //The  chat sound name
-    /// <summary>The  chat sound name</summary>
     public const string ChatSound = "ChatSound";
-    // The  Item sound name
-    ///<summary>The  Item sound name</summary>
     public const string ItemSound = "spell3";
-    //The path to battle begins music
-    /// The  battle begins music name
     public const string UIClickSound = "UiSound";
     public const string TurnSound = "TurnSOund";
-    //The path to magic aura effect
-    /// <summary>The magic aura effect</summary>
     public const string MagicAuraEffect = "Magic_Aura";
-    //The amount of time that the controls are locked whenthe menus are displayed
-    /// <summary>The inputlocking time</summary>
     public const float InputlockingTime = 0.2f;
-    //The amount of time the text dialog paused when typing leters, reduce the value to make dialogs faster
-    /// <summary>The letter pause</summary>
     public const float LetterPause = 0.01f;
-    //Number of characters by dialog page
-    /// <summary>The dialog characters number</summary>
     public const int DialogCharactersNumber = 100;
-
-    /*This is the Input configuration*/
-    /// <summary>The move to right input</summary>
-    public const KeyCode MoveToRightInput = KeyCode.RightArrow;
-    /// <summary>The move to left input</summary>
-    public const KeyCode MoveToLeftInput = KeyCode.LeftArrow;
-    /// <summary>The move to up input</summary>
-    public const KeyCode MoveToUpInput = KeyCode.UpArrow;
-    /// <summary>The move to down input</summary>
-    public const KeyCode MoveToDownInput = KeyCode.DownArrow;
-    /// <summary> The menu input </summary>
-    public const KeyCode MenuInput = KeyCode.Escape;
-    /// <summary>The interract input</summary>
-    public const KeyCode InterractInput = KeyCode.Space;
 
     /*TAGS*/
     /// <summary>The player</summary>

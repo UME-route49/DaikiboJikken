@@ -64,7 +64,6 @@ public class ItemsGameMenu : MonoBehaviour {
 			GameObject newToggle = Instantiate (ToggleToDuplicate) as GameObject;
 			ItemsUI toggle = newToggle.GetComponent <ItemsUI> ();
 			toggle.Name.text = item.Name;
-			toggle.Icon.sprite =Resources.Load <Sprite> (Settings.IconsPaths + item.PicturesName); ;
 			toggle.Toggle.isOn = false;
 			newToggle.SetActive(true);
 			newToggle.transform.SetParent( ContentPanel);

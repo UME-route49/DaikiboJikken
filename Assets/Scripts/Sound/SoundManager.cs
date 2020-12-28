@@ -36,10 +36,8 @@ public class SoundManager : MonoBehaviour
             {
                 Destroy(instance.gameObject);
                 _instance = this;
-
             }
-            if (this != _instance)
-                Destroy(this.gameObject);
+            if (this != _instance) Destroy(this.gameObject);
         }
     }
 
@@ -102,9 +100,19 @@ public class SoundManager : MonoBehaviour
         SoundManager.StaticPlayOneShot(Settings.WinningMusic, Vector3.zero, volume);
     }
 
-    public static void BattleBeginsMusic(float volume = -1)
+    public static void BattleMusic(float volume = -1)
     {
-        SoundManager.StaticPlayOneShot(Settings.BattleBeginsMusic, Vector3.zero, volume);
+        SoundManager.StaticPlayOneShot(Settings.BattleMusic, Vector3.zero, volume);
+    }
+
+    public static void FieldMusic(float volume = -1)
+    {
+        SoundManager.StaticPlayOneShot(Settings.FIeldMusic, Vector3.zero, volume);
+    }
+
+    public static void TitleMusic(float volume = -1)
+    {
+        SoundManager.StaticPlayOneShot(Settings.TitleMusic, Vector3.zero, volume);
     }
 
     public static void TurnSound(float volume = -1)

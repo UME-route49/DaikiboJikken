@@ -14,7 +14,7 @@ using System.IO;
 public class Main : MonoBehaviour
 {
     //最初のシーン読み込み
-    public string FirstSceneToLoad;
+    public string FirstSceneToLoad = "SampleBattleScene";
     //読み込まれたシーン
     public static string FirstSceneLoaded;
 
@@ -92,7 +92,7 @@ public class Main : MonoBehaviour
 
         //ロード中にデータを破壊しないようにする
         DontDestroyOnLoad(gameObject);
-
+        
         //シーンをロード
         SceneManager.LoadScene(FirstSceneLoaded);
     }
@@ -121,8 +121,6 @@ public class Main : MonoBehaviour
         CharacterList[0].SpellsList.AddRange(Datas.SpellsData.
             Where(w => w.Value.AllowedCharacterType == EnumCharacterType.Warrior).Select(s => s.Value));
 
-        Debug.Log(CharacterList[0].Name);
-
         CharacterList.Add(Datas.CharactersData[2]);
         CharacterList[1].Head = Datas.ItemsData[15];
         EquipmentList.Add(Datas.ItemsData[15]);
@@ -133,8 +131,6 @@ public class Main : MonoBehaviour
         CharacterList[1].SpellsList.AddRange(Datas.SpellsData.
             Where(w => w.Value.AllowedCharacterType == EnumCharacterType.Thief).Select(s => s.Value));
 
-        Debug.Log(CharacterList[1].Name);
-
         CharacterList.Add(Datas.CharactersData[3]);
         CharacterList[2].Head = Datas.ItemsData[15];
         EquipmentList.Add(Datas.ItemsData[15]);
@@ -144,8 +140,6 @@ public class Main : MonoBehaviour
         EquipmentList.Add(Datas.ItemsData[9]);
         CharacterList[2].SpellsList.AddRange(Datas.SpellsData.
             Where(w => w.Value.AllowedCharacterType == EnumCharacterType.Witch).Select(s => s.Value));
-
-        Debug.Log(CharacterList[2].Name);
 
         foreach (var item in EquipmentList)
         {

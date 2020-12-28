@@ -245,7 +245,7 @@ public class BattlePanels : MonoBehaviour {
 		Vector3 position = (Vector3)parameters[1];
 		PopUp.gameObject.SetActive (true);
 		PopUp.text = text;
-		PopUp.gameObject.transform.position = new Vector3(position.x, position.y, PopUp.gameObject.transform.position.z);
+		//PopUp.gameObject.transform.position = new Vector3(position.x, position.y, PopUp.gameObject.transform.position.z);
 		float time = 0.75f;
 
 		Sequence actions = DOTween.Sequence();

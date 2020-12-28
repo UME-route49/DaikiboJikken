@@ -10,22 +10,38 @@ using UnityEngine.SceneManagement;
 using System.Linq;
 
 public class HomeMenu : MonoBehaviour {
+
     /// The newgame toggle
     public Toggle NewgameToggle;
     /// The scene to load for new game
     public String SceneToLoadForNewGame;
+
+    FadeOut fadeOut;
    
     // Use this for initialization
-    /// Starts this instance.
-    void Start () {
+    void Start() 
+    {
 		Datas.PopulateDatas ();
+        SoundManager.TitleMusic();
+        fadeOut = FindObjectOfType<FadeOut>();
     }
 
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            NewgameChoice();
+        }
+    }
 
+    private void NewgameChoice()
+    {
+        SoundManager.UISound();
+        Main.CurrentScene = SceneToLoadForNewGame;
+        fadeOut.StartCoroutine("Fadeout", SceneToLoadForNewGame);
+    }
 
     /// This procedure check the no toggle control and send action to the action variable
-    /// <param name="toggle">The toggle that sent the action</param>
-    /// <param name="toggle">The toggle.</param>
     public void NewgameToggleChoice(Toggle toggle)
 	{
 		Contract.Requires<MissingComponentException> (toggle != null);
@@ -38,8 +54,6 @@ public class HomeMenu : MonoBehaviour {
 	}
 
     /// This procedure check the no toggle control and send action to the action variable
-    /// <param name="toggle">The toggle that sent the action</param>
-    /// <param name="toggle">The toggle.</param>
     public void ContinueToggleChoice(Toggle toggle)
 	{
 		Contract.Requires<MissingComponentException> (toggle != null);

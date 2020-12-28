@@ -33,8 +33,6 @@ public class WeaponBattle : MonoBehaviour {
     public void LoadEquipements()
 	{
 		if (BattlePanels.selectedCharacter.RightHand != null) {
-			if (RightHandImage != null)
-				RightHandImage.sprite = Resources.Load <Sprite> (Settings.IconsPaths + BattlePanels.selectedCharacter.RightHand.PicturesName);
 			if (RightHandText != null)
                 RightHandText.text = BattlePanels.selectedCharacter.RightHand.Name;
         }

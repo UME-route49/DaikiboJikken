@@ -54,10 +54,10 @@ public class Datas : MonoBehaviour
         character.Type = EnumCharacterType.Witch;
         character.Level = 1;
         character.PicturesName = "Witch";
-        character.HP = 20;
-        character.MaxHP = 20;
-        character.MP = 30;
-        character.MaxMP = 30;
+        character.HP = 100;
+        character.MaxHP = 100;
+        character.MP = 50;
+        character.MaxMP = 50;
         CharactersData[3] = character;
     }
 

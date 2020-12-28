@@ -65,7 +65,6 @@ public class EquipementsGameMenu : MonoBehaviour {
 			ItemsUI toggle = newToggle.GetComponent <ItemsUI> ();
 			toggle.Name.text = item.Name;
 			toggle.ItemData = item;
-			toggle.Icon.sprite =Resources.Load <Sprite> (Settings.IconsPaths + item.PicturesName); ;
 			toggle.Toggle.isOn = false;
 			newToggle.SetActive(true);
 			newToggle.transform.SetParent( ContentPanel);

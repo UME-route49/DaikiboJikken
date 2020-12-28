@@ -55,10 +55,6 @@ public class BattleController : MonoBehaviour
     /// <summary>順序の列挙</summary>
     List<Tuple<EnumPlayerOrEnemy, GameObject>>.Enumerator sequenceEnumerator;
 
-    /// <summary>生成されたセレクター</summary>
-    private GameObject instantiatedSelector;
-    /// <summary>生成されたターゲットセレクター</summary>
-    private GameObject instantiatedTargetSelector;
     /// <summary>選択された敵</summary>
     private GameObject selectedEnemy;
     /// <summary>選択されたプレイヤー</summary>
@@ -70,21 +66,19 @@ public class BattleController : MonoBehaviour
 
 	/// <summary>バトルUIのオブジェクト</summary>
 	public GameObject uiBttle;
-	/// コマンドUIの取得
-	private BattlePanels battlePanels;
 
 	///カメラのオブジェクト
 	public GameObject mainCamera;
 
-	private Sequence sequence; 
+	private Sequence sequence;
+
+	FadeOut fadeOut;
 
 	/// <summary>Awakes this instance.main</summary>
 	void Awake()
 	{
         CharacterState = EnumCharacterState.Idle;
 		CharacterSide = EnumSide.Down;
-		instantiatedSelector = GameObject.Instantiate(Selector);
-		instantiatedTargetSelector = GameObject.Instantiate(TargetSelector);
 		var o = Instantiate(uiBttle);
 		var canvas = o.GetComponentsInChildren<Canvas>();
 		//foreach (Canvas canva in canvas) canva.worldCamera = Camera.main;
@@ -99,7 +93,8 @@ public class BattleController : MonoBehaviour
     private void Start()
     {
 		sequence = DOTween.Sequence();
-		battlePanels = uiBttle.GetComponent<BattlePanels>();
+		SoundManager.BattleMusic();
+		fadeOut = FindObjectOfType<FadeOut>();
     }
 
     /// <summary>This is the main loop and where the system detect the presed keys and send them to the controller.</summary>
@@ -112,55 +107,51 @@ public class BattleController : MonoBehaviour
 		}
 		else if (currentState == EnumBattleState.EnemyTurn)
 		{
-			Log (GameTexts.EnemyTurn);
+			uiGameObject.SendMessage("LogText", GameTexts.EnemyTurn);
 			var z = turnByTurnSequenceList.Where(w=> w.First == EnumPlayerOrEnemy.Player);
 			var playerTargetedByEnemy = z.ElementAt(UnityEngine.Random.Range(0, z.Count() - 1));
 			var playerTargetedByEnemyDatas =  GetCharacterDatas (playerTargetedByEnemy.Second.name);
 
-			PositionTargetSelector(playerTargetedByEnemy.Second);
 			EnemyAttack(playerTargetedByEnemy.Second, playerTargetedByEnemyDatas);
 			NextBattleSequence ();                                                             
 		}
 		else if (currentState == EnumBattleState.PlayerTurn)
 		{
-			Log (GameTexts.PlayerTurn);
+			uiGameObject.SendMessage("LogText", GameTexts.PlayerTurn);
 
 			mainCamera.transform.position = selectedPlayer.transform.position + new Vector3(0, 2, 0)
-					- selectedPlayer.transform.forward * 4;
+				- selectedPlayer.transform.forward * 4;
 			mainCamera.transform.LookAt(generatedEnemyList[0].transform);
 
 			SoundManager.TurnSound();
-			HideTargetSelector();
 			ShowMenu();
 			currentState = EnumBattleState.None;
 		}
 		else if (currentState == EnumBattleState.PlayerWon)
 		{
-			Log (GameTexts.PlayerWon);
-			HideTargetSelector();
+			var go = GameObject.FindGameObjectsWithTag(Settings.Music).FirstOrDefault();
+			if (go) go.GetComponent<AudioSource>().Stop(); 
+			SoundManager.WinningMusic();         
+
+			uiGameObject.SendMessage("LogText", GameTexts.PlayerWon);
 			HideMenu ();
 			int totalXP = 0;
-			foreach (var x in generatedEnemyList) {
+			foreach (var x in generatedEnemyList) 
 				totalXP += x.GetComponent<EnemyCharacterDatas> ().XP;
-			}
 
 			foreach (var x in turnByTurnSequenceList){
 				var characterdatas = GetCharacterDatas (x.Second.name);
 				characterdatas.XP += totalXP;
-				var calculatedXP = Math.Floor ( Math.Sqrt(625+100* characterdatas.XP)-25)/ 50;
-				characterdatas.Level =(int) calculatedXP;
+				var calculatedXP = Math.Floor(Math.Sqrt(625 + 100 * characterdatas.XP) - 25) / 50;
+				characterdatas.Level = (int)calculatedXP;
 			}
 			var textTodisplay = GameTexts.EndOfTheBattle + "\n\n" + GameTexts.PlayerXP + totalXP;
 			ShowDropMenu(textTodisplay);
 			currentState = EnumBattleState.EndBattle;
-			var go = GameObject.FindGameObjectsWithTag(Settings.Music).FirstOrDefault();
-			if (go) go.GetComponent<AudioSource>().Stop(); 
-			SoundManager.WinningMusic();         
 		}
 		else if (currentState == EnumBattleState.EnemyWon)
-		{   
-			Log (GameTexts.EnemyWon);
-			HideTargetSelector();
+		{
+			uiGameObject.SendMessage("LogText", GameTexts.EnemyWon);
 			HideMenu ();
 
 			var textTodisplay = GameTexts.EndOfTheBattle + "\n\n" +GameTexts.YouLost ;
@@ -170,6 +161,10 @@ public class BattleController : MonoBehaviour
 			var go = GameObject.FindGameObjectsWithTag(Settings.Music).FirstOrDefault();
 			if (go) go.GetComponent<AudioSource>().Stop();
 			SoundManager.GameOverMusic();
+        }
+		else if(currentState == EnumBattleState.EndBattle)
+        {
+			if (Input.GetKeyDown(KeyCode.Space)) fadeOut.StartCoroutine("Fadeout", "DemoField");
         }
 	}
 
@@ -305,19 +300,12 @@ public class BattleController : MonoBehaviour
 		}
 	}
 
-    /// <summary>Positions the selector.</summary>
-    public void PositionSelector(GameObject go)
-	{
-		instantiatedSelector.transform.position = go.transform.position + new Vector3(-4, 0, 0);
-	}
-
 	public void Action(EnumBattleAction battleAction)
     {
 		currentState = EnumBattleState.SelectingTarget;
 		battlAction = battleAction;
 		SelectTheFirstEnemy();
 		HideMenu();
-		HideTargetSelector();
 		PlayerAction();
 	}
 
@@ -325,7 +313,7 @@ public class BattleController : MonoBehaviour
     public void PassAction()
 	{
 		battlAction = EnumBattleAction.Pass;
-		//battlePanels.HpMpBarSet(selectedPlayer.name, selectedPlayerDatas);
+		uiGameObject.SendMessage("HpMpSet", selectedPlayer);
 		NextBattleSequence ();
 		HideMenu();
 	}
@@ -334,20 +322,6 @@ public class BattleController : MonoBehaviour
     public void SelectTheFirstEnemy()
 	{
 		selectedEnemy = generatedEnemyList.Where(w=>w.activeSelf).FirstOrDefault();
-		if (selectedEnemy != null) PositionTargetSelector(selectedEnemy);
-	}
-
-    /// Positions the target selector.
-    public void PositionTargetSelector(GameObject target)
-	{
-		instantiatedTargetSelector.SetActive(true);
-		instantiatedTargetSelector.transform.position = target.transform.position + new Vector3(-4, 0, 0);
-	}
-
-    /// Hides the target selector.
-    public void HideTargetSelector()
-	{
-		instantiatedTargetSelector.SetActive(false);
 	}
 
     /// Hides the menu.
@@ -381,15 +355,18 @@ public class BattleController : MonoBehaviour
 		if (enemyCharacterdatas != null && selectedPlayerDatas != null) {
 			switch (battlAction) {
 				case EnumBattleAction.Weapon:
+					selectedPlayer.transform.LookAt(selectedEnemy.transform.position);
 					Sequence actions = DOTween.Sequence();
 					animator.SetBool("Run", true);
 					sequence = actions.Append(selectedPlayer.transform.DOLocalMove(selectedEnemy.transform.position
-						- new Vector3(SpaceBetweenCharacterAndEnemy, 0, 0), 1.0f)).SetEase(Ease.InSine)
+						- new Vector3(SpaceBetweenCharacterAndEnemy, 0, 0), 0.8f)).SetEase(Ease.InSine)
 						.AppendCallback(() => animator.SetBool("Run", false))
 						.AppendCallback(() => animator.SetTrigger("Attack"));
-					sequence = actions.AppendInterval(1.5f);
+						//.AppendCallback(() => uiGameObject.BroadcastMessage("ShowPopup",
+						//	new object[] { "-" + calculatedDamage.ToString(), selectedEnemy.transform.position }));
+					sequence = actions.AppendInterval(1.0f);
 					sequence = actions.Append(selectedPlayer.transform
-						.DOLocalMove(selectedPlayer.transform.position, 0.8f))
+						.DOLocalMove(selectedPlayer.transform.position, 0.5f))
 						.Join(selectedPlayer.transform.DOJump(selectedPlayer.transform.position, 3, 1, 0.8f));
 					sequence = actions.AppendInterval(1f);
 
@@ -399,16 +376,14 @@ public class BattleController : MonoBehaviour
 					calculatedDamage = Mathf.Clamp (calculatedDamage, 0, calculatedDamage);
 					enemyCharacterdatas.HP = Mathf.Clamp(enemyCharacterdatas.HP 
 						- calculatedDamage, 0 , enemyCharacterdatas.HP - calculatedDamage);
-					ShowPopup ("-"+calculatedDamage.ToString (), selectedEnemy.transform.position);
 					Destroy( Instantiate (WeaponParticleEffect, selectedEnemy.transform.localPosition, Quaternion.identity),1.5f);
 					break;
 				case EnumBattleAction.Magic:
 					calculatedDamage = BattlePanels.selectedSpell.Attack + selectedPlayerDatas.GetMagic () - enemyCharacterdatas.MagicDefense; 
 					calculatedDamage = Mathf.Clamp (calculatedDamage, 0, calculatedDamage);
 					enemyCharacterdatas.HP =Mathf.Clamp ( enemyCharacterdatas.HP - calculatedDamage, 0 , enemyCharacterdatas.HP - calculatedDamage);
-					selectedPlayerDatas.MP = Mathf.Clamp ( selectedPlayerDatas.MP - BattlePanels.selectedSpell.ManaAmount, 0 ,selectedPlayerDatas.MP - BattlePanels.selectedSpell.ManaAmount);
-					ShowPopup (calculatedDamage.ToString (), selectedEnemy.transform.localPosition);
-					ShowPopup ("-"+calculatedDamage.ToString (), selectedEnemy.transform.position);
+					selectedPlayerDatas.MP = Mathf.Clamp ( selectedPlayerDatas.MP - BattlePanels.selectedSpell.ManaAmount, 0 
+						,selectedPlayerDatas.MP - BattlePanels.selectedSpell.ManaAmount);
 					uiGameObject.SendMessage("HpMpSet", selectedPlayerDatas);
 					
 					var ennemyEffect = Resources.Load<GameObject>(Settings.PrefabsPath + BattlePanels.selectedSpell.ParticleEffect);
@@ -422,7 +397,6 @@ public class BattleController : MonoBehaviour
 					//calculatedDamage = BattlePanels.SelectedItem.Attack - enemyCharacterdatas.MagicDefense; 
 					calculatedDamage = Mathf.Clamp (calculatedDamage, 0, calculatedDamage);
 					enemyCharacterdatas.HP = Mathf.Clamp ( enemyCharacterdatas.HP - calculatedDamage, 0 , enemyCharacterdatas.HP - calculatedDamage);
-					ShowPopup ("-"+calculatedDamage.ToString (), selectedEnemy.transform.position);
 					Destroy( Instantiate (MagicParticleEffect, selectedEnemy.transform.localPosition, Quaternion.identity),1.7f);
 					SoundManager.ItemSound();
 					break;
@@ -453,8 +427,9 @@ public class BattleController : MonoBehaviour
 					sequence = actions.Append(go.transform.DOLookAt(playerToAttack.transform.position, 0.2f));
 					sequence = actions.Append(go.transform.DOLocalMove(playerToAttack.transform.position
 						+ playerToAttack.transform.forward * 4, 1).SetEase(Ease.OutCirc))
-						.AppendCallback(() => ShowPopup("-" + calculatedDamage.ToString(), playerToAttack.transform.position))
-						.AppendCallback(() => uiGameObject.SendMessage("HpMpSet", playerToAttackDatas));
+						.AppendCallback(() => uiGameObject.SendMessage("HpMpSet", playerToAttackDatas))
+						.AppendCallback(() => uiGameObject.SendMessage("ShowPopup",
+							new object[] { "-" + calculatedDamage.ToString(), playerToAttack.transform.position }));
 					sequence = actions.AppendInterval(2f);
 					sequence = actions.Append(go.transform.DOLocalMove(go.transform.position, 1).SetEase(Ease.OutCirc));
 					calculatedDamage = enemyCharacterdatas.Attack - playerToAttackDatas.Defense; 
@@ -466,7 +441,6 @@ public class BattleController : MonoBehaviour
 					calculatedDamage = enemyCharacterdatas.Attack - playerToAttackDatas.Defense; 
 					calculatedDamage = Mathf.Clamp (calculatedDamage, 0, calculatedDamage);
 					playerToAttackDatas.HP = Mathf.Clamp (playerToAttackDatas.HP - calculatedDamage , 0 ,playerToAttackDatas.HP - calculatedDamage);
-					ShowPopup ("-"+calculatedDamage.ToString (), playerToAttack.transform.position);
 					uiGameObject.SendMessage("HpMpSet", playerToAttackDatas);
 					Destroy( Instantiate (WeaponParticleEffect, playerToAttack.transform.localPosition, Quaternion.identity),1.5f);
 					break;
@@ -488,22 +462,10 @@ public class BattleController : MonoBehaviour
 	}
 
     /// Logs the specified text.
-    public void Log(string text)
-	{
-		if (uiGameObject) uiGameObject.BroadcastMessage ("LogText",text);
-	}
-
-    /// Shows the popup.
-    public void ShowPopup(string text, Vector3 position)
-	{
-		if (uiGameObject)uiGameObject.BroadcastMessage ("ShowPopup", new object[]{ text, position });
-	}
-
-    /// Hides the popup.
-    public void HidePopup()
-	{
-		if (uiGameObject) uiGameObject.BroadcastMessage ("HidePopup");
-	}
+ //   public void Log(string text)
+	//{
+	//	if (uiGameObject) uiGameObject.BroadcastMessage ("LogText",text);
+	//}
 
     /// Shows the drop menu.
     public void ShowDropMenu(string text)
