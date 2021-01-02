@@ -119,4 +119,14 @@ public class SoundManager : MonoBehaviour
     {
         SoundManager.StaticPlayOneShot(Settings.TurnSound, Vector3.zero, volume);
     }
+
+    public static void StartSound(float volume = -1)
+    {
+        SoundManager.StaticPlayOneShot(Settings.StartSound, Vector3.zero, volume);
+    }
+
+    public static void EncountSound(float volume = -1)
+    {
+        SoundManager.StaticPlayOneShot(Settings.EncountSound, Vector3.zero, volume);
+    }
 }

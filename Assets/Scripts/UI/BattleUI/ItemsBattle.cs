@@ -6,8 +6,6 @@ using System.Collections.Generic;
 using System.Linq;
 
 public class ItemsBattle : MonoBehaviour {
-    //TODO : Add the number of items in the list  Ex :  potion x2 
-
     /// The toggle to duplicate
     public GameObject ToggleToDuplicate;
     /// The content panel
@@ -24,7 +22,6 @@ public class ItemsBattle : MonoBehaviour {
 		ClearItemList ();
 		PopulateList ();
 		logicGameObject  = GameObject.FindGameObjectsWithTag(Settings.Logic).FirstOrDefault();
-
 	}
 
     /// Populates the list.
@@ -48,12 +45,9 @@ public class ItemsBattle : MonoBehaviour {
 
 
     /// This procedure check the resume toggle control and displays equips canvas
-    /// <param name="gameObject">The gameobject that sent the action</param>
-    /// <param name="toggle">The toggle.</param>
     public void ToggleSelectAction(Toggle toggle)
 	{
 		Contract.Requires<MissingComponentException> (toggle != null);
-        //SoundManager.UISound();
         if (toggle.isOn) {
 			toggle.group.NotifyToggleOn(toggle);
 			selectedToggle = toggle;
@@ -72,11 +66,7 @@ public class ItemsBattle : MonoBehaviour {
 		}
 	}
 
-   
-
-    /// <summary>
     /// This procedure clear all the items in the list
-    /// </summary>
     public void ClearItemList()
 	{
 		Contract.Requires<UnassignedReferenceException> (ContentPanel != null);
@@ -86,21 +76,16 @@ public class ItemsBattle : MonoBehaviour {
             {
                 GameObject.Destroy(child.gameObject);
             }
-
         }
     }
 
-    /// <summary>
     /// Deselects the menus toggles.
-    /// </summary>
     public void DeselectMenusToggles()
 	{
 		if(selectedToggle)
         {
             selectedToggle.isOn = false;
         }
-
     }
-
 }
 

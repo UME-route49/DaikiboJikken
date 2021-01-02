@@ -38,6 +38,8 @@ public class CharactersData : ICloneable
     //魔法
     public List<SpellsData> SpellsList = new List<SpellsData>();
 
+    public EnumPanelPosition Panel;
+
     //攻撃力の取得（基礎値+装備値）
     public int GetAttack()
     {

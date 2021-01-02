@@ -6,43 +6,36 @@ using DG.Tweening;
 
 public class FadeOut : MonoBehaviour {
 
-	/// The fade out time
-	public float FadeOutTime = 1;
-
-    // Update is called once per frame
-    /// Starts this instance.
     void Start ()
 	{
-		StartCoroutine (Fadein());
+		StartCoroutine (Fadein(1f));
 	}
 
-    // Animate the Logos with fadeIn and fadeOut effect
-    /// Initializes this instance.
-    IEnumerator Fadein()
-	{    	
+    IEnumerator Fadein(float time)
+	{
 		// Set the texture so that it is the the size of the screen and covers it.
 		transform.localScale= new Vector3( Screen.width, Screen.height,1);
 
 		Sequence mySequence = DOTween.Sequence();
 		Color oldColor = GetComponent<Image>().color;
 		GetComponent<Image>().color = new Color (oldColor.r, oldColor.b, oldColor.g, 1f);
-		mySequence.Append(GetComponent<Image>().DOColor(new Color(oldColor.r, oldColor.b, oldColor.g, 0f), FadeOutTime)).SetEase(Ease.InQuart);
+		mySequence.Append(GetComponent<Image>().DOColor(new Color(oldColor.r, oldColor.b, oldColor.g, 0f), time)).SetEase(Ease.InQuart);
 		mySequence.Play ();
 
-		yield return new WaitForSeconds (FadeOutTime);
+		yield return new WaitForSeconds (time);
 	}
 
-	IEnumerator Fadeout(string NextScene)
+	public IEnumerator Fadeout(string NextScene, float time)
     {
 		transform.localScale = new Vector3(Screen.width, Screen.height, 1);
 
 		Sequence mySequence = DOTween.Sequence();
 		Color oldColor = GetComponent<Image>().color;
 		GetComponent<Image>().color = new Color(oldColor.r, oldColor.b, oldColor.g, 0f);
-		mySequence.Append(GetComponent<Image>().DOColor(new Color(oldColor.r, oldColor.b, oldColor.g, 1f), FadeOutTime)).SetEase(Ease.InQuart);
+		mySequence.Append(GetComponent<Image>().DOColor(new Color(oldColor.r, oldColor.b, oldColor.g, 1f), time)).SetEase(Ease.InQuart);
 		mySequence.Play();
 
-		yield return new WaitForSeconds(FadeOutTime);
+		yield return new WaitForSeconds(time);
 
 		SceneManager.LoadScene(NextScene);
 	}

@@ -1,54 +1,21 @@
-﻿// ***********************************************************************
-// Assembly         : Assembly-CSharp
-// Author           : Pondomaniac
-// Created          : 07-06-2016
-//
-// Last Modified By : Pondomaniac
-// Last Modified On : 07-06-2016
-// ***********************************************************************
-// <copyright file="GameTexts.cs" company="">
+﻿using System;
 
-// </copyright>
-// <summary></summary>
-// ***********************************************************************
-using System;
-
-
-/// <summary>
-/// Class GameTexts.
-/// </summary>
 public class GameTexts
-	{
-    //Battle log texts
-    /// <summary>
+{
     /// The player turn
-    /// </summary>
-    public const string PlayerTurn = "It's player turn";
-    /// <summary>
+    public const string PlayerTurn = "プレイヤーのターンです。";
     /// The enemy turn
-    /// </summary>
-    public const string EnemyTurn = "It's enemy turn";
-    /// <summary>
+    public const string EnemyTurn = "敵のターンです。";
     /// The enemy won
-    /// </summary>
-    public const string EnemyWon = "Enemy won";
-    /// <summary>
+    public const string EnemyWon = "全滅しました。";
     /// The player won
-    /// </summary>
-    public const string PlayerWon = "Player won";
-    /// <summary>
+    public const string PlayerWon = "勝利しました。";
     /// The end of the battle
-    /// </summary>
-    public const string EndOfTheBattle = "End of the battle";
-    /// <summary>
+    public const string EndOfTheBattle = "戦闘終了。";
     /// The player xp
-    /// </summary>
-    public const string PlayerXP = "- All survived players get XP:";
-    /// <summary>
+    public const string PlayerXP = "経験値を獲得しました:";
     /// You lost
-    /// </summary>
-    public const string YouLost = "- The enemy was stronger than you try again next time !";
-
-	}
+    public const string YouLost = "装備を整えて再戦してみましょう。";
+}
 
 

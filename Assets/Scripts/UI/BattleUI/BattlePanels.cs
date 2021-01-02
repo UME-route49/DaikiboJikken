@@ -19,9 +19,7 @@ public class BattlePanels : MonoBehaviour {
     public static SpellsData selectedSpell ;
     /// The selected item
     public static ItemsData selectedItem;
-    /// The fade out time
-    public float FadeOutTime=2.5f;
-    
+
     //The fadeIn animation time
     /// The log text
     public Text logText;
@@ -180,17 +178,17 @@ public class BattlePanels : MonoBehaviour {
 				else  row.Panel.SetActive(false);
 			}
 		}
-	}
+    }
 
-    /// Fights this instance.
+    // Fights this instance.
     void Fight ()
 	{
-		Debug.Log ("Fight");
+        Debug.Log ("Fight");
 		SendMessageUpwards("DisplayPanel",EnumBattleAction.Weapon);
 	}
 
-    /// Magics this instance.
-    void Magic ()
+	/// Magics this instance.
+	void Magic ()
 	{
 		Debug.Log ("Magic");
 		SendMessageUpwards("DisplayPanel",EnumBattleAction.Magic);
@@ -263,12 +261,6 @@ public class BattlePanels : MonoBehaviour {
 		PopUp.text = string.Empty;
 	}
 
-    /// Ends the battle.
-    public void EndBattle()
-	{
-		if ( logicGameObject ) logicGameObject.BroadcastMessage ("EndBattle");
-	}
-
 	public void HpMpSet(CharactersData character)
     {
 		Sequence sequence = DOTween.Sequence();
@@ -287,7 +279,6 @@ public class BattlePanels : MonoBehaviour {
 				HPMPtexts[2].MP.text = "MP" + character.MP + "/" + character.MaxMP;
 				break;
 			default:
-				Debug.Log(11111111111111111111);
 				break;
 		}
     }

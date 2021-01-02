@@ -13,7 +13,9 @@ public class Settings
     public const string ChatSound = "ChatSound";
     public const string ItemSound = "spell3";
     public const string UIClickSound = "UiSound";
-    public const string TurnSound = "TurnSOund";
+    public const string TurnSound = "TurnSound";
+    public const string StartSound = "StartSound";
+    public const string EncountSound = "EncountSound";
     public const string MagicAuraEffect = "Magic_Aura";
     public const float InputlockingTime = 0.2f;
     public const float LetterPause = 0.01f;

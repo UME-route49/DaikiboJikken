@@ -1,16 +1,3 @@
-// ***********************************************************************
-// Assembly         : Assembly-CSharp
-// Author           : Pondomaniac
-// Created          : 07-06-2016
-//
-// Last Modified By : Pondomaniac
-// Last Modified On : 07-07-2016
-// ***********************************************************************
-// <copyright file="ItemsGameMenu.cs" company="">
-
-// </copyright>
-// <summary></summary>
-// ***********************************************************************
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
@@ -18,44 +5,25 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
-/// <summary>
-/// Class ItemsGameMenu.
-/// </summary>
 public class ItemsGameMenu : MonoBehaviour {
-    //TODO : Add the number of items in the list  Ex :  potion x2 
-
-    /// <summary>
     /// The toggle to duplicate
-    /// </summary>
     public GameObject ToggleToDuplicate;
-    /// <summary>
     /// The content panel
-    /// </summary>
     public Transform ContentPanel;
-    /// <summary>
     /// The use action toggle
-    /// </summary>
     public Toggle UseActionToggle;
-    /// <summary>
     /// The item description
-    /// </summary>
     public Text ItemDescription;
-    /// <summary>
     /// The selected toggle
-    /// </summary>
     private Toggle selectedToggle;
 
-    /// <summary>
     /// Starts this instance.
-    /// </summary>
     void Start () {
 		ClearItemList ();
 		PopulateList ();
 	}
 
-    /// <summary>
     /// Populates the list.
-    /// </summary>
     void PopulateList () {
 	
 		Contract.Requires<UnassignedReferenceException> (GameMenu.SelectedCharacter != null);
@@ -75,11 +43,7 @@ public class ItemsGameMenu : MonoBehaviour {
 	}
 
 
-    /// <summary>
     /// This procedure check the resume toggle control and displays equips canvas
-    /// <param name="gameObject">The gameobject that sent the action</param>
-    /// </summary>
-    /// <param name="toggle">The toggle.</param>
     public void ToggleSelectAction(Toggle toggle)
 	{
 		Contract.Requires<MissingComponentException> (toggle != null);
@@ -109,12 +73,7 @@ public class ItemsGameMenu : MonoBehaviour {
 		}
 	}
 
-
-    /// <summary>
     /// This procedure use the selected item
-    /// <param name="toggle">The toggle that sent the action</param>
-    /// </summary>
-    /// <param name="toggle">The toggle.</param>
     public void ToggleUseAction(Toggle toggle)
 	{
 		Contract.Requires<MissingComponentException> (toggle != null);
@@ -134,9 +93,7 @@ public class ItemsGameMenu : MonoBehaviour {
 	}
 
 
-    /// <summary>
     /// This procedure clear all the items in the list
-    /// </summary>
     public void ClearItemList()
 	{
 		Contract.Requires<UnassignedReferenceException> (ContentPanel != null);
@@ -149,6 +106,5 @@ public class ItemsGameMenu : MonoBehaviour {
 
         }
     }
-
 }
 

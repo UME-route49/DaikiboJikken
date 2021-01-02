@@ -17,6 +17,7 @@ public class HomeMenu : MonoBehaviour {
     public String SceneToLoadForNewGame;
 
     FadeOut fadeOut;
+    bool canControl = true;
    
     // Use this for initialization
     void Start() 
@@ -24,28 +25,32 @@ public class HomeMenu : MonoBehaviour {
 		Datas.PopulateDatas ();
         SoundManager.TitleMusic();
         fadeOut = FindObjectOfType<FadeOut>();
+        canControl = true;
     }
 
     private void Update()
     {
+        if (!canControl) return;
+
         if (Input.GetKeyDown(KeyCode.Space))
         {
+            canControl = false;
             NewgameChoice();
         }
     }
 
     private void NewgameChoice()
     {
-        SoundManager.UISound();
+        SoundManager.StartSound();
         Main.CurrentScene = SceneToLoadForNewGame;
-        fadeOut.StartCoroutine("Fadeout", SceneToLoadForNewGame);
+        fadeOut.StartCoroutine(fadeOut.Fadeout(SceneToLoadForNewGame, 5f));
     }
 
     /// This procedure check the no toggle control and send action to the action variable
     public void NewgameToggleChoice(Toggle toggle)
 	{
 		Contract.Requires<MissingComponentException> (toggle != null);
-        SoundManager.UISound();
+        SoundManager.StartSound();
         if (toggle.isOn) {
             gameObject.SetActive (false); 
 			Main.CurrentScene = SceneToLoadForNewGame;
@@ -57,7 +62,7 @@ public class HomeMenu : MonoBehaviour {
     public void ContinueToggleChoice(Toggle toggle)
 	{
 		Contract.Requires<MissingComponentException> (toggle != null);
-        SoundManager.UISound();
+        SoundManager.StartSound();
         if (toggle.isOn) {
             gameObject.SetActive (false); 
 			Main.Load ();

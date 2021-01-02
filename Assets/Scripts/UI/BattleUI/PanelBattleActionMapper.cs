@@ -7,12 +7,8 @@ using UnityEngine.UI;
 [Serializable]
 public struct PanelBattleActionMapper
 {
-    /// The battle action
     public EnumBattleAction BattleAction;
-    /// The panel
     public GameObject Panel;
-
     public Toggle parentToggle;
-
     public Transform contents;
 }

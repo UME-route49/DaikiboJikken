@@ -11,4 +11,10 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/TOTSUKA/TitleScene.unity
     guid: be87387ca3d419743b788d23f71f442d
+  - enabled: 1
+    path: Assets/TOTSUKA/MainLoader.unity
+    guid: 33819af26057d174e96d9fdc95474811
+  - enabled: 1
+    path: Assets/TOTSUKA/DemoFIeld.unity
+    guid: 3bcd4785f8f0ef6448489cf4cb34ff23
   m_configObjects: {}

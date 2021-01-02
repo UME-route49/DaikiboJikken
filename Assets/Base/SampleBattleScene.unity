@@ -458,18 +458,12 @@ MonoBehaviour:
   PossibleEnnemies:
   - {fileID: 6553916670458435248, guid: 7e9279917ca7c1a46829b13557e4d0c8, type: 3}
   NumberOfEnemyToGenerate: 1
-  SpaceBetweenCharacters: 7
-  SpaceBetweenCharacterAndEnemy: 3
-  PlayersXPosition: -12
-  EnnemyXPosition: 0
-  PlayersYPosition: 5
-  EnnemyYPosition: 0
-  Selector: {fileID: 186788, guid: 2b4c7480eff01d9409cced1270f20338, type: 3}
-  TargetSelector: {fileID: 176272, guid: 4d04e0a494ac98844955c5081e90edc6, type: 3}
   WeaponParticleEffect: {fileID: 1307993304775662, guid: ad7659d14794c1d4d979fbbe13100887,
     type: 3}
   MagicParticleEffect: {fileID: 105272, guid: 3b1bf221e075dec41b4bd5195541f5ef, type: 3}
-  uiBttle: {fileID: 101470, guid: a77189cc12b3b1d409c82256c5d5bdda, type: 3}
+  uiObject: {fileID: 101470, guid: a77189cc12b3b1d409c82256c5d5bdda, type: 3}
+  panelObject: {fileID: 5982480443788539704, guid: 2a50e645b2038cb48917106187faeec2,
+    type: 3}
   mainCamera: {fileID: 963194225}
 --- !u!222 &1696824624
 CanvasRenderer:
@@ -495,7 +489,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 1.402, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8565285830672418890
@@ -525,7 +519,7 @@ Canvas:
   m_SortingBucketNormalizedSize: 0
   m_AdditionalShaderChannelsFlag: 25
   m_SortingLayerID: 560376435
-  m_SortingOrder: 0
+  m_SortingOrder: 100
   m_TargetDisplay: 0
 --- !u!224 &8565285830672650044
 RectTransform:
@@ -607,4 +601,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a4e47c62556d2840afd82851e0efd53, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  FadeOutTime: 3

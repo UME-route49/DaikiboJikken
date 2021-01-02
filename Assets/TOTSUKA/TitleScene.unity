@@ -603,7 +603,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a4e47c62556d2840afd82851e0efd53, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  FadeOutTime: 3
+  fadeInTime: 1
+  fadeOutTime: 3
 --- !u!114 &8565285831611821999
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -671,7 +672,7 @@ Canvas:
   m_SortingBucketNormalizedSize: 0
   m_AdditionalShaderChannelsFlag: 25
   m_SortingLayerID: 560376435
-  m_SortingOrder: 0
+  m_SortingOrder: 100
   m_TargetDisplay: 0
 --- !u!222 &8565285831614739265
 CanvasRenderer:

@@ -9,18 +9,22 @@ public class PlayerController : MonoBehaviour
     Rigidbody rb;
     Animator animator;
 
+    public bool canControl = true;
+
     // Start is called before the first frame update
     void Start()
     {
         rb = GetComponent<Rigidbody>();
         animator = GetComponent<Animator>();
+        canControl = true;
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (!canControl) return;
+
         mainCamera.transform.position = transform.position + new Vector3(0, 8, -5);
-        //mainCamera.transform.LookAt(transform.position);
 
         rb.AddForce(new Vector3(1, 0, 0) * Input.GetAxisRaw("Horizontal") * 100
             + new Vector3(0, 0, 1) * Input.GetAxisRaw("Vertical") * 100);

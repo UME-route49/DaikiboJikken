@@ -338,6 +338,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 136df95a545b0cd498a66d2c73584368, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  interval: 3
 --- !u!4 &933737538
 Transform:
   m_ObjectHideFlags: 0
@@ -2031,6 +2032,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mainCamera: {fileID: 659307540}
+  canControl: 1
 --- !u!1 &6497743240078928765
 GameObject:
   m_ObjectHideFlags: 0
@@ -2101,7 +2103,7 @@ AudioSource:
   rolloffMode: 0
   BypassEffects: 0
   BypassListenerEffects: 0
-  BypassReverbZones: 0
+  BypassReverbZones: 1
   rolloffCustomCurve:
     serializedVersion: 2
     m_Curve:
@@ -3633,7 +3635,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a4e47c62556d2840afd82851e0efd53, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  FadeOutTime: 3
 --- !u!114 &8565285831611821999
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3701,7 +3702,7 @@ Canvas:
   m_SortingBucketNormalizedSize: 0
   m_AdditionalShaderChannelsFlag: 25
   m_SortingLayerID: 560376435
-  m_SortingOrder: 0
+  m_SortingOrder: 100
   m_TargetDisplay: 0
 --- !u!222 &8565285831614739265
 CanvasRenderer:

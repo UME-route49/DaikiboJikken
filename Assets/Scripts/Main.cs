@@ -182,7 +182,6 @@ public class Main : MonoBehaviour
         info.AddValue("playerXPosition", PlayerPosition.x);
         info.AddValue("playerYPosition", PlayerPosition.y);
         info.AddValue("playerZPosition", PlayerPosition.z);
-
     }
 
     /// Saves this instance.
