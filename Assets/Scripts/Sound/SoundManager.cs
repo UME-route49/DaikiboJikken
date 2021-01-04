@@ -54,7 +54,7 @@ public class SoundManager : MonoBehaviour
     }
 
     /// <summary>Plays the background music.</summary>
-    public void PlayBackgroundMusic(string musicTitle, float volume = -1)
+    public static void PlayBackgroundMusic(string musicTitle, float volume = -1)
     {
         var instantiatedSound = Resources.Load<AudioClip>(Settings.SoundPath + musicTitle);
         if (volume >= 0) instance.gameObject.GetComponent<AudioSource>().volume = volume;
@@ -97,22 +97,22 @@ public class SoundManager : MonoBehaviour
 
     public static void WinningMusic(float volume = -1)
     {
-        SoundManager.StaticPlayOneShot(Settings.WinningMusic, Vector3.zero, volume);
+        SoundManager.PlayBackgroundMusic(Settings.WinningMusic, volume);
     }
 
     public static void BattleMusic(float volume = -1)
     {
-        SoundManager.StaticPlayOneShot(Settings.BattleMusic, Vector3.zero, volume);
+        SoundManager.PlayBackgroundMusic(Settings.BattleMusic, volume);
     }
 
     public static void FieldMusic(float volume = -1)
     {
-        SoundManager.StaticPlayOneShot(Settings.FIeldMusic, Vector3.zero, volume);
+        SoundManager.PlayBackgroundMusic(Settings.FIeldMusic, volume);
     }
 
     public static void TitleMusic(float volume = -1)
     {
-        SoundManager.StaticPlayOneShot(Settings.TitleMusic, Vector3.zero, volume);
+        SoundManager.PlayBackgroundMusic (Settings.TitleMusic, volume);
     }
 
     public static void TurnSound(float volume = -1)

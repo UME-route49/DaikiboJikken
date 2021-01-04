@@ -67,10 +67,12 @@ public class Datas : MonoBehaviour
 		item.Name = "ブロードソード";
 		item.Description = "見習い戦士に国から支給される剣。";
 		item.PicturesName = "sword001";
-		item.EquipementType = EnumItemType.RightHand;
+		item.itemType = EnumItemType.RightHand;
 		item.AllowedCharacterType = EnumCharacterType.Warrior;
 		item.Attack = 15;
 		item.Price = 10;
+		item.Particle = "Sword";
+		item.Sound = "Sword";
 		ItemsData[1] = item;
 
 		//item = new ItemsData();
@@ -147,11 +149,13 @@ public class Datas : MonoBehaviour
 		item.Name = "Wand";
 		item.Description = "A noob wand";
 		item.PicturesName = "W_Mace010";
-		item.EquipementType = EnumItemType.TwoHands;
+		item.itemType = EnumItemType.TwoHands;
 		item.AllowedCharacterType = EnumCharacterType.Warrior;
 		item.Attack = 20;
 		item.Magic = 20;
 		item.Price = 10;
+		item.Particle = "Wand";
+		item.Sound = "Wand";
 		ItemsData[9] = item;
 
 		//item = new ItemsData();
@@ -181,7 +185,7 @@ public class Datas : MonoBehaviour
 		item.Name = "helmet";
 		item.Description = "A noob helmet";
 		item.PicturesName = "C_Elm01";
-		item.EquipementType = EnumItemType.Head;
+		item.itemType = EnumItemType.Head;
 		item.AllowedCharacterType = EnumCharacterType.Warrior;
 		item.Defense = 15;
 		item.Price = 10;
@@ -211,7 +215,7 @@ public class Datas : MonoBehaviour
         item.Name = "Hat";
         item.Description = "A noob hat";
         item.PicturesName = "C_Hat01";
-        item.EquipementType = EnumItemType.Head;
+        item.itemType = EnumItemType.Head;
         item.AllowedCharacterType = EnumCharacterType.Witch;
         item.MagicDefense = 20;
         item.Price = 10;
@@ -232,7 +236,7 @@ public class Datas : MonoBehaviour
 		item.Name = "Shield";
 		item.Description = "A noob shield";
 		item.PicturesName = "E_Wood01";
-		item.EquipementType = EnumItemType.LeftHand;
+		item.itemType = EnumItemType.LeftHand;
 		item.AllowedCharacterType = EnumCharacterType.Warrior;
 		item.Defense = 15;
 		item.Price = 10;
@@ -283,7 +287,7 @@ public class Datas : MonoBehaviour
 		item.Name = "Armor";
 		item.Description = "A noob armor";
 		item.PicturesName = "A_Armour01";
-		item.EquipementType = EnumItemType.Body;
+		item.itemType = EnumItemType.Body;
 		item.AllowedCharacterType = EnumCharacterType.Warrior;
 		item.Defense = 20;
 		item.Price = 20;
@@ -323,7 +327,7 @@ public class Datas : MonoBehaviour
         item.Name = "Clothes";
         item.Description = "A noob clothes";
         item.PicturesName = "A_Clothing01";
-        item.EquipementType = EnumItemType.Body;
+        item.itemType = EnumItemType.Body;
         item.AllowedCharacterType = EnumCharacterType.Warrior;
         item.MagicDefense = 20;
         item.Price = 20;
@@ -354,54 +358,66 @@ public class Datas : MonoBehaviour
 		item.Name = "ポーション";
 		item.Description = "HPを20回復。";
 		item.PicturesName = "P_Red04";
-		item.EquipementType = EnumItemType.Heal;
+		item.itemType = EnumItemType.Heal;
 		item.HpDamege = 20;
 		item.Price = 5;
+		item.Particle = "Potion";
+		item.Sound = "Potion";
 		ItemsData[29] = item;
 
 		item = new ItemsData();
 		item.Name = "メガポーション";
 		item.Description = "HPを40回復。";
 		item.PicturesName = "P_Red03";
-		item.EquipementType = EnumItemType.Heal;
+		item.itemType = EnumItemType.Heal;
 		item.HpDamege = 40;
 		item.Price = 10;
+		item.Particle = "MegaPotion";
+		item.Sound = "MegaPotion";
 		ItemsData[30] = item;
 
 		item = new ItemsData();
 		item.Name = "ウルトラポーション";
 		item.Description = "HPを60回復。";
 		item.PicturesName = "P_Red03";
-		item.EquipementType = EnumItemType.Heal;
+		item.itemType = EnumItemType.Heal;
 		item.HpDamege = 60;
 		item.Price = 30;
+		item.Particle = "UltraPotion";
+		item.Sound = "UltraPotion";
 		ItemsData[31] = item;
 
 		item = new ItemsData();
 		item.Name = "エーテル";
-		item.Description = "A potion that add 20 mana points";
+		item.Description = "MPを30回復。";
 		item.PicturesName = "P_Red04";
-		item.EquipementType = EnumItemType.Heal;
-		item.MpDamege = 20;
+		item.itemType = EnumItemType.Heal;
+		item.MpDamege = 30;
 		item.Price = 5;
+		item.Particle = "Ether";
+		item.Sound = "Ether";
 		ItemsData[32] = item;
 
 		item = new ItemsData();
-		item.Name = "ハイエーテル";
-		item.Description = "A potion that add 40 mana points";
+		item.Name = "メガエーテル";
+		item.Description = "MPを120回復。";
 		item.PicturesName = "P_Red03";
-		item.EquipementType = EnumItemType.Heal;
-		item.MpDamege = 40;
+		item.itemType = EnumItemType.Heal;
+		item.MpDamege = 120;
 		item.Price = 10;
+		item.Particle = "MegaEther";
+		item.Sound = "MegaEther";
 		ItemsData[33] = item;
 
 		item = new ItemsData();
 		item.Name = "ウルトラエーテル";
-		item.Description = "A big potion that add 60 mana points";
+		item.Description = "MPを500回復";
 		item.PicturesName = "P_Red03";
-		item.EquipementType = EnumItemType.Heal;
-		item.MpDamege = 60;
+		item.itemType = EnumItemType.Heal;
+		item.MpDamege = 500;
 		item.Price = 30;
+		item.Particle = "UltraEther";
+		item.Sound = "UltraEther";
 		ItemsData[34] = item;
 	}
 
@@ -414,8 +430,8 @@ public class Datas : MonoBehaviour
 		spell.AllowedCharacterType = EnumCharacterType.Witch;
 		spell.ManaAmount = 5;
 		spell.Attack = 10;
-		spell.ParticleEffect = "Hoat";
-		spell.SoundEffect = "Hoat";
+		spell.Particle = "Hoat";
+		spell.Sound = "Hoat";
 		SpellsData[1] = spell;
 
 		spell = new SpellsData();
@@ -424,8 +440,8 @@ public class Datas : MonoBehaviour
 		spell.AllowedCharacterType = EnumCharacterType.Witch;
 		spell.ManaAmount = 7;
 		spell.Attack = 15;
-		spell.ParticleEffect = "Hoater";
-		spell.SoundEffect = "Hoater";
+		spell.Particle = "Hoater";
+		spell.Sound = "Hoater";
 		SpellsData[2] = spell;
 
 		spell = new SpellsData();
@@ -434,8 +450,8 @@ public class Datas : MonoBehaviour
 		spell.AllowedCharacterType = EnumCharacterType.Witch;
 		spell.ManaAmount = 15;
 		spell.Attack = 20;
-		spell.ParticleEffect = "Hotist";
-		spell.SoundEffect = "Hotist";
+		spell.Particle = "Hotist";
+		spell.Sound = "Hotist";
 		SpellsData[3] = spell;
 
 		spell = new SpellsData();
@@ -444,8 +460,8 @@ public class Datas : MonoBehaviour
 		spell.AllowedCharacterType = EnumCharacterType.Witch;
 		spell.ManaAmount = 20;
 		spell.Attack = 30;
-		spell.ParticleEffect = "Col";
-		spell.SoundEffect = "Col";
+		spell.Particle = "Col";
+		spell.Sound = "Col";
 		SpellsData[4] = spell;
 
 		spell = new SpellsData();
@@ -454,8 +470,8 @@ public class Datas : MonoBehaviour
 		spell.AllowedCharacterType = EnumCharacterType.Witch;
 		spell.ManaAmount = 30;
 		spell.Attack = 35;
-		spell.ParticleEffect = "Colel";
-		spell.SoundEffect = "Colel";
+		spell.Particle = "Colel";
+		spell.Sound = "Colel";
 		SpellsData[5] = spell;
 
 		spell = new SpellsData();
@@ -464,8 +480,8 @@ public class Datas : MonoBehaviour
 		spell.AllowedCharacterType = EnumCharacterType.Witch;
 		spell.ManaAmount = 40;
 		spell.Attack = 45;
-		spell.ParticleEffect = "Colest";
-		spell.SoundEffect = "Colest";
+		spell.Particle = "Colest";
+		spell.Sound = "Colest";
 		SpellsData[6] = spell;
 
 		spell = new SpellsData();
@@ -474,8 +490,8 @@ public class Datas : MonoBehaviour
 		spell.AllowedCharacterType = EnumCharacterType.Witch;
 		spell.ManaAmount = 5;
 		spell.Attack = -10;
-		spell.ParticleEffect = "Res";
-		spell.SoundEffect = "Res";
+		spell.Particle = "Res";
+		spell.Sound = "Res";
 		SpellsData[7] = spell;
 
 		spell = new SpellsData();
@@ -484,8 +500,8 @@ public class Datas : MonoBehaviour
 		spell.AllowedCharacterType = EnumCharacterType.Witch;
 		spell.ManaAmount = 12;
 		spell.Attack = -30;
-		spell.ParticleEffect = "Resia";
-		spell.SoundEffect = "Resia";
+		spell.Particle = "Resia";
+		spell.Sound = "Resia";
 		SpellsData[8] = spell;
 
 		spell = new SpellsData();
@@ -494,8 +510,8 @@ public class Datas : MonoBehaviour
 		spell.AllowedCharacterType = EnumCharacterType.Witch;
 		spell.ManaAmount = 20;
 		spell.Attack = -70;
-		spell.ParticleEffect = "Resiast";
-		spell.SoundEffect = "Resiast";
+		spell.Particle = "Resiast";
+		spell.Sound = "Resiast";
 		SpellsData[9] = spell;
 	}
 }

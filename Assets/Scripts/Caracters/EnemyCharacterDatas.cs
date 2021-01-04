@@ -29,6 +29,18 @@ public class EnemyCharacterDatas: MonoBehaviour
     //Gained XP
     /// The xp
     public int XP= default(int);
+
+    public EnumPanelPosition Foward;
+
+    public struct Action
+    {
+        string Name;
+        int Damage;
+        bool[] panel;
+        EnumBattleAction Type;
+    }
+
+    public Action[] actions;
 }
 
 

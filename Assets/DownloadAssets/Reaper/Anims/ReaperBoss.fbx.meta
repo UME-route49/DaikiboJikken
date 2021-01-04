@@ -1062,6 +1062,14 @@ ModelImporter:
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
+      - time: 0.504
+        functionName: PlayParticle
+        data: 
+        objectReferenceParameter: {fileID: 4683456495815015770, guid: fa877fefd1592c240840594cb81e0097,
+          type: 3}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
       transformMask: []
       maskType: 3
       maskSource: {instanceID: 0}

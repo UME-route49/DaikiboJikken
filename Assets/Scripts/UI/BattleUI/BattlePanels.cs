@@ -11,6 +11,7 @@ public class BattlePanels : MonoBehaviour {
     public PanelBattleActionMapper[] actionPanels;
     /// The selected toggle
     public Toggle selectedToggle;
+
     /// The selected character
     public static CharactersData selectedCharacter ;
     /// The selected weapon

@@ -145,7 +145,7 @@ public class CharacterInfosController : MonoBehaviour {
 	{
         var clonedSelectedCharacter =( CharactersData)( GameMenu.SelectedCharacter.Clone());
 
-        switch (itemsData.EquipementType)
+        switch (itemsData.itemType)
         {
             case EnumItemType.Head: 
                 clonedSelectedCharacter.Head = itemsData; 

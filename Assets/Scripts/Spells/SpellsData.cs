@@ -14,9 +14,9 @@ public class SpellsData
     //消費MP
     public int ManaAmount = default(int);
     //エフェクト
-    public string ParticleEffect = string.Empty;
+    public string Particle = string.Empty;
     //SE
-    public string SoundEffect = string.Empty;
+    public string Sound = string.Empty;
     //使える役職
     public EnumCharacterType AllowedCharacterType = EnumCharacterType.None;
 }

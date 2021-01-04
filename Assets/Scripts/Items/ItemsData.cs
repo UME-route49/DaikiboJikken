@@ -23,10 +23,15 @@ public class ItemsData
     public int MagicDefense = default(int);
     public int Price = default(int);
 
+    //エフェクト
+    public string Particle = string.Empty;
+    //SE
+    public string Sound = string.Empty;
+
     //装備できる役職
     public EnumCharacterType AllowedCharacterType = EnumCharacterType.None;
     //アイテムの属性（使い方）
-    public EnumItemType EquipementType = EnumItemType.None;
+    public EnumItemType itemType = EnumItemType.None;
     //装備されているかどうか
     public bool isEquiped = false;
 }
