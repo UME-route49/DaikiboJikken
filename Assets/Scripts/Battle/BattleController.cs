@@ -72,7 +72,7 @@ public class BattleController : MonoBehaviour
 		NextBattleSequence();
 	}
 
-    private void Start()
+    void Start()
     {
 		sequence = DOTween.Sequence();
 		SoundManager.BattleMusic();
@@ -103,14 +103,16 @@ public class BattleController : MonoBehaviour
 		}
 		else if (currentState == EnumBattleState.PlayerTurn)
 		{
-			battleUi.SendMessage("LogText", selectedPlayer.name + "の番です。");
+            battleUi.SendMessage("LogText", selectedPlayer.name + "の番です。");
+			SoundManager.TurnSound();
+			battleUi.SendMessage("ShowActionMenu");
+			battleUi.BroadcastMessage("Start");
 
+			selectedPlayer.transform.LookAt(generatedEnemyList[0].transform.position);
 			mainCamera.transform.position = selectedPlayer.transform.position + new Vector3(0, 2, 0)
 				- selectedPlayer.transform.forward * 4;
 			mainCamera.transform.LookAt(generatedEnemyList[0].transform);
 
-			SoundManager.TurnSound();
-			ShowMenu();
 			currentState = EnumBattleState.None;
 		}
 		else if(currentState == EnumBattleState.SelectingPanel)
@@ -121,8 +123,10 @@ public class BattleController : MonoBehaviour
 			panel.SetActive(true);
 				
 			var characterData = GetCharacterDatas(selectedPlayer.name);
-            panel.transform.GetChild((int)characterData.Panel)
-                .GetComponentInChildren<MeshRenderer>().material.color = Color.yellow;
+
+			if(panelSelect == 0)
+				panel.transform.GetChild((int)characterData.Panel)
+					.GetComponentInChildren<MeshRenderer>().material.color = Color.yellow;
 
             if (Input.GetKeyDown(KeyCode.D))
             {
@@ -155,6 +159,7 @@ public class BattleController : MonoBehaviour
 				PanelPosition[(int)characterData.Panel] = false;
 				PanelPosition[(int)characterData.Panel + panelSelect] = true;
 				characterData.Panel = (EnumPanelPosition)((int)characterData.Panel + panelSelect);
+				panelSelect = 0;
 				panel.SetActive(false);
 				PlayerAction();
 			}
@@ -163,7 +168,7 @@ public class BattleController : MonoBehaviour
 		{
 
 			battleUi.SendMessage("LogText", GameTexts.PlayerWon);
-			battleUi.BroadcastMessage("HideActionMenu");
+			battleUi.SendMessage("HideActionMenu");
 			int totalXP = 0;
 			foreach (var x in generatedEnemyList)
 				totalXP += x.GetComponent<EnemyCharacterDatas>().XP;
@@ -176,7 +181,7 @@ public class BattleController : MonoBehaviour
 				characterdatas.Level = (int)calculatedXP;
 			}
 			var textTodisplay = GameTexts.EndOfTheBattle + "\n\n" + GameTexts.PlayerXP + totalXP;
-			battleUi.BroadcastMessage("ShowDropMenu", textTodisplay);
+			battleUi.SendMessage("ShowDropMenu", textTodisplay);
 
 
 			var go = GameObject.FindGameObjectsWithTag(Settings.Music).FirstOrDefault();
@@ -188,7 +193,7 @@ public class BattleController : MonoBehaviour
 		else if (currentState == EnumBattleState.EnemyWon)
 		{
 			battleUi.SendMessage("LogText", GameTexts.EnemyWon);
-			battleUi.BroadcastMessage("HideActionMenu");
+			battleUi.SendMessage("HideActionMenu");
 
 			var textTodisplay = GameTexts.EndOfTheBattle + "\n\n" + GameTexts.YouLost;
 			battleUi.BroadcastMessage("ShowDropMenu", textTodisplay);
@@ -215,15 +220,6 @@ public class BattleController : MonoBehaviour
 		return Main.CharacterList.Where (w => w.Name == s.Replace(Settings.CloneName,"" ) ).FirstOrDefault ();
 	}
 
-    /// <summary>Flips the specified to the left.</summary>
-    void Flip(bool toTheLeft)
-	{
-		Vector3 theScale = transform.localScale;
-		if (toTheLeft)theScale.x = -Mathf.Abs(theScale.x);
-		else theScale.x = Mathf.Abs(theScale.x);
-		transform.localScale = theScale;
-	}
-
     /// <summary>敵の生成</summary>
     void GenerateEnnemies()
 	{
@@ -243,7 +239,6 @@ public class BattleController : MonoBehaviour
 				GameObject go =  GameObject.Instantiate(Resources.Load(Settings.PrefabsPath + character.Name)
 					, panel.transform.GetChild(i).transform.position, Quaternion.identity) as GameObject;
 				PanelPosition[i] = true;
-				i++;
 				go.transform.LookAt(generatedEnemyList[0].transform);
 
 				var datas = GetCharacterDatas(go.name);
@@ -252,6 +247,8 @@ public class BattleController : MonoBehaviour
 				instantiatedCharacterList.Add(go);
 
 				battleUi.SendMessage("HpMpSet", character);
+
+				i++;
 			}
 		}
         catch (System.Exception ex)
@@ -323,20 +320,10 @@ public class BattleController : MonoBehaviour
     {
 		battlAction = action;
 		selectedEnemy = generatedEnemyList[0];
-		battleUi.BroadcastMessage("HideActionMenu");
+		battleUi.SendMessage("HideActionMenu");
 		if (battlAction == EnumBattleAction.MoveAttack)
 			currentState = EnumBattleState.SelectingPanel;
-		else 
-			PlayerAction();
-	}
-
-    /// Shows the menu.
-    public void ShowMenu()
-	{	
-		if (battleUi) {
-			battleUi.BroadcastMessage("ShowActionMenu");	
-			battleUi.BroadcastMessage ("Start");
-		}
+		else PlayerAction();
 	}
 
 	/// Ends the battle.
@@ -349,37 +336,42 @@ public class BattleController : MonoBehaviour
     /// Players the action.
     public void PlayerAction()
 	{
-		var enemyCharacterdatas = selectedEnemy.GetComponent<EnemyCharacterDatas> ();
+		var enemy = selectedEnemy;
+		var enemyCharacterdatas = enemy.GetComponent<EnemyCharacterDatas> ();
 		var animator = selectedPlayer.GetComponent<Animator>();
 		int calculatedDamage = 0;
+
+		var popPos = RectTransformUtility.WorldToScreenPoint(mainCamera.GetComponent<Camera>()
+			, enemy.transform.position + new Vector3(1, 2, 1));
+
 		if (enemyCharacterdatas != null && selectedPlayerDatas != null) {
 			switch (battlAction) {
 				case EnumBattleAction.Weapon:
 					BattlePanels.selectedWeapon = BattlePanels.selectedCharacter.RightHand;
 					calculatedDamage = BattlePanels.selectedWeapon.Attack 
 						+ selectedPlayerDatas.GetAttack () - enemyCharacterdatas.Defense; 
-					calculatedDamage = Mathf.Clamp (calculatedDamage, 0, calculatedDamage);
+					calculatedDamage = -Mathf.Clamp (calculatedDamage, 0, calculatedDamage);
 					enemyCharacterdatas.HP = Mathf.Clamp(enemyCharacterdatas.HP 
 						- calculatedDamage, 0 , enemyCharacterdatas.HP - calculatedDamage);
 
 					Sequence attack = DOTween.Sequence();
-					selectedPlayer.transform.LookAt(selectedEnemy.transform.position);
+					selectedPlayer.transform.LookAt(enemy.transform.position);
 					animator.SetBool("Run", true);
-					sequence = attack.Append(selectedPlayer.transform.DOLocalMove(selectedEnemy.transform.position 
-						- selectedPlayer.transform.forward * 2, 0.8f)).SetEase(Ease.InSine)
+					sequence = attack.Append(selectedPlayer.transform.DOLocalMove(enemy.transform.position
+						- selectedPlayer.transform.forward * 3, 0.8f)).SetEase(Ease.InSine)
 						.AppendCallback(() => animator.SetBool("Run", false))
-						.AppendCallback(() => animator.SetTrigger("Attack"));
-					//.AppendCallback(() => uiGameObject.BroadcastMessage("ShowPopup",
-					//	new object[] { "-" + calculatedDamage.ToString(), selectedEnemy.transform.position }));
+						.AppendCallback(() => animator.SetTrigger("Attack"))
+						.AppendCallback(() => battleUi.SendMessage("ShowPopup", new object[] {calculatedDamage.ToString(), popPos}));
 					sequence = attack.AppendInterval(1.0f)
-						.AppendCallback(() => StartCoroutine(KillCharacter(selectedEnemy, enemyCharacterdatas.HP, 3f)));
+						.AppendCallback(() => StartCoroutine(KillCharacter(enemy, enemyCharacterdatas.HP, 3f)));
 					sequence = attack.Append(selectedPlayer.transform
 						.DOLocalMove(selectedPlayer.transform.position, 0.5f))
 						.Join(selectedPlayer.transform.DOJump(selectedPlayer.transform.position, 3, 1, 0.8f));
 					sequence = attack.AppendInterval(1f);
 
-					Destroy( Instantiate (WeaponParticleEffect, selectedEnemy.transform.localPosition, Quaternion.identity),1.5f);
+					Destroy( Instantiate (WeaponParticleEffect, enemy.transform.localPosition, Quaternion.identity),1.5f);
 					break;
+
 				case EnumBattleAction.MoveAttack:
 					BattlePanels.selectedWeapon = BattlePanels.selectedCharacter.RightHand;
 					calculatedDamage = BattlePanels.selectedWeapon.Attack
@@ -388,44 +380,72 @@ public class BattleController : MonoBehaviour
 					enemyCharacterdatas.HP = Mathf.Clamp(enemyCharacterdatas.HP
 						- calculatedDamage, 0, enemyCharacterdatas.HP - calculatedDamage);
 
-					selectedPlayer.transform.LookAt(selectedEnemy.transform.position);
+					selectedPlayer.transform.LookAt(enemy.transform.position);
 					Sequence moveAttack = DOTween.Sequence();
 					animator.SetBool("Run", true);
-					sequence = moveAttack.Append(selectedPlayer.transform.DOLocalMove(selectedEnemy.transform.position
-						- selectedPlayer.transform.forward * 2, 0.8f)).SetEase(Ease.Linear)
-						.AppendCallback(() => animator.SetTrigger("Attack"));
-					//.AppendCallback(() => uiGameObject.BroadcastMessage("ShowPopup",
-					//	new object[] { "-" + calculatedDamage.ToString(), selectedEnemy.transform.position }));
+					sequence = moveAttack.Append(selectedPlayer.transform.DOLocalMove(enemy.transform.position
+						- selectedPlayer.transform.forward * 3, 0.8f)).SetEase(Ease.Linear)
+						.AppendCallback(() => animator.SetTrigger("Attack"))
+						.AppendCallback(() => battleUi.SendMessage("ShowPopup", new object[] {calculatedDamage.ToString(), popPos}));
 					sequence = moveAttack.AppendInterval(1f)
-						.AppendCallback(() => StartCoroutine(KillCharacter(selectedEnemy, enemyCharacterdatas.HP, 3f)))
+						.AppendCallback(() => StartCoroutine(KillCharacter(enemy, enemyCharacterdatas.HP, 3f)))
 						.AppendCallback(() => selectedPlayer.transform.LookAt(panel.transform.GetChild((int)selectedPlayerDatas.Panel).transform.position));
 					sequence = moveAttack.Append(selectedPlayer.transform
 						.DOLocalMove(panel.transform.GetChild((int)selectedPlayerDatas.Panel).transform.position, 0.8f))
 						.AppendCallback(() => animator.SetBool("Run", false));
-					sequence = moveAttack.Append(selectedPlayer.transform.DOLookAt(selectedEnemy.transform.position, 0.2f));
+					sequence = moveAttack.Append(selectedPlayer.transform.DOLookAt(enemy.transform.position, 0.2f));
 					sequence = moveAttack.AppendInterval(1f);
 
-					Destroy(Instantiate(WeaponParticleEffect, selectedEnemy.transform.localPosition, Quaternion.identity), 1.5f);
+					Destroy(Instantiate(WeaponParticleEffect, enemy.transform.localPosition, Quaternion.identity), 1.5f);
 					break;
-				case EnumBattleAction.Magic:
-					calculatedDamage = BattlePanels.selectedSpell.Attack + selectedPlayerDatas.GetMagic () - enemyCharacterdatas.MagicDefense; 
-					calculatedDamage = Mathf.Clamp (calculatedDamage, 0, calculatedDamage);
-					enemyCharacterdatas.HP =Mathf.Clamp ( enemyCharacterdatas.HP - calculatedDamage, 0 , enemyCharacterdatas.HP - calculatedDamage);
-					selectedPlayerDatas.MP = Mathf.Clamp ( selectedPlayerDatas.MP - BattlePanels.selectedSpell.ManaAmount, 0 
-						,selectedPlayerDatas.MP - BattlePanels.selectedSpell.ManaAmount);
-					battleUi.SendMessage("HpMpSet", selectedPlayerDatas);
-					
-					var ennemyEffect = Resources.Load<GameObject>(Settings.PrefabsPath + BattlePanels.selectedSpell.ParticleEffect);
-					Destroy(Instantiate(ennemyEffect, selectedEnemy.transform.localPosition, Quaternion.identity), 0.5f);
 
-					var playerEffect = Resources.Load<GameObject>(Settings.PrefabsPath + Settings.MagicAuraEffect);
-					Destroy( Instantiate (playerEffect, selectedPlayer.transform.localPosition, Quaternion.identity),0.4f);
-					SoundManager.StaticPlayOneShot(BattlePanels.selectedSpell.SoundEffect, Vector3.zero);
-					break;
-				case EnumBattleAction.Item:
-					//calculatedDamage = BattlePanels.SelectedItem.Attack - enemyCharacterdatas.MagicDefense; 
+				case EnumBattleAction.Magic:
+					var spell = BattlePanels.selectedSpell;
+					calculatedDamage = spell.Attack + selectedPlayerDatas.GetMagic () - enemyCharacterdatas.MagicDefense; 
 					calculatedDamage = Mathf.Clamp (calculatedDamage, 0, calculatedDamage);
 					enemyCharacterdatas.HP = Mathf.Clamp ( enemyCharacterdatas.HP - calculatedDamage, 0 , enemyCharacterdatas.HP - calculatedDamage);
+					selectedPlayerDatas.MP = Mathf.Clamp ( selectedPlayerDatas.MP - spell.ManaAmount, 0 
+						,selectedPlayerDatas.MP - spell.ManaAmount);
+					battleUi.SendMessage("HpMpSet", selectedPlayerDatas);
+					
+					var playerEffect = Resources.Load<GameObject>(Settings.PrefabsPath + Settings.MagicAuraEffect);
+					var enemyEffect = Resources.Load<GameObject>(Settings.PrefabsPath + spell.ParticleEffect);
+					var enemyEffectTIme = enemyEffect.GetComponent<ParticleSystem>().time;
+
+
+					Sequence magic = DOTween.Sequence();
+					mainCamera.transform.position = selectedPlayer.transform.position
+						+ selectedPlayer.transform.forward * 5 + new Vector3(0, 3, 0);
+					mainCamera.transform.LookAt(selectedPlayer.transform.position);
+					animator.SetTrigger("Magic");
+					StartCoroutine(EffectInstantiate(playerEffect, selectedPlayer, 1.5f));
+					SoundManager.MagicSound();
+
+					sequence = magic.AppendInterval(3f)
+						.AppendCallback(() => mainCamera.transform.position = enemy.transform.position
+							+ enemy.transform.forward * 10 + new Vector3(0, 5, 0))
+						.AppendCallback(() => mainCamera.transform.LookAt(enemy.transform.position))
+						.AppendCallback(() => StartCoroutine(EffectInstantiate(enemyEffect, enemy, 5f)))
+						.AppendCallback(() => SoundManager.HoatSound());
+						//.AppendCallback(() => selectedEnemy.GetComponent<Animator>().SetTrigger("Hit"));
+					sequence = magic.AppendInterval(enemyEffectTIme);
+					break;
+				case EnumBattleAction.Item:
+					if (BattlePanels.selectedItem.HpDamege > 0 || BattlePanels.selectedItem.MpDamege > 0)
+					{
+						enemyCharacterdatas.HP = Mathf.Clamp(enemyCharacterdatas.HP - BattlePanels.selectedItem.HpDamege
+							, 0, enemyCharacterdatas.HP - BattlePanels.selectedItem.HpDamege);
+						enemyCharacterdatas.MP = Mathf.Clamp(enemyCharacterdatas.MP - BattlePanels.selectedItem.MpDamege
+							, 0, enemyCharacterdatas.MP - BattlePanels.selectedItem.MpDamege);
+					}
+					else
+					{
+						selectedPlayerDatas.HP = Mathf.Clamp(selectedPlayerDatas.HP - BattlePanels.selectedItem.HpDamege,
+							selectedPlayerDatas.HP - BattlePanels.selectedItem.HpDamege, selectedPlayerDatas.MaxHP);
+						selectedPlayerDatas.MP = Mathf.Clamp(selectedPlayerDatas.MP - BattlePanels.selectedItem.MpDamege,
+							selectedPlayerDatas.MP - BattlePanels.selectedItem.MpDamege, selectedPlayerDatas.MaxMP);
+						battleUi.SendMessage("HpMpSet", selectedPlayerDatas);
+					}
 					Destroy( Instantiate (MagicParticleEffect, selectedEnemy.transform.localPosition, Quaternion.identity),1.7f);
 					SoundManager.ItemSound();
 					break;
@@ -441,14 +461,17 @@ public class BattleController : MonoBehaviour
     public void EnemyAttack(GameObject playerToAttack, CharactersData playerToAttackDatas )
 	{
 		var go = sequenceEnumerator.Current.Second;
-		mainCamera.transform.position = go.transform.position
+		mainCamera.transform.position = playerToAttack.transform.position
 			+ playerToAttack.transform.right * 5 + new Vector3(0, 5, 0)
-			- selectedPlayer.transform.forward * 5;
+			+ playerToAttack.transform.forward * 5;
 		mainCamera.transform.LookAt(playerToAttack.transform);
 
 		var enemyCharacterdatas = go.GetComponent<EnemyCharacterDatas> ();
 		var animator = go.GetComponent<Animator>();
 		int calculatedDamage = 0;
+
+		var popPos = RectTransformUtility.WorldToScreenPoint(mainCamera.GetComponent<Camera>()
+			, playerToAttack.transform.position + new Vector3(1, 2, 1));
 
 		if (enemyCharacterdatas != null && selectedPlayerDatas != null) {
 			switch (battlAction) {
@@ -464,8 +487,7 @@ public class BattleController : MonoBehaviour
 					sequence = attack.Append(go.transform.DOLocalMove(playerToAttack.transform.position
 						+ playerToAttack.transform.forward * 4, 1f).SetEase(Ease.OutCirc))
 						.AppendCallback(() => battleUi.SendMessage("HpMpSet", playerToAttackDatas))
-						.AppendCallback(() => battleUi.SendMessage("ShowPopup",
-							new object[] {calculatedDamage.ToString(), playerToAttack.transform.position }));
+						.AppendCallback(() => battleUi.SendMessage("ShowPopup", new object[] {calculatedDamage.ToString(), popPos}));
 					sequence = attack.AppendInterval(2f)
 						.AppendCallback(() => StartCoroutine(KillCharacter(playerToAttack, playerToAttackDatas.HP, 2f)));
 					sequence = attack.Append(go.transform.DOLocalMove(go.transform.position, 1).SetEase(Ease.OutCirc));
@@ -484,6 +506,16 @@ public class BattleController : MonoBehaviour
 		//if (playerToAttackDatas.HP <= 0) KillCharacter (playerToAttack);
 		selectedEnemy = null;
 	}
+
+	IEnumerator EffectInstantiate(GameObject particle, GameObject character, float time)
+    {
+		GameObject go = Instantiate(particle, character.transform.position, character.transform.rotation);
+		go.transform.localScale = character.transform.localScale;
+
+		yield return new WaitForSeconds(time);
+
+		Destroy(go);
+    }
 
 	IEnumerator KillCharacter(GameObject go, int HP, float time)
 	{

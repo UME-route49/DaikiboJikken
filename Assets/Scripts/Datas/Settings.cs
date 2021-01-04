@@ -16,7 +16,11 @@ public class Settings
     public const string TurnSound = "TurnSound";
     public const string StartSound = "StartSound";
     public const string EncountSound = "EncountSound";
-    public const string MagicAuraEffect = "Magic_Aura";
+
+    public const string MagicAuraEffect = "MagicAura";
+    public const string MagicSound = "MagicSound";
+    public const string HoatSound = "HoatSound";
+
     public const float InputlockingTime = 0.2f;
     public const float LetterPause = 0.01f;
     public const int DialogCharactersNumber = 100;

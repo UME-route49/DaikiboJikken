@@ -3,7 +3,7 @@
 public class GameTexts
 {
     /// The player turn
-    public const string PlayerTurn = "プレイヤーのターンです。";
+    public const string PlayerTurn = "のターンです。";
     /// The enemy turn
     public const string EnemyTurn = "敵のターンです。";
     /// The enemy won

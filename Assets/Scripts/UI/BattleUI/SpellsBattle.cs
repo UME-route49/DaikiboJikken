@@ -19,21 +19,21 @@ public class SpellsBattle : MonoBehaviour {
     private GameObject logicGameObject ;
 
 
-    void Start () {
+    void Start ()
+	{
 		ClearItemList ();
-		PopulateList ();
+		PopulateList();
 		logicGameObject  = GameObject.FindGameObjectsWithTag(Settings.Logic).FirstOrDefault();
 	}
 
     void PopulateList () {
 	
-		Contract.Requires<UnassignedReferenceException> (BattlePanels.selectedCharacter != null);
+		//Contract.Requires<UnassignedReferenceException> (BattlePanels.selectedCharacter != null);
 
 		foreach (var spell in BattlePanels.selectedCharacter.SpellsList) {
 			GameObject newToggle = Instantiate (ToggleToDuplicate) as GameObject;
 			ItemsUI toggle = newToggle.GetComponent <ItemsUI> ();
 			toggle.Name.text = spell.Name;
-			//toggle.Icon.sprite =Resources.Load <Sprite> (Settings.IconsPaths + spell.PicturesName); ;
 			toggle.Toggle.isOn = false;
 			newToggle.SetActive(true);
 			newToggle.transform.SetParent(ContentPanel.transform);
@@ -46,29 +46,7 @@ public class SpellsBattle : MonoBehaviour {
 		}
 	}
 
-
-    /// This procedure check the resume toggle control and displays equips canvas
-    public void ToggleSelectAction(Toggle toggle)
-	{
-		Contract.Requires<MissingComponentException> (toggle != null);
-        //SoundManager.UISound();
-        if (toggle.isOn) {
-			selectedToggle = toggle;
-			ItemsUI toggleItem = selectedToggle.GetComponent <ItemsUI> ();
-			var itemDatas = BattlePanels.selectedCharacter.SpellsList.Where(w =>w.Name == toggleItem.Name.text).FirstOrDefault();
-			BattlePanels.selectedSpell = itemDatas;
-			if (logicGameObject) {
-				//logicGameObject.BroadcastMessage("MagicAction");	
-			}
-		}
-		else if (!toggle.isOn) {
-			}
-	}
-
-
-    /// <summary>
     /// This procedure clear all the items in the list
-    /// </summary>
     public void ClearItemList()
 	{
 		Contract.Requires<UnassignedReferenceException> (ContentPanel != null);
@@ -78,21 +56,7 @@ public class SpellsBattle : MonoBehaviour {
             {
                 GameObject.Destroy(child.gameObject);
             }
-
         }
     }
-
-    /// <summary>
-    /// Deselects the menus toggles.
-    /// </summary>
-    public void DeselectMenusToggles()
-	{
-		if(selectedToggle)
-        {
-            selectedToggle.isOn = false;
-        }
-
-    }
-
 }
 

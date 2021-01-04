@@ -147,19 +147,19 @@ public class CharacterInfosController : MonoBehaviour {
 
         switch (itemsData.EquipementType)
         {
-            case EnumEquipmentType.Head: 
+            case EnumItemType.Head: 
                 clonedSelectedCharacter.Head = itemsData; 
                 break;
-            case EnumEquipmentType.Body : 
+            case EnumItemType.Body : 
                 clonedSelectedCharacter.Body = itemsData; 
                 break;
-            case EnumEquipmentType.LeftHand: 
+            case EnumItemType.LeftHand: 
                 clonedSelectedCharacter.LeftHand = itemsData; 
                 break;
-            case EnumEquipmentType.RightHand: 
+            case EnumItemType.RightHand: 
                 clonedSelectedCharacter.RightHand = itemsData; 
                 break;
-            case EnumEquipmentType.TwoHands: 
+            case EnumItemType.TwoHands: 
                 clonedSelectedCharacter.RightHand = itemsData; clonedSelectedCharacter.LeftHand = null; 
                 break;
         }

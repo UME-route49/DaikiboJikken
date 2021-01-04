@@ -52,20 +52,21 @@ public class BattlePanels : MonoBehaviour {
     /// Starts this instance.
     void Start()
 	{
-		selectedWeapon = null;
-		selectedSpell = null;
-		selectedItem = null;
-	}
+        selectedWeapon = null;
+        selectedSpell = null;
+        selectedItem = null;
+    }
 
     /// Awakes this instance.
     void Awake ()
 	{
 		logicGameObject = GameObject.FindGameObjectsWithTag(Settings.Logic).FirstOrDefault();
-		selectedCharacter = Main.CharacterList [0];
+		selectedCharacter = Main.CharacterList[0];
 	}
 
     private void Update()
     {
+		//Debug.Log(selectedToggle);
 		if (isActivePanel == "ParentPanel")
 		{
 			if (Input.GetKeyDown(KeyCode.W))
@@ -97,7 +98,6 @@ public class BattlePanels : MonoBehaviour {
 				isActivePanel = "ChildPanel";
 				actionPanels[parentCounter].contents.GetChild(1).GetComponent<Toggle>().isOn = true;
 				selectedToggle = actionPanels[parentCounter].contents.GetChild(1).GetComponent<Toggle>();
-				DisplayPanel(actionPanels[parentCounter].BattleAction);
 			}
 			else if (Input.GetKeyDown(KeyCode.Space))
 			{
@@ -119,7 +119,6 @@ public class BattlePanels : MonoBehaviour {
 				actionPanels[parentCounter].contents.GetChild(childCounter).GetComponent<Toggle>().isOn = true;
 				SoundManager.UISound();
 				selectedToggle = actionPanels[parentCounter].contents.GetChild(childCounter).GetComponent<Toggle>();
-				DisplayPanel(actionPanels[parentCounter].BattleAction);
 			}
 			else if(Input.GetKeyDown(KeyCode.S))
             {
@@ -129,7 +128,6 @@ public class BattlePanels : MonoBehaviour {
 				actionPanels[parentCounter].contents.GetChild(childCounter).GetComponent<Toggle>().isOn = true;
 				SoundManager.UISound();
 				selectedToggle = actionPanels[parentCounter].contents.GetChild(childCounter).GetComponent<Toggle>();
-				DisplayPanel(actionPanels[parentCounter].BattleAction);
 			}
 			else if (Input.GetKeyDown(KeyCode.A))
             {
@@ -152,15 +150,13 @@ public class BattlePanels : MonoBehaviour {
 						break;
 					case EnumBattleAction.Item:
 						var itemDatas = Main.ItemList.Where(w => w.Name == toggleItem.Name.text).FirstOrDefault();
-						BattlePanels.selectedCharacter.HP += itemDatas.HealthPoint;
-						BattlePanels.selectedCharacter.MP += itemDatas.Mana;
 						BattlePanels.selectedItem = itemDatas;
 						Main.ItemList.Remove(Main.ItemList.Where(w => w.Name == toggleItem.Name.text).FirstOrDefault());
 						Destroy(selectedToggle.gameObject);
 						break;
                 }
 				selectedToggle.isOn = false;
-				logicGameObject.BroadcastMessage("Action", actionPanels[parentCounter].BattleAction);
+				logicGameObject.SendMessage("Action", actionPanels[parentCounter].BattleAction);
             }
         }
 	}
@@ -173,37 +169,15 @@ public class BattlePanels : MonoBehaviour {
 
 				if (row.BattleAction == action){
 					row.Panel.SetActive(true);
-					//row.Panel.SendMessage("Start"); 
+					row.Panel.SendMessage("Start");
 				}
 				else  row.Panel.SetActive(false);
 			}
 		}
     }
 
-    // Fights this instance.
-    void Fight ()
-	{
-        Debug.Log ("Fight");
-		SendMessageUpwards("DisplayPanel",EnumBattleAction.Weapon);
-	}
-
-	/// Magics this instance.
-	void Magic ()
-	{
-		Debug.Log ("Magic");
-		SendMessageUpwards("DisplayPanel",EnumBattleAction.Magic);
-	}
-
-    /// Items this instance.
-    void Item ()
-	{
-		Debug.Log ("Item");
-		SendMessageUpwards("DisplayPanel",EnumBattleAction.Item);
-	}
-
     void LogText (string text)
 	{
-		Debug.Log ("Loging"+text);
 		logText.text = text;
 	}
 
@@ -240,10 +214,10 @@ public class BattlePanels : MonoBehaviour {
     public void ShowPopup(object[] parameters)
 	{
 		string text = (string)(parameters[0]);
-		Vector3 position = (Vector3)parameters[1];
+		Vector2 position = (Vector2)parameters[1];
 		PopUp.gameObject.SetActive (true);
 		PopUp.text = text;
-		//PopUp.gameObject.transform.position = new Vector3(position.x, position.y, PopUp.gameObject.transform.position.z);
+		PopUp.gameObject.transform.position = position;
 		float time = 0.75f;
 
 		Sequence actions = DOTween.Sequence();
@@ -251,7 +225,6 @@ public class BattlePanels : MonoBehaviour {
 		//actions.Join(PopUp.DOFontsize(PopUp.fontSize * 2, time)).setEase(Ease.OutBounce);
 		actions.Append(PopUp.DOColor(new Color(1.0f, 1.0f, 1.0f, 0.0f), time)).SetEase(Ease.OutQuart);
 		//actions.Join(PopUp.DOFontsize(PopUp.fontSize, time)).setEase(Ease.OutQuart);
-		actions.Play();
 	}
 
     /// Hides the popup.

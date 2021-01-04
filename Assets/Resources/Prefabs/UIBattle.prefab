@@ -353,7 +353,7 @@ MonoBehaviour:
     Panel: {fileID: 0}
     parentToggle: {fileID: 5800753422162988130}
     contents: {fileID: 0}
-  selectedToggle: {fileID: 0}
+  selectedToggle: {fileID: 11458106}
   logText: {fileID: 8728007866950933035}
   DropText: {fileID: 8728007866950950425}
   PopUp: {fileID: 8728007866950985115}
@@ -2199,7 +2199,7 @@ MonoBehaviour:
   m_StartCorner: 0
   m_StartAxis: 0
   m_CellSize: {x: 400, y: 30}
-  m_Spacing: {x: 0, y: 20}
+  m_Spacing: {x: 0, y: 10}
   m_Constraint: 1
   m_ConstraintCount: 1
 --- !u!114 &11405002
@@ -2422,7 +2422,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 11417940}
   toggleTransition: 1
   graphic: {fileID: 11469224}
-  m_Group: {fileID: 11403226}
+  m_Group: {fileID: 11472732}
   onValueChanged:
     m_PersistentCalls:
       m_Calls:
@@ -2459,8 +2459,8 @@ MonoBehaviour:
     PicturesName: 
     Name: 
     Description: 
-    HealthPoint: 0
-    Mana: 0
+    HpDamege: 0
+    MpDamege: 0
     Attack: 0
     Defense: 0
     Magic: 0
@@ -2505,7 +2505,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 350, y: 50}
+  m_SizeDelta: {x: 350, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &11490418
 MonoBehaviour:
@@ -2528,7 +2528,7 @@ MonoBehaviour:
   m_StartCorner: 0
   m_StartAxis: 0
   m_CellSize: {x: 350, y: 30}
-  m_Spacing: {x: 0, y: 20}
+  m_Spacing: {x: 0, y: 10}
   m_Constraint: 1
   m_ConstraintCount: 1
 --- !u!114 &11463768
@@ -2633,7 +2633,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2fafe2cfe61f6974895a912c3755e8f1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_AllowSwitchOff: 1
+  m_AllowSwitchOff: 0
 --- !u!1 &188764
 GameObject:
   m_ObjectHideFlags: 0
@@ -3212,7 +3212,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &22469534
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3276,7 +3276,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 11484358}
   toggleTransition: 1
   graphic: {fileID: 11490188}
-  m_Group: {fileID: 11403226}
+  m_Group: {fileID: 11472732}
   onValueChanged:
     m_PersistentCalls:
       m_Calls:
@@ -3313,8 +3313,8 @@ MonoBehaviour:
     PicturesName: 
     Name: 
     Description: 
-    HealthPoint: 0
-    Mana: 0
+    HpDamege: 0
+    MpDamege: 0
     Attack: 0
     Defense: 0
     Magic: 0

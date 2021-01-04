@@ -38,31 +38,6 @@ public class ItemsBattle : MonoBehaviour {
 			newToggle.transform.SetParent( ContentPanel.transform);
 			newToggle.transform.localScale= Vector3.one;
 			newToggle.transform.position= Vector3.one;
-			if(item.EquipementType != EnumEquipmentType.Usable) 
-				newToggle.GetComponent<Toggle>().interactable = false ;
-		}
-	}
-
-
-    /// This procedure check the resume toggle control and displays equips canvas
-    public void ToggleSelectAction(Toggle toggle)
-	{
-		Contract.Requires<MissingComponentException> (toggle != null);
-        if (toggle.isOn) {
-			toggle.group.NotifyToggleOn(toggle);
-			selectedToggle = toggle;
-			//ItemsUI toggleItem = selectedToggle.GetComponent <ItemsUI> ();
-			//var itemDatas = Main.ItemList.Where(w =>w.Name == toggleItem.Name.text).FirstOrDefault();
-			
-			//BattlePanels.SelectedCharacter.HP += itemDatas.HealthPoint;
-			//BattlePanels.SelectedCharacter.MP += itemDatas.Mana;
-			//BattlePanels.SelectedItem = itemDatas;
-			//Main.ItemList.Remove(Main.ItemList.Where(w =>w.Name == toggleItem.Name.text).FirstOrDefault());
-			//if (logicGameObject) {
-			//	//logicGameObject.BroadcastMessage("ItemAction");	
-			//}
-		}
-		else if (!toggle.isOn) {
 		}
 	}
 
@@ -78,14 +53,4 @@ public class ItemsBattle : MonoBehaviour {
             }
         }
     }
-
-    /// Deselects the menus toggles.
-    public void DeselectMenusToggles()
-	{
-		if(selectedToggle)
-        {
-            selectedToggle.isOn = false;
-        }
-    }
 }
-

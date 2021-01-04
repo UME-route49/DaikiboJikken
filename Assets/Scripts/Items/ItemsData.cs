@@ -14,8 +14,9 @@ public class ItemsData
     public string Description = string.Empty;
 
     //アイテムのパラメーター
-    public int HealthPoint = default(int);
-    public int Mana = default(int);
+    public int HpDamege = default(int);
+    public int MpDamege = default(int);
+
     public int Attack = default(int);
     public int Defense = default(int);
     public int Magic = default(int);
@@ -25,7 +26,7 @@ public class ItemsData
     //装備できる役職
     public EnumCharacterType AllowedCharacterType = EnumCharacterType.None;
     //アイテムの属性（使い方）
-    public EnumEquipmentType EquipementType = EnumEquipmentType.None;
+    public EnumItemType EquipementType = EnumItemType.None;
     //装備されているかどうか
     public bool isEquiped = false;
 }

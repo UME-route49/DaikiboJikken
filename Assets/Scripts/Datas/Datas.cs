@@ -67,7 +67,7 @@ public class Datas : MonoBehaviour
 		item.Name = "ブロードソード";
 		item.Description = "見習い戦士に国から支給される剣。";
 		item.PicturesName = "sword001";
-		item.EquipementType = EnumEquipmentType.RightHand;
+		item.EquipementType = EnumItemType.RightHand;
 		item.AllowedCharacterType = EnumCharacterType.Warrior;
 		item.Attack = 15;
 		item.Price = 10;
@@ -147,7 +147,7 @@ public class Datas : MonoBehaviour
 		item.Name = "Wand";
 		item.Description = "A noob wand";
 		item.PicturesName = "W_Mace010";
-		item.EquipementType = EnumEquipmentType.TwoHands;
+		item.EquipementType = EnumItemType.TwoHands;
 		item.AllowedCharacterType = EnumCharacterType.Warrior;
 		item.Attack = 20;
 		item.Magic = 20;
@@ -181,7 +181,7 @@ public class Datas : MonoBehaviour
 		item.Name = "helmet";
 		item.Description = "A noob helmet";
 		item.PicturesName = "C_Elm01";
-		item.EquipementType = EnumEquipmentType.Head;
+		item.EquipementType = EnumItemType.Head;
 		item.AllowedCharacterType = EnumCharacterType.Warrior;
 		item.Defense = 15;
 		item.Price = 10;
@@ -211,7 +211,7 @@ public class Datas : MonoBehaviour
         item.Name = "Hat";
         item.Description = "A noob hat";
         item.PicturesName = "C_Hat01";
-        item.EquipementType = EnumEquipmentType.Head;
+        item.EquipementType = EnumItemType.Head;
         item.AllowedCharacterType = EnumCharacterType.Witch;
         item.MagicDefense = 20;
         item.Price = 10;
@@ -232,7 +232,7 @@ public class Datas : MonoBehaviour
 		item.Name = "Shield";
 		item.Description = "A noob shield";
 		item.PicturesName = "E_Wood01";
-		item.EquipementType = EnumEquipmentType.LeftHand;
+		item.EquipementType = EnumItemType.LeftHand;
 		item.AllowedCharacterType = EnumCharacterType.Warrior;
 		item.Defense = 15;
 		item.Price = 10;
@@ -283,7 +283,7 @@ public class Datas : MonoBehaviour
 		item.Name = "Armor";
 		item.Description = "A noob armor";
 		item.PicturesName = "A_Armour01";
-		item.EquipementType = EnumEquipmentType.Body;
+		item.EquipementType = EnumItemType.Body;
 		item.AllowedCharacterType = EnumCharacterType.Warrior;
 		item.Defense = 20;
 		item.Price = 20;
@@ -323,7 +323,7 @@ public class Datas : MonoBehaviour
         item.Name = "Clothes";
         item.Description = "A noob clothes";
         item.PicturesName = "A_Clothing01";
-        item.EquipementType = EnumEquipmentType.Body;
+        item.EquipementType = EnumItemType.Body;
         item.AllowedCharacterType = EnumCharacterType.Warrior;
         item.MagicDefense = 20;
         item.Price = 20;
@@ -354,8 +354,8 @@ public class Datas : MonoBehaviour
 		item.Name = "ポーション";
 		item.Description = "HPを20回復。";
 		item.PicturesName = "P_Red04";
-		item.EquipementType = EnumEquipmentType.Usable;
-		item.HealthPoint = 20;
+		item.EquipementType = EnumItemType.Heal;
+		item.HpDamege = 20;
 		item.Price = 5;
 		ItemsData[29] = item;
 
@@ -363,8 +363,8 @@ public class Datas : MonoBehaviour
 		item.Name = "メガポーション";
 		item.Description = "HPを40回復。";
 		item.PicturesName = "P_Red03";
-		item.EquipementType = EnumEquipmentType.Usable;
-		item.HealthPoint = 40;
+		item.EquipementType = EnumItemType.Heal;
+		item.HpDamege = 40;
 		item.Price = 10;
 		ItemsData[30] = item;
 
@@ -372,8 +372,8 @@ public class Datas : MonoBehaviour
 		item.Name = "ウルトラポーション";
 		item.Description = "HPを60回復。";
 		item.PicturesName = "P_Red03";
-		item.EquipementType = EnumEquipmentType.Usable;
-		item.HealthPoint = 60;
+		item.EquipementType = EnumItemType.Heal;
+		item.HpDamege = 60;
 		item.Price = 30;
 		ItemsData[31] = item;
 
@@ -381,8 +381,8 @@ public class Datas : MonoBehaviour
 		item.Name = "エーテル";
 		item.Description = "A potion that add 20 mana points";
 		item.PicturesName = "P_Red04";
-		item.EquipementType = EnumEquipmentType.Usable;
-		item.Mana = 20;
+		item.EquipementType = EnumItemType.Heal;
+		item.MpDamege = 20;
 		item.Price = 5;
 		ItemsData[32] = item;
 
@@ -390,17 +390,17 @@ public class Datas : MonoBehaviour
 		item.Name = "ハイエーテル";
 		item.Description = "A potion that add 40 mana points";
 		item.PicturesName = "P_Red03";
-		item.EquipementType = EnumEquipmentType.Usable;
-		item.Mana = 40;
+		item.EquipementType = EnumItemType.Heal;
+		item.MpDamege = 40;
 		item.Price = 10;
 		ItemsData[33] = item;
 
 		item = new ItemsData();
-		item.Name = "ウルトラポーション";
+		item.Name = "ウルトラエーテル";
 		item.Description = "A big potion that add 60 mana points";
 		item.PicturesName = "P_Red03";
-		item.EquipementType = EnumEquipmentType.Usable;
-		item.Mana = 60;
+		item.EquipementType = EnumItemType.Heal;
+		item.MpDamege = 60;
 		item.Price = 30;
 		ItemsData[34] = item;
 	}
@@ -408,7 +408,6 @@ public class Datas : MonoBehaviour
 	//魔法データの設定
 	public static void PopulateSpellsDatas()
 	{
-
 		var spell = new SpellsData();
 		spell.Name = "ホート";
 		spell.Description = "アツい炎で敵を燃やす。";
