@@ -979,12 +979,12 @@ GameObject:
   m_Component:
   - component: {fileID: 6556970276844460172}
   - component: {fileID: 6602931063485198148}
-  - component: {fileID: 1963769445007980057}
   - component: {fileID: 8865369668979555346}
   - component: {fileID: 4042375617748207949}
+  - component: {fileID: 93250950349120672}
   m_Layer: 0
   m_Name: BOSS
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1025,28 +1025,6 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &1963769445007980057
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6553916670458435248}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6e9cb6fc7a4e6344a8fc16605030a3d3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  HP: 100
-  MP: 20
-  Attack: 20
-  Defense: 20
-  Magic: 20
-  MagicDefense: 20
-  Level: 40
-  MaxHP: 200
-  MaxMP: 20
-  XP: 10000
 --- !u!114 &8865369668979555346
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1155,6 +1133,29 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &93250950349120672
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6553916670458435248}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6e9cb6fc7a4e6344a8fc16605030a3d3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  HP: 200
+  MP: 100
+  Attack: 20
+  Defense: 20
+  Magic: 20
+  MagicDefense: 20
+  Level: 20
+  MaxHP: 200
+  MaxMP: 100
+  XP: 20
+  Foward: 0
 --- !u!1 &6553919712167617028
 GameObject:
   m_ObjectHideFlags: 0

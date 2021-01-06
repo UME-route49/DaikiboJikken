@@ -26,9 +26,6 @@ public class PlayerController : MonoBehaviour
 
         mainCamera.transform.position = transform.position + new Vector3(0, 8, -5);
 
-        rb.AddForce(new Vector3(1, 0, 0) * Input.GetAxisRaw("Horizontal") * 100
-            + new Vector3(0, 0, 1) * Input.GetAxisRaw("Vertical") * 100);
-
         if (Input.GetAxisRaw("Horizontal") != 0 || Input.GetAxisRaw("Vertical") != 0)
         {
             animator.SetBool("Run", true);
@@ -37,5 +34,13 @@ public class PlayerController : MonoBehaviour
         }
         else
             animator.SetBool("Run", false);
+    }
+
+    private void FixedUpdate()
+    {
+        if (!canControl) return;
+
+        rb.AddForce(new Vector3(1, 0, 0) * Input.GetAxisRaw("Horizontal") * 10
+            + new Vector3(0, 0, 1) * Input.GetAxisRaw("Vertical") * 10, ForceMode.Impulse);
     }
 }

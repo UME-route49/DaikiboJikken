@@ -5,7 +5,7 @@
     MoveAttack,
     Magic,
     Item,
-    Pass
+    Guard
 }
 
 public enum EnumBattleState

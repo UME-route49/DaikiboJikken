@@ -152,8 +152,8 @@ public class BattlePanels : MonoBehaviour {
 					case EnumBattleAction.Item:
 						var itemDatas = Main.ItemList.Where(w => w.Name == toggleItem.Name.text).FirstOrDefault();
 						BattlePanels.selectedItem = itemDatas;
-						Main.ItemList.Remove(Main.ItemList.Where(w => w.Name == toggleItem.Name.text).FirstOrDefault());
-						Destroy(selectedToggle.gameObject);
+						//Main.ItemList.Remove(Main.ItemList.Where(w => w.Name == toggleItem.Name.text).FirstOrDefault());
+						//Destroy(selectedToggle.gameObject);
 						break;
                 }
 				selectedToggle.isOn = false;
@@ -216,10 +216,13 @@ public class BattlePanels : MonoBehaviour {
 	{
 		string text = (string)(parameters[0]);
 		Vector2 position = (Vector2)parameters[1];
+		Color color = (Color)parameters[2];
+
 		PopUp.gameObject.SetActive (true);
 		PopUp.text = text;
 		PopUp.gameObject.transform.position = position;
-		float time = 0.75f;
+		PopUp.color = color;
+		float time = 1f;
 
 		Sequence actions = DOTween.Sequence();
 		actions.Append(PopUp.DOColor(new Color(1.0f, 1.0f, 1.0f, 1.0f), time)).SetEase(Ease.OutQuart);

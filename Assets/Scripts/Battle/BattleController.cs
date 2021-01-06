@@ -358,12 +358,12 @@ public class BattleController : MonoBehaviour
 						.AppendCallback(() => animator.SetBool("Run", false))
 						.AppendCallback(() => animator.SetTrigger("Attack"));
 					sequence = attack.AppendInterval(0.8f)
-						.AppendCallback(() => battleUi.SendMessage("ShowPopup", new object[] {damage.ToString(), popPos}))
+						.AppendCallback(() => battleUi.SendMessage("ShowPopup", new object[] {damage.ToString(), popPos, Color.white }))
 						.AppendCallback(() => KillCharacter(enemy, enemyData.HP));
 					sequence = attack.Append(selectedPlayer.transform
 						.DOLocalMove(selectedPlayer.transform.position, 0.4f))
 						.Join(selectedPlayer.transform.DOJump(selectedPlayer.transform.position, 3, 1, 0.5f));
-					sequence = attack.AppendInterval(1f);
+					sequence = attack.AppendInterval(0.8f);
 					break;
 
 				case EnumBattleAction.MoveAttack:
@@ -383,14 +383,14 @@ public class BattleController : MonoBehaviour
 						- selectedPlayer.transform.forward * 3, 0.7f)).SetEase(Ease.Linear)
 						.AppendCallback(() => animator.SetTrigger("Attack"));
 					sequence = moveAttack.AppendInterval(0.8f)
-						.AppendCallback(() => battleUi.SendMessage("ShowPopup", new object[] { damage.ToString(), popPos }))
+						.AppendCallback(() => battleUi.SendMessage("ShowPopup", new object[] { damage.ToString(), popPos, Color.white }))
 						.AppendCallback(() => KillCharacter(enemy, enemyData.HP))
 						.AppendCallback(() => selectedPlayer.transform.LookAt(panel.transform.GetChild((int)selectedPlayerDatas.Panel).transform.position));
 					sequence = moveAttack.Append(selectedPlayer.transform
 						.DOLocalMove(panel.transform.GetChild((int)selectedPlayerDatas.Panel).transform.position, 0.7f))
 						.AppendCallback(() => animator.SetBool("Run", false));
 					sequence = moveAttack.Append(selectedPlayer.transform.DOLookAt(enemy.transform.position, 0.2f));
-					sequence = moveAttack.AppendInterval(1f);
+					sequence = moveAttack.AppendInterval(0.5f);
 					break;
 
 				case EnumBattleAction.Magic:
@@ -414,16 +414,16 @@ public class BattleController : MonoBehaviour
 					StartCoroutine(ParticleInstantiate(playerParticle, selectedPlayer, 1.5f));
 					SoundManager.MagicSound();
 
-					sequence = magic.AppendInterval(3f)
+					sequence = magic.AppendInterval(1.5f)
 						.AppendCallback(() => mainCamera.transform.position = enemy.transform.position
 							+ enemy.transform.forward * 10 + new Vector3(0, 3, 0))
 						.AppendCallback(() => mainCamera.transform.LookAt(enemy.transform.position + new Vector3(0, 2, 0)))
 						.AppendCallback(() => StartCoroutine(ParticleInstantiate(enemyParticle, enemy, 5f)))
 						.AppendCallback(() => SoundManager.HoatSound())
-						.AppendCallback(() => battleUi.SendMessage("ShowPopup", new object[] { damage.ToString(), popPos }))
+						.AppendCallback(() => battleUi.SendMessage("ShowPopup", new object[] { damage.ToString(), popPos, Color.white }))
 						.AppendCallback(() => KillCharacter(enemy, enemyData.HP));
 					//.AppendCallback(() => selectedEnemy.GetComponent<Animator>().SetTrigger("Hit"));
-					sequence = magic.AppendInterval(enemyParticleTime+2f);
+					//sequence = magic.AppendInterval(enemyParticleTime+2f);
 					break;
 				case EnumBattleAction.Item:
 					var item = BattlePanels.selectedItem;
@@ -447,15 +447,21 @@ public class BattleController : MonoBehaviour
 						selectedPlayerDatas.MP = Mathf.Clamp(selectedPlayerDatas.MP + item.MpDamege,
 							selectedPlayerDatas.MP + item.MpDamege, selectedPlayerDatas.MaxMP);
 						battleUi.SendMessage("HpMpSet", selectedPlayerDatas);
-						mainCamera.transform.position = selectedPlayer.transform.transform.position
-							+ selectedPlayer.transform.forward * 5;
-						mainCamera.transform.LookAt(selectedPlayer.transform.position);
+						//mainCamera.transform.position = selectedPlayer.transform.transform.position
+						//	+ selectedPlayer.transform.forward * 4 + new Vector3(0, 1, 0);
+						//mainCamera.transform.LookAt(selectedPlayer.transform.position);
 						StartCoroutine(ParticleInstantiate(itemParticle, selectedPlayer, 3f));
+						battleUi.SendMessage("ShowPopup", new object[] { item.HpDamege.ToString(), popPos, Color.green });
 						SoundManager.ItemSound();
 					}
 
 					Sequence useItem = DOTween.Sequence();
-					sequence = useItem.AppendInterval(3f);
+					sequence = useItem.Append(mainCamera.transform.DOMove(mainCamera.transform.position, 1f));
+
+					NextBattleSequence();
+					break;
+				case EnumBattleAction.Guard:
+					selectedPlayerDatas.GuardFlag = true;
 					break;
 				default:
 					break;
@@ -469,15 +475,11 @@ public class BattleController : MonoBehaviour
 	public void EnemyAttack(GameObject target, CharactersData targetData)
 	{
 		var enemy = sequenceEnumerator.Current.Second;
-		mainCamera.transform.position = target.transform.position
-			+ target.transform.right * 5 + new Vector3(0, 5, 0) + target.transform.forward * 5;
-		mainCamera.transform.LookAt(target.transform);
-
 		var enemyData = enemy.GetComponent<EnemyCharacterDatas> ();
 		var animator = enemy.GetComponent<Animator>();
 		int calculatedDamage = 0;
 		var popPos = RectTransformUtility.WorldToScreenPoint(mainCamera.GetComponent<Camera>()
-			, target.transform.position + new Vector3(1, 2, 1));
+			, target.transform.position + new Vector3(0.5f, 2, 0.5f));
 
 		if (enemyData != null && selectedPlayerDatas != null) {
 			switch (battlAction) {
@@ -493,12 +495,15 @@ public class BattleController : MonoBehaviour
 					enemy.transform.LookAt(target.transform.position);
 					enemyData.Foward = targetData.Panel;
 
+					mainCamera.transform.position = target.transform.position
+						+ target.transform.right * 10 + new Vector3(0, 5, 0) + target.transform.forward * 10;
+					mainCamera.transform.LookAt(target.transform);
 					Sequence attack = DOTween.Sequence();
 					sequence = attack.Append(enemy.transform.DOLocalMove(target.transform.position
 						+ target.transform.forward * 4, 1f).SetEase(Ease.OutCirc))
 						.AppendCallback(() => battleUi.SendMessage("HpMpSet", targetData));
 					sequence = attack.AppendInterval(1f)
-						.AppendCallback(() => battleUi.SendMessage("ShowPopup", new object[] { calculatedDamage.ToString(), popPos }))
+						.AppendCallback(() => battleUi.SendMessage("ShowPopup", new object[] { calculatedDamage.ToString(), popPos, Color.white }))
 						.AppendCallback(() => KillCharacter(target, targetData.HP));
 					sequence = attack.Append(enemy.transform.DOLocalMove(enemy.transform.position, 1).SetEase(Ease.OutCirc));
 					break;
@@ -515,6 +520,7 @@ public class BattleController : MonoBehaviour
 		if (HP <= 0)
 		{
 			target.GetComponent<Animator>().SetTrigger("Death");
+			if (target.gameObject.tag == "Enemy") sequence.Append(target.transform.DOScale(0f, 3f));
 			turnByTurnSequenceList.RemoveAll(r => r.Second.GetInstanceID() == target.GetInstanceID());
 			var id = sequenceEnumerator.Current.Second.GetInstanceID();
 			sequenceEnumerator = turnByTurnSequenceList.GetEnumerator();

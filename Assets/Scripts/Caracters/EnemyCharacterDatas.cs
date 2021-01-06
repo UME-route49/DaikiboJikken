@@ -34,11 +34,11 @@ public class EnemyCharacterDatas: MonoBehaviour
 
     public struct Action
     {
-        string Name;
-        int Damage;
-        bool[] panel;
-        EnumBattleAction Type;
-    }
+        public string Name;
+        public int Damage;
+        public bool[] Panels;
+        public EnumBattleAction Type;
+    } 
 
     public Action[] actions;
 }
